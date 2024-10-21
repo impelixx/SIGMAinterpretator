@@ -1,0 +1,24 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: docker compose build
+
+      - name: Stop previous container
+        run: docker compose -p "cpp-react-template" down -v
+
+      - name: Run container
+        run: docker compose --profile production up -d

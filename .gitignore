@@ -1,0 +1,4 @@
+backend/build
+frontend/node_modules
+tests/node_modules
+data/
