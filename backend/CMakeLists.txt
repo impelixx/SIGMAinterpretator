@@ -23,5 +23,5 @@ set(
     PROJECT_LINK_LIBS
 )
 
-add_executable("${PROJECT_NAME}" ${SOURCES})
+add_executable("${PROJECT_NAME}" ${SOURCES} include/Lexem.cpp lib/Lexem.h)
 target_link_libraries("${PROJECT_NAME}" ${PROJECT_LINK_LIBS})
