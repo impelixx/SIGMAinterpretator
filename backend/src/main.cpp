@@ -1,39 +1,35 @@
 #include <iostream>
-#include <httplib.h>
-#include <json.h>
+#include <vector>
+#include <string>
+#include <fstream>
 
-#define JSON_RESPONSE(json) res.set_content(json.dump(), "application/json")
-
-using json = nlohmann::json;
-
-int counter = 0;
+using namespace std;
 
 int main() {
-  httplib::Server app;
+    std::ifstream file_code;
+    file_code.open("/Users/sinicynaleksej/SIGMAinterpretator/code.us");
 
-  app.set_post_routing_handler([](const auto& req, auto& res) {
-    res.set_header("Access-Control-Allow-Origin", "*");
-    res.set_header("Access-Control-Allow-Headers", "*");
-  });
+    char* code = new char;
+    int size = 0;
 
-  app.Get("/ping", [](const auto& req, auto& res) {
-    json response = {
-      {"ok", true}
-    };
+    if (file_code.is_open()) {
+        cout << "файл открылся" << endl;
+        string ln;
+        while (getline(file_code, ln)) {
+            for (char s : ln) {
+                code[size] = s;
+                ++size;
+            }
+            code[size] = '\n';
+            ++size;
+        }
+        for (int i = 0; i < size; ++i) {
+            cout << code[i];
+        }
+        cout << endl << "файл прочитан" << endl;
+    }
 
-    JSON_RESPONSE(response);
-  });
+    file_code.close();
 
-  app.Post("/increment", [](const auto& req, auto& res) {
-    json response = {
-      {"ok", true},
-      {"counter", ++counter}
-    };
-
-    JSON_RESPONSE(response);
-  });
-
-  app.listen("0.0.0.0", 8080);
-
-  return 0;
+    return 0;
 }
