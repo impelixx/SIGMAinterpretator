@@ -15,12 +15,12 @@ void Lexem::set_text(std::string txt) {
     text_ = txt;
 }
 
-void Lexem::set_y(int y) {
-    line_ = y;
+void Lexem::set_s(int s) {
+    s_ = s;
 }
 
-void Lexem::set_x(int x) {
-    pos_ = x;
+void Lexem::set_e(int e) {
+    e_ = e;
 }
 
 std::string Lexem::get_type() {
@@ -31,10 +31,10 @@ std::string Lexem::get_text() {
     return text_;
 }
 
-int Lexem::get_y() {
-    return line_;
+int Lexem::get_s() {
+    return s_;
 }
 
-int Lexem::get_x() {
-    return pos_;
+int Lexem::get_e() {
+    return e_;
 }
