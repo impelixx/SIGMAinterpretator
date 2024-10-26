@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <utility>
 #include "Lexem.h"
 
 using namespace std;
@@ -32,9 +33,80 @@ bool isLexem(string line) {
     }
 
     //identificator
-    if (line[0] >= 'a' && line[0] <= 'z' || line[0] >= 'A' && line[0] <= 'Z' || line[0] == '_') {
-        for (int i = 1; i < line.size(); ++i) {
+    {
+        if (line[0] >= 'a' && line[0] <= 'z' || line[0] >= 'A' && line[0] <= 'Z' || line[0] == '_') {
+            bool is_ident = true;
+            for (int i = 1; i < line.size(); ++i) {
+                if (line[i] >= 'a' && line[i] <= 'z' ||
+                    line[i] >= 'A' && line[i] <= 'Z' ||
+                    line[i] == '_' ||
+                    line[i] >= '0' && line[i] <= '9') {
+                    continue;
+                } else {
+                    is_ident = false;
+                }
+            }
 
+            if (is_ident) {
+                return true;
+            }
+        }
+    }
+
+    //literal integer
+    {
+        if (line[0] >= '0' && line[0] <= '9') {
+            bool is_int = true;
+            for (int i = 1; i < line.size(); ++i) {
+                if (line[i] >= '0' && line[i] <= '9') {
+                    continue;
+                } else {
+                    is_int = false;
+                }
+            }
+
+            if (is_int) {
+                return true;
+            }
+        }
+    }
+
+    //literal float
+    {
+        if (line[0] >= '0' && line[0] <= '9') {
+            bool is_float = true;
+            int i = 1;
+
+            for (; i < line.size(); ++i) {
+                if (line[i] >= '0' && line[i] <= '9') {
+                    continue;
+                } else if (line[i] == '.') {
+                    ++i;
+                    break;
+                } else {
+                    is_float = false;
+                }
+            }
+
+            for (; i < line.size(); ++i) {
+                if (line[i] >= '0' && line[i] <= '9') {
+                    continue;
+                } else {
+                    is_float = false;
+                }
+            }
+            if (is_float) {
+                return true;
+            }
+        }
+    }
+
+    //literal char
+    {
+        if (line[0] == '\'' && line[line.size() - 1] == '\'') {
+            if (line.size() == 3 && (line[1] >= '(' && line[1] <= '}')) {
+                return true;
+            }
         }
     }
 
@@ -43,7 +115,7 @@ bool isLexem(string line) {
 
 int main() {
     std::ifstream file_code;
-    file_code.open("/Users/sinicynaleksej/SIGMAinterpretator/code.us");
+    file_code.open("/Users/sinicynaleksej/SIGMAinterpretator/used files/code.us");
 
     char* code = new char;
     int size = 0;
@@ -64,6 +136,7 @@ int main() {
         }
         cout << endl << "файл прочитан" << endl;
     }
+
     file_code.close();
 
     for (int start = 0; start < size; ++start) {
