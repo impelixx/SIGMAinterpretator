@@ -1,11 +1,5 @@
-//
-// Created by Синицын Алексей on 21.10.2024.
-//
-
 #include "Lexem.h"
 #include <iostream>
-#include <httplib.h>
-#include <json.h>
 
 void Lexem::set_type(std::string tp) {
     type_ = tp;

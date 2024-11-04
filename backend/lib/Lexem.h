@@ -1,9 +1,4 @@
-//
-// Created by Синицын Алексей on 21.10.2024.
-//
 #include <iostream>
-#include <httplib.h>
-#include <json.h>
 
 #ifndef BACKEND_LEXEM_H
 #define BACKEND_LEXEM_H

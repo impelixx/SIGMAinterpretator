@@ -5,3 +5,13 @@ data/
 */cmake-build-debug
 .idea/
 *.us
+/backend/CMakeFiles/
+/backend/.cmake
+backend/Makefile
+backend/Testing
+/backend/CMakeCache.txt
+/backend/cmake_install.cmake
+/backend/**.ninja
+/backend/backend
+/backend/.ninja_deps
+/backend/.ninja_log
