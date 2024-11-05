@@ -15,3 +15,9 @@ backend/Testing
 /backend/backend
 /backend/.ninja_deps
 /backend/.ninja_log
+build/
+backend/.DS_Store
+.vscode/tasks.json
+.vscode/settings.json
+.DS_Store
+.vscode/

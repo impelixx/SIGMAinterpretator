@@ -35,9 +35,8 @@ Lexem* processing(char*& symbol) {
 int main() {
     Bor working_system;
 
-    {
         std::ifstream file_code;
-        file_code.open("/Users/sinicynaleksej/CLionProjects/untitled8/workwords");
+        file_code.open("../test/workword.txt");
         if (file_code.is_open()) {
             cout << "файл открылся" << endl;
             string ln;
@@ -47,15 +46,14 @@ int main() {
             cout << "файл прочитан" << endl;
         }
         file_code.close();
-    }
 
     char* code = new char;
     int size = 0;
     {
         std::ifstream file_code;
-        file_code.open("/Users/sinicynaleksej/CLionProjects/untitled8/code.mop");
+        file_code.open("../test/code.us");
         if (file_code.is_open()) {
-            cout << "файл открылся" << endl;
+            cout << "файл открылся 1" << endl;
             string ln;
             while (getline(file_code, ln)) {
                 for (char s: ln) {
