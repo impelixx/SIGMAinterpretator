@@ -1,34 +1,49 @@
-#include "Lexem.h"
+#include "../include/Lexem.h"
 #include <iostream>
 
-void Lexem::set_type(std::string tp) {
-    type_ = tp;
-}
-
-void Lexem::set_text(std::string txt) {
+void Lexem::set_text(std::string txt){
     text_ = txt;
 }
 
-void Lexem::set_s(int s) {
-    s_ = s;
+std::string Lexem::get_type() const {
+    if (type_ == LexemType::KEYWORD) {
+        return "KEYWORD";
+    }
+    if (type_ == LexemType::NUMBER) {
+        return "NUMBER";
+    }
+    if (type_ == LexemType::OPERATOR) {
+        return "OPERATOR";
+    }
+    if (type_ == LexemType::STRING) {
+        return "STRING";
+    }
+    if (type_ == LexemType::IDENTIFIER) {
+        return "IDENTIFIER";
+    }
+    if (type_ == LexemType::NEWLINE) {
+        return "NEWLINE";
+    }
+    if (type_ == LexemType::COMMENT) {
+        return "COMMENT";
+    }
+    if (type_ == LexemType::DEDENT) {
+        return "DEDENT";
+    }
+    if (type_ == LexemType::INDENT) {
+        return "INDENT";
+    }
+    if (type_ == LexemType::BRACKET) {
+        return "BRACKET";
+    }
+    return "UNKNOWN";
 }
 
-void Lexem::set_e(int e) {
-    e_ = e;
-}
-
-std::string Lexem::get_type() {
-    return type_;
-}
-
-std::string Lexem::get_text() {
+std::string Lexem::get_text() const{
     return text_;
 }
 
-int Lexem::get_s() {
-    return s_;
-}
+Lexem::Lexem(LexemType type, std::string text, int s, int e)
+    : type_(type), text_(std::move(text)) {
 
-int Lexem::get_e() {
-    return e_;
 }

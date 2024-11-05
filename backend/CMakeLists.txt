@@ -1,4 +1,5 @@
 set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_C_COMPILER clang)
 
 cmake_minimum_required(VERSION 3.18)
 project(backend)
@@ -17,11 +18,12 @@ file(
     SOURCES
     "src/**/*.cpp"
     "src/*.cpp"
+    "src/Lexem.cpp"
 )
 
 set(
     PROJECT_LINK_LIBS
 )
 
-add_executable("${PROJECT_NAME}" ${SOURCES})
-target_link_libraries("${PROJECT_NAME}" ${PROJECT_LINK_LIBS})
+add_executable(${PROJECT_NAME} ${SOURCES})
+
