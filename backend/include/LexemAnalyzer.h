@@ -4,6 +4,8 @@
 #include "Lexem.h"
 #include <string>
 #include <vector>
+#include "Bor.h"
+
 
 class LexemAnalyzer {
 public:
@@ -42,6 +44,7 @@ private:
     size_t index_;
     size_t currentPosition_;
     std::vector<int> indentStack_;
+    bor keywords_;
 };
 
 #endif // LEXEM_ANALYZER_H

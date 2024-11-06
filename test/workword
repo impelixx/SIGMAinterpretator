@@ -1,9 +1,9 @@
 bool
-int
-float
-char
-string
-void
+INT
+FLOAT
+CHAR
+STRING
+VOID
 return
 for
 while
