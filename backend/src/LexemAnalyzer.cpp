@@ -380,7 +380,6 @@ void LexemAnalyzer::AnalyzeIdentifier() {
         GetNextChar();
     }
     
-    // Check if it's a keyword using the Bor
     auto [isKeyword, lexem] = keywords_.has(identifier.c_str(), identifier.length(), startPos);
     if (isKeyword) {
         lexems_.emplace_back(Lexem(LexemType::KEYWORD, identifier, startPos, index_));
@@ -395,7 +394,7 @@ void LexemAnalyzer::AnalyzeNumber() {
     std::string number;
     size_t startPos = index_ - 1;
 
-    while (isdigit(ch_)) {
+    while (isdigit(ch_) || ch_ == '.') {
         number += ch_;
         GetNextChar();
     }
@@ -475,7 +474,6 @@ void LexemAnalyzer::AnalyzeParameters() {
     while (ch_ != ')' && ch_ != '\0') {
         SkipWhitespace();
         
-        // Handle type declaration (INT, FLOAT, etc)
         if (isalpha(ch_)) {
             std::string type;
             size_t startPos = index_ - 1;
