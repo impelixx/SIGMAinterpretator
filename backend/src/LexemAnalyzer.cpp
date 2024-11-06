@@ -51,7 +51,7 @@ void LexemAnalyzer::SkipWhitespace() {
     std::cout << "Exiting SkipWhitespace()" << std::endl;
 }
 
-// cсчитаем отступы
+// считаем отступы
 void LexemAnalyzer::HandleIndentation(int currentIndent) {
     int previousIndent = indentStack_.back();
     if (currentIndent > previousIndent) {
@@ -395,8 +395,13 @@ void LexemAnalyzer::AnalyzeNumber() {
     std::string number;
     size_t startPos = index_ - 1;
 
-    while (isdigit(ch_)) {
+    bool was_point = false;
+
+    while (isdigit(ch_) || (!was_point && ch_ == '.')) {
         number += ch_;
+        if (ch_ == '.') {
+            was_point = true;
+        }
         GetNextChar();
     }
 
