@@ -15,6 +15,7 @@ enum LexemType {
     DEDENT,     // Уменьшение отступа
     BRACKET,    // Скобки
     INDENT,     // Увеличение отступа
+    EOS,        // End of string
     UNKNOWN     // Неизвестные токен
 };
 
