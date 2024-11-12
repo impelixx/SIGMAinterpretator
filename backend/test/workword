@@ -3,7 +3,7 @@ int
 FLOAT
 CHAR
 STRING
-VOID
+void
 return
 for
 while
