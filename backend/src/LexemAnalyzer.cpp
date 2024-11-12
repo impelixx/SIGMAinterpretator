@@ -145,8 +145,9 @@ void LexemAnalyzer::AnalyzeStatement() {
             AnalyzeElseStatement();
         } else if (word == "return") {
             AnalyzeReturnStatement();
-        } else if (keywords_.has(word.c_str(), word.length(), index_ - word.length()).first)
-        {
+        } else if (word == "for") {
+            AnalyzeForStatement();
+        } else if (keywords_.has(word.c_str(), word.length(), index_ - word.length()).first) {
             lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, index_ - word.length(), index_));
         } else
         {
@@ -222,6 +223,64 @@ void LexemAnalyzer::AnalyzeVariableDeclaration() {
     }
 }
 
+void LexemAnalyzer::AnalyzeForStatement() {
+    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "for", index_ - 1, index_ + 2));
+    SkipWhitespace();
+
+    if (!(isalpha(ch_) || ch_ == '_')) {
+        throw std::runtime_error("Expected type name in for statement");
+    }
+    AnalyzeIdentifier();
+    SkipWhitespace();
+
+    if (!(isalpha(ch_) || ch_ == '_')) {
+        throw std::runtime_error("Expected variable name in for statement");
+    }
+    AnalyzeIdentifier();
+    SkipWhitespace();
+    std::cout << "cha" << ch_ << std::endl;
+    if (code_.substr(index_-1, 2) != "in") {
+        throw std::runtime_error("Expected 'in' keyword in for statement");
+    }
+    GetNextChar();
+    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", index_ - 2, index_));
+    GetNextChar(); 
+    SkipWhitespace();
+
+    if (ch_ != '(') {
+        throw std::runtime_error("Expected '(' after 'in'");
+    }
+    lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", index_ - 1, index_));
+    GetNextChar();
+    SkipWhitespace();
+
+    AnalyzeExpression();
+    SkipWhitespace();
+
+    if (ch_ != ',') {
+        throw std::runtime_error("Expected ',' between range values");
+    }
+    lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", index_ - 1, index_));
+    GetNextChar();
+    SkipWhitespace();
+
+    AnalyzeExpression();
+    SkipWhitespace();
+
+    if (ch_ != ')') {
+        throw std::runtime_error("Expected ')' after range values");
+    }
+    lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_));
+    GetNextChar();
+    SkipWhitespace();
+
+    if (ch_ != ':') {
+        throw std::runtime_error("Expected ':' after for statement");
+    }
+    lexems_.emplace_back(Lexem(LexemType::EOS, ":", index_ - 1, index_));
+    GetNextChar();
+    SkipWhitespace();
+}
 
 // Analyze array declaration
 void LexemAnalyzer::AnalyzeArrayDeclaration() {

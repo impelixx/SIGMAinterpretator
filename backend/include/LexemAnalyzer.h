@@ -24,6 +24,7 @@ private:
     void AnalyzeElseStatement();
     void AnalyzeAssignment();
     void AnalyzeIfStatement();
+    void AnalyzeForStatement();
     void AnalyzeWhileStatement();
     void AnalyzePrintStatement();
     void AnalyzeReturnStatement();
