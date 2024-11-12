@@ -46,7 +46,7 @@
 //нет
 <ForStatement> -> "for" + <Type> + <Identifier> + "in range" + "(" + <Number> + "," + <Number> ")" + <FieldView>
 
-//нет
+//нет 
 <FieldView> -> ":" + NEWLINE + INDENT + <StatementList> + DEDENT
 
 //нет
