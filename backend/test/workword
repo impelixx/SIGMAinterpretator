@@ -1,8 +1,8 @@
 bool
 int
-FLOAT
-CHAR
-STRING
+float
+char
+string
 void
 return
 for

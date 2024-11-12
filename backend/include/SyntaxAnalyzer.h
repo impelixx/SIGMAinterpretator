@@ -20,7 +20,7 @@ private:
     bool AnalyzeIfStatement();
     bool AnalyzeWhileStatement();
     bool AnalyzeDoWhileStatement();
-    bool FieldViewStatement();
+    bool AnalyzeFieldView();
     bool AnalyzeForStatement();
     bool AnalyzePrintStatement();
     bool AnalyzeReturnStatement();

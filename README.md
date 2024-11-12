@@ -21,47 +21,47 @@
 //есть
 <FunctionDeclaration> → "def" + <Identifier> + "(" + <ParameterList> + ")" + ":" + NEWLINE + INDENT + <StatementList> + DEDENT
 
-//нет
+//есть
 <ParameterList> → ℇ | ( <Identifier> + { "," + <Identifier> } )
 
-//нет
+//есть
 <VariableDeclaration> → <Type> + <Identifier> + "=" + <Expression> + <StatementTerminator>
-	              | <Type> + <Identifier> + "[" + <Number> + "]" + "=" + <Initianalizer list> + <StatementTerminator>
+	              | <Type> + <Identifier> + "[" + <Number> + "]" + "=" + <Initianalizer list> + <StatementTerminator> 
 
-//нет
-<Initianalizer list> → "{" +  [<Expression> + { "," + <Expression>] } + "}"
+//есть
+<InitianalizerList> → "{" +  [<Expression> + { "," + <Expression>] } + "}"
 
-//нет
+//есть
 <Assignment> → (<Identifier> | (<Identifier> + "[" + <Number> "]")) + "=" + <Expression> + <StatementTerminator>
 
-//нет
+//есть
 <IfStatement> → "if" + <CaseExpression> + <FieldView>
 
-//нет
+//есть
 <WhileStatement> → "while" + <CaseExpression> + <FieldView>
 
-//нет
-<DoWhileStatement> → "do" + ":" + <FieldView> + "while" + <CaseExpression> + <StatementTerminator>
+//есть
+<DoWhileStatement> → "do" + <FieldView> + "while" + <CaseExpression> + <StatementTerminator>
 
-//нет
-<ForStatement> -> "for" + <Type> + <Identifier> + "in range" + "(" + <Number> + "," + <Number> ")" + <FieldView>
+//есть
+<ForStatement> -> "for" + <Type> + <Identifier> + "in" + "(" + <Number> + "," + <Number> ")" + <FieldView>
 
-//нет 
+//есть
 <FieldView> -> ":" + NEWLINE + INDENT + <StatementList> + DEDENT
 
-//нет
+//есть
 <PrintStatement> → "print" + "(" + <Expression> + ")" + <StatementTerminator>
 
-//нет
+//есть
 <ReturnStatement> → "return" + <CaseExpression> + <StatementTerminator>
 
-//нет
+//есть
 <CaseExpression> -> "(" + <Expression> + { (and | or) + <Expression> + ")"
 
-//нет
+//есть
 <Expression> → <Term> + { ("+" | "-" ) + <Term> }
 
-//нет
+//есть
 <Term> → <Factor> + { ("*" | "/" ) + <Factor> }
 
 //нет
