@@ -49,7 +49,10 @@ std::string Lexem::get_text() const{
     return text_;
 }
 
-Lexem::Lexem(LexemType type, std::string text, int s, int e)
-    : type_(type), text_(std::move(text)) {
+size_t Lexem::get_start() const {
+    return s_;
+}
 
+size_t Lexem::get_end() const {
+    return e_;
 }

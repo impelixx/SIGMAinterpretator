@@ -4,13 +4,13 @@
 <StatementList> → { <Statement> }
 
 <Statement> → <FunctionDeclaration>
-	             | <VariableDeclaration>
-	             | <Assignment>
-	             | <IfStatement>
-	             | <WhileStatement>
-	             | <PrintStatement>
-	             | <ReturnStatement>
-	             | <EmptyStatement>
+	          | <VariableDeclaration>
+	          | <Assignment>
+	          | <IfStatement>
+	          | <WhileStatement>
+	          | <PrintStatement>
+	          | <ReturnStatement>
+	          | <EmptyStatement>
 
 <EmptyStatement> → ";" | NEWLINE
 

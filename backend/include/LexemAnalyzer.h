@@ -21,6 +21,7 @@ private:
     void AnalyzeVariableDeclaration();
     void AnalyzeFunctionDeclaration();
     void AnalyzeParameters();
+    void AnalyzeElseStatement();
     void AnalyzeAssignment();
     void AnalyzeIfStatement();
     void AnalyzeWhileStatement();

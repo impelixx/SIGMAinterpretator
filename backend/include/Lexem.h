@@ -23,13 +23,16 @@ enum LexemType {
 
 class Lexem {
 public:
-    Lexem(LexemType type, std::string text, int s, int e);
+    Lexem(LexemType type, std::string text, int s, int e): type_(type), text_(text), s_(s), e_(e) {};
     // Getters
     std::string get_type() const;
     std::string get_text() const;
+    size_t get_start() const;
+    size_t get_end() const;
     // Setters
     void set_text(std::string text);
 private:
+    int s_, e_;
     LexemType type_;
     std::string text_;
 };
