@@ -23,7 +23,7 @@
 
 <Initianalizer list> → "{" +  [<Expression> + { "," + <Expression>] } + "}"
 
-<Assignment> → <Identifier> + "=" + <Expression> + <StatementTerminator>
+<Assignment> → (<Identifier> | (<Identifier> + "[" + <Number> "]")) + "=" + <Expression> + <StatementTerminator>
 
 <IfStatement> → "if" + <Expression> + ":" + NEWLINE + INDENT + <StatementList> + DEDENT
 
