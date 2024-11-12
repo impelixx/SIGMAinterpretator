@@ -19,8 +19,12 @@ private:
     bool AnalyzeAssignment();
     bool AnalyzeIfStatement();
     bool AnalyzeWhileStatement();
+    bool AnalyzeDoWhileStatement();
+    bool FieldViewStatement();
+    bool AnalyzeForStatement();
     bool AnalyzePrintStatement();
     bool AnalyzeReturnStatement();
+    bool AnalyzeCaseExpression();
     bool AnalyzeExpression();
     bool AnalyzeTerm();
     bool AnalyzeFactor();

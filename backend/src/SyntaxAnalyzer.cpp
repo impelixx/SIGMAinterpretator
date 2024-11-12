@@ -145,11 +145,27 @@ bool SyntaxAnalyzer::AnalyzeWhileStatement() {
 
 }
 
+bool SyntaxAnalyzer::AnalyzeDoWhileStatement() {
+
+}
+
+bool SyntaxAnalyzer::FieldViewStatement() {
+
+}
+
+bool SyntaxAnalyzer::AnalyzeForStatement() {
+
+}
+
 bool SyntaxAnalyzer::AnalyzePrintStatement() {
 
 }
 
 bool SyntaxAnalyzer::AnalyzeReturnStatement() {
+
+}
+
+bool SyntaxAnalyzer::AnalyzeCaseExpression() {
 
 }
 
@@ -166,11 +182,12 @@ bool SyntaxAnalyzer::AnalyzeFactor() {
 }
 
 bool SyntaxAnalyzer::AnalyzeType() {
-    if (lex[LexemIndex].get_text() == "BOOL"
-        || lex[LexemIndex].get_text() == "INT"
-        || lex[LexemIndex].get_text() == "FLOAT"
-        || lex[LexemIndex].get_text() == "CHAR"
-        || lex[LexemIndex].get_text() == "STRING") {
+    if (lex[LexemIndex].get_text() == "bool"
+        || lex[LexemIndex].get_text() == "int"
+        || lex[LexemIndex].get_text() == "float"
+        || lex[LexemIndex].get_text() == "char"
+        || lex[LexemIndex].get_text() == "string") {
+        ++LexemIndex;
         return true;
     }
     return false;
