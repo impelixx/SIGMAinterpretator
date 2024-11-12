@@ -16,7 +16,8 @@ enum LexemType {
     BRACKET,    // Скобки
     INDENT,     // Увеличение отступа
     EOS,        // End of string
-    UNKNOWN     // Неизвестные токен
+    UNKNOWN,     // Неизвестные токен
+    EOC         // end of file
 };
 
 

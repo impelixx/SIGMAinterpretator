@@ -1,5 +1,5 @@
 bool
-INT
+int
 FLOAT
 CHAR
 STRING

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "LexemAnalyzer.h"
+// #include "SyntaxAnalyzer.h"
 #include <fstream>
 #include <sstream>
 
@@ -14,18 +15,21 @@ int main() {
         std::string code = buffer.str();
 
         LexemAnalyzer analyzer(code);
+
         try {
             analyzer.Analyze();
             analyzer.PrintLexems();
+            std::vector<Lexem> lexems = analyzer.GetLexems();
+            // SyntaxAnalyzer SyntaxAnalyzer(lexems);
+            // SyntaxAnalyzer.Analyze();
         } catch (const std::exception& e) {
-            std::cerr << "LexemAnalyzer error: " << e.what() << std::endl;
+            std::cerr << "error: " << e.what() << std::endl;
             std::cerr << "At position: " << analyzer.GetCurrentPosition() << std::endl;
             analyzer.PrintLexems();
             return 2;
         }
 
         std::cout << "Я победил" << std::endl;
-        analyzer.keywords_.has("a", 5, 0);
     } catch (const std::exception& e) {
         std::cerr << "error: " << e.what() << std::endl;
         return 1;

@@ -13,8 +13,7 @@ public:
     void Analyze();
     void PrintLexems() const;
     size_t GetCurrentPosition() const { return currentPosition_; }
-    bor keywords_;
-
+    std::vector<Lexem> GetLexems() { return lexems_; }
 private:
     // Parsing func
     void AnalyzeProgram();
@@ -27,13 +26,10 @@ private:
     void AnalyzeWhileStatement();
     void AnalyzePrintStatement();
     void AnalyzeReturnStatement();
-    void AnalyzeBlock();
     void AnalyzeArrayDeclaration();
     void AnalyzeExpression();
     void AnalyzeIdentifier();
     void AnalyzeNumber();
-    void AnalyzeType();
-    void AnalyzeKeyword();
 
     // Util
     void GetNextChar();
@@ -41,12 +37,13 @@ private:
     void HandleIndentation(int previousIndentation);
 
     // var
+    char ch_;
     std::string code_;
     std::vector<Lexem> lexems_;
-    char ch_;
+    std::vector<int> indentStack_;
     size_t index_;
     size_t currentPosition_;
-    std::vector<int> indentStack_;
+    bor keywords_;
 };
 
 #endif // LEXEM_ANALYZER_H
