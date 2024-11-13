@@ -13,8 +13,6 @@ LexemAnalyzer::LexemAnalyzer(const std::string& code)
         throw std::runtime_error("Failed to open file '../test/workword.txt'");
     }
     std::string word;
-    std::cout << "start add keywords" << std::endl;
-    std::cout << word << std::endl;
     while (keywords >> word) {
         keywords_.add(word);
     }
@@ -131,7 +129,6 @@ void LexemAnalyzer::AnalyzeStatement() {
             word += ch_;
             GetNextChar();
         }
-        std::cout << "----------------------->" << word << std::endl;
         if (word == "int" || word == "float" || word == "string" || word == "bool") {
             lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, index_ - word.length(), index_));
             AnalyzeVariableDeclaration();
@@ -238,7 +235,6 @@ void LexemAnalyzer::AnalyzeForStatement() {
     }
     AnalyzeIdentifier();
     SkipWhitespace();
-    std::cout << "cha" << ch_ << std::endl;
     if (code_.substr(index_-1, 2) != "in") {
         throw std::runtime_error("Expected 'in' keyword in for statement");
     }
