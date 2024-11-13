@@ -11,6 +11,8 @@
 	          | <Assignment>
 	          | <IfStatement>
 	          | <WhileStatement>
+	          | <DoWhileStatement>
+	          | <ForStatement>
 	          | <PrintStatement>
 	          | <ReturnStatement>
 	          | <EmptyStatement>
