@@ -660,9 +660,6 @@ void LexemAnalyzer::AnalyzePrintStatement() {
 
 // Analyze return 
 void LexemAnalyzer::AnalyzeReturnStatement() {
-    for (int i = 0; i < 6; ++i) {
-        GetNextChar();
-    }
     lexems_.emplace_back(Lexem(LexemType::KEYWORD, "return", index_ - 6, index_));
     SkipWhitespace();
     AnalyzeExpression();
