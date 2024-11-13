@@ -27,6 +27,8 @@ bool SyntaxAnalyzer::AnalyzeStatement() {
         || AnalyzeAssignment()
         || AnalyzeIfStatement()
         || AnalyzeWhileStatement()
+        || AnalyzeDoWhileStatement()
+        || AnalyzeForStatement()
         || AnalyzePrintStatement()
         || AnalyzeReturnStatement()
         || AnalyzeEmptyStatement();
