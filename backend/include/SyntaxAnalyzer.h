@@ -6,6 +6,7 @@
 class SyntaxAnalyzer {
 public:
     SyntaxAnalyzer(std::vector<Lexem> lexems) {lex = lexems;};
+    std::string NumLine();
     bool Analyze();
 private:
     bool AnalyzeProgram();
@@ -32,7 +33,6 @@ private:
     bool AnalyzeIdentifier();
     bool AnalyzeNumber();
     bool AnalyzeStatementTerminator();
-    int line = 0;
     int LexemIndex = 0;
     std::vector<Lexem> lex;
 };

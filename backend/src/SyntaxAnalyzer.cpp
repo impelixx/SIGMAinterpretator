@@ -1,4 +1,17 @@
 #include "SyntaxAnalyzer.h"
+#include <string>
+
+std::string SyntaxAnalyzer::NumLine() {
+    int index = LexemIndex;
+    int s = 1;
+    for (int i = 0; i < index; ++i) {
+        if (lex[i].get_type() == "NEWLINE") {
+            ++s;
+        }
+    }
+
+    return std::to_string(s);
+}
 
 bool SyntaxAnalyzer::Analyze() {
     AnalyzeProgram();
@@ -66,55 +79,55 @@ bool SyntaxAnalyzer::AnalyzeFunctionDeclaration() {
                                         }
                                         else {
                                             LexemIndex = LastLexemIndex;
-                                            // throw
+                                            throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
                                             return false;
                                         }
                                     }
                                     else {
                                         LexemIndex = LastLexemIndex;
-                                        // throw
+                                        throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
                                         return false;
                                     }
                                 }
                                 else {
                                     LexemIndex = LastLexemIndex;
-                                    // throw
+                                    throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
                                     return false;
                                 }
                             }
                             else {
                                 LexemIndex = LastLexemIndex;
-                                // throw
+                                throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
                                 return false;
                             }
                         }
                         else {
                             LexemIndex = LastLexemIndex;
-                            // throw
+                            throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
                             return false;
                         }
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        // throw
+                        throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
+            throw "Error in AnalyzeFunctionDeclaration()" + NumLine();
             return false;
         }
     }
@@ -136,7 +149,7 @@ bool SyntaxAnalyzer::AnalyzeParameterList() {
                 ++LexemIndex;
                 if (!AnalyzeIdentifier()) {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeParameterList()" + NumLine();
                     return false;
                 }
             }
@@ -146,13 +159,12 @@ bool SyntaxAnalyzer::AnalyzeParameterList() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeParameterList()" + NumLine();
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
             return false;
         }
     }
@@ -174,13 +186,13 @@ bool SyntaxAnalyzer::AnalyzeVariableDeclaration() {
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        // throw
+                        throw "Error in AnalyzeVariableDeclaration()" + NumLine();
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeVariableDeclaration()" + NumLine();
                     return false;
                 }
             }
@@ -190,7 +202,6 @@ bool SyntaxAnalyzer::AnalyzeVariableDeclaration() {
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
             return false;
         }
     }
@@ -211,31 +222,31 @@ bool SyntaxAnalyzer::AnalyzeVariableDeclaration() {
                                 }
                                 else {
                                     LexemIndex = LastLexemIndex;
-                                    // throw
+                                    throw "Error in AnalyzeVariableDeclaration()" + NumLine();
                                     return false;
                                 }
                             }
                             else {
                                 LexemIndex = LastLexemIndex;
-                                // throw
+                                throw "Error in AnalyzeVariableDeclaration()" + NumLine();
                                 return false;
                             }
                         }
                         else {
                             LexemIndex = LastLexemIndex;
-                            // throw
+                            throw "Error in AnalyzeVariableDeclaration()" + NumLine();
                             return false;
                         }
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        // throw
+                        throw "Error in AnalyzeVariableDeclaration()" + NumLine();
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeVariableDeclaration()" + NumLine();
                     return false;
                 }
             }
@@ -262,7 +273,7 @@ bool SyntaxAnalyzer::AnalyzeInitianalizerList() {
                 ++LexemIndex;
                 if (!AnalyzeExpression()) {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeInitianalizerList()" + NumLine();
                     return false;
                 }
                 ++LexemIndex;
@@ -273,13 +284,12 @@ bool SyntaxAnalyzer::AnalyzeInitianalizerList() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeInitianalizerList()" + NumLine();
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
             return false;
         }
     }
@@ -299,19 +309,19 @@ bool SyntaxAnalyzer::AnalyzeAssignment() {
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeAssignment()" + NumLine();
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeAssignment()" + NumLine();
                 return false;
             }
         }
     }
     else {
-        LexemIndex = LastLexemIndex;  // Ошибка в <Identifier>
+        LexemIndex = LastLexemIndex;
         return false;
     }
 
@@ -320,13 +330,13 @@ bool SyntaxAnalyzer::AnalyzeAssignment() {
     }
     else {
         LexemIndex = LastLexemIndex;
-        // throw
+        throw "Error in AnalyzeAssignment()" + NumLine();
         return false;
     }
 
     if (!AnalyzeExpression()) {
         LexemIndex = LastLexemIndex;
-        // throw
+        throw "Error in AnalyzeAssignment()" + NumLine();
         return false;
     }
 
@@ -335,7 +345,7 @@ bool SyntaxAnalyzer::AnalyzeAssignment() {
     }
     else {
         LexemIndex = LastLexemIndex;
-        // throw
+        throw "Error in AnalyzeAssignment()" + NumLine();
         return false;
     }
 }
@@ -351,13 +361,13 @@ bool SyntaxAnalyzer::AnalyzeIfStatement() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeIfStatement()" + NumLine();
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
+            throw "Error in AnalyzeIfStatement()" + NumLine();
             return false;
         }
     }
@@ -376,13 +386,13 @@ bool SyntaxAnalyzer::AnalyzeWhileStatement() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeWhileStatement()" + NumLine();
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
+            throw "Error in AnalyzeWhileStatement()" + NumLine();
             return false;
         }
     }
@@ -403,25 +413,25 @@ bool SyntaxAnalyzer::AnalyzeDoWhileStatement() {
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        // throw
+                        throw "Error in AnalyzeDoWhileStatement()" + NumLine();
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeDoWhileStatement()" + NumLine();
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeDoWhileStatement()" + NumLine();
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
+            throw "Error in AnalyzeDoWhileStatement()" + NumLine();
             return false;
         }
     }
@@ -450,55 +460,55 @@ bool SyntaxAnalyzer::AnalyzeForStatement() {
                                         }
                                         else {
                                             LexemIndex = LastLexemIndex;
-                                            // throw
+                                            throw "Error in AnalyzeForStatement()" + NumLine();
                                             return false;
                                         }
                                     }
                                     else {
                                         LexemIndex = LastLexemIndex;
-                                        // throw
+                                        throw "Error in AnalyzeForStatement()" + NumLine();
                                         return false;
                                     }
                                 }
                                 else {
                                     LexemIndex = LastLexemIndex;
-                                    // throw
+                                    throw "Error in AnalyzeForStatement()" + NumLine();
                                     return false;
                                 }
                             }
                             else {
                                 LexemIndex = LastLexemIndex;
-                                // throw
+                                throw "Error in AnalyzeForStatement()" + NumLine();
                                 return false;
                             }
                         }
                         else {
                             LexemIndex = LastLexemIndex;
-                            // throw
+                            throw "Error in AnalyzeForStatement()" + NumLine();
                             return false;
                         }
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        // throw
+                        throw "Error in AnalyzeForStatement()" + NumLine();
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeForStatement()" + NumLine();
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeForStatement()" + NumLine();
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
+            throw "Error in AnalyzeForStatement()" + NumLine();
             return false;
         }
     }
@@ -521,25 +531,25 @@ bool SyntaxAnalyzer::AnalyzeFieldView() {
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        // throw
+                        throw "Error in AnalyzeFieldView()" + NumLine();
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeFieldView()" + NumLine();
                     return false;
                 }
             }
             else {
-                LexemIndex = LastLexemIndex;  // Ошибка в INDENT
-                // throw
+                LexemIndex = LastLexemIndex;
+                throw "Error in AnalyzeFieldView()" + NumLine();
                 return false;
             }
         }
         else {
-            LexemIndex = LastLexemIndex;  // Ошибка в NEWLINE
-            // throw
+            LexemIndex = LastLexemIndex;
+            throw "Error in AnalyzeFieldView()" + NumLine();
             return false;
         }
     }
@@ -562,27 +572,26 @@ bool SyntaxAnalyzer::AnalyzePrintStatement() {
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        // throw
+                        throw "Error in AnalyzePrintStatement()" + NumLine();
                         return false;
                     }
                 } else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzePrintStatement()" + NumLine();
                     return false;
                 }
             } else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzePrintStatement()" + NumLine();
                 return false;
             }
         } else {
             LexemIndex = LastLexemIndex;
-            // throw
+            throw "Error in AnalyzePrintStatement()" + NumLine();
             return false;
         }
     }
 
-    // Если не нашли ключевое слово "print"
     return false;
 }
 
@@ -597,13 +606,13 @@ bool SyntaxAnalyzer::AnalyzeReturnStatement() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeReturnStatement()" + NumLine();
                 return false;
             }
         }
         else {
-            LexemIndex = LastLexemIndex;  // Ошибка в <CaseExpression>
-            // throw
+            LexemIndex = LastLexemIndex;
+            throw "Error in AnalyzeReturnStatement()" + NumLine();
             return false;
         }
     }
@@ -611,7 +620,7 @@ bool SyntaxAnalyzer::AnalyzeReturnStatement() {
 }
 
 bool SyntaxAnalyzer::AnalyzeCaseExpression() {
-    int LastLexemIndex = LexemIndex;  // Сохраняем текущий индекс лексем
+    int LastLexemIndex = LexemIndex;
 
     if (lex[LexemIndex].get_text() == "(") {
         ++LexemIndex;
@@ -620,7 +629,7 @@ bool SyntaxAnalyzer::AnalyzeCaseExpression() {
                 ++LexemIndex;
                 if (!AnalyzeExpression()) {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeCaseExpression()" + NumLine();
                     return false;
                 }
             }
@@ -631,13 +640,13 @@ bool SyntaxAnalyzer::AnalyzeCaseExpression() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeCaseExpression()" + NumLine();
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            // throw
+            throw "Error in AnalyzeCaseExpression()" + NumLine();
             return false;
         }
     }
@@ -653,7 +662,7 @@ bool SyntaxAnalyzer::AnalyzeExpression() {
             ++LexemIndex;
             if (!AnalyzeTerm()) {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeExpression()" + NumLine();
                 return false;
             }
         }
@@ -670,7 +679,7 @@ bool SyntaxAnalyzer::AnalyzeTerm() {
 
             if (!AnalyzeFactor()) {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeTerm()" + NumLine();
                 return false;
             }
         }
@@ -699,13 +708,13 @@ bool SyntaxAnalyzer::AnalyzeFactor() {
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    // throw
+                    throw "Error in AnalyzeFactor()" + NumLine();
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                // throw
+                throw "Error in AnalyzeFactor()" + NumLine();
                 return false;
             }
         }

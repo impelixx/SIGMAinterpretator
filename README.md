@@ -66,7 +66,7 @@
 //есть
 <Term> → <Factor> + { ("*" | "/" ) + <Factor> }
 
-//нет
+//есть
 <Factor> → <Number> | <Identifier> | ( "(" + <Expression> + ")" )
 
 //есть
