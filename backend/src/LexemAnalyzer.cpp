@@ -194,7 +194,7 @@ void LexemAnalyzer::AnalyzeVariableDeclaration() {
     SkipWhitespace();
     
     if (ch_ == '=') {
-        lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", index_ - 1, index_));
+        //lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", index_ - 1, index_));
         SkipWhitespace();
         GetNextChar();
         SkipWhitespace();

@@ -79,55 +79,55 @@ bool SyntaxAnalyzer::AnalyzeFunctionDeclaration() {
                                         }
                                         else {
                                             LexemIndex = LastLexemIndex;
-                                            throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+                                            throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
                                             return false;
                                         }
                                     }
                                     else {
                                         LexemIndex = LastLexemIndex;
-                                        throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+                                        throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
                                         return false;
                                     }
                                 }
                                 else {
                                     LexemIndex = LastLexemIndex;
-                                    throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+                                    throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
                                     return false;
                                 }
                             }
                             else {
                                 LexemIndex = LastLexemIndex;
-                                throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+                                throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
                                 return false;
                             }
                         }
                         else {
                             LexemIndex = LastLexemIndex;
-                            throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+                            throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
                             return false;
                         }
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+                        throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzeFunctionDeclaration()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzeFunctionDeclaration() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -149,7 +149,7 @@ bool SyntaxAnalyzer::AnalyzeParameterList() {
                 ++LexemIndex;
                 if (!AnalyzeIdentifier()) {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeParameterList()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeParameterList() error in " + NumLine() + " line");
                     return false;
                 }
             }
@@ -159,7 +159,7 @@ bool SyntaxAnalyzer::AnalyzeParameterList() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeParameterList()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeParameterList() error in " + NumLine() + " line");
                 return false;
             }
         }
@@ -186,13 +186,13 @@ bool SyntaxAnalyzer::AnalyzeVariableDeclaration() {
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        throw std::runtime_error( "Error in AnalyzeVariableDeclaration()" + NumLine());
+                        throw std::runtime_error( "Error in AnalyzeVariableDeclaration() (Terminator) error in " + NumLine() + " line");
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeVariableDeclaration()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeVariableDeclaration() (Expression) error in " + NumLine() + " line");
                     return false;
                 }
             }
@@ -211,7 +211,7 @@ bool SyntaxAnalyzer::AnalyzeVariableDeclaration() {
         if (AnalyzeIdentifier()) {
             if (lex[LexemIndex].get_text() == "[") {
                 ++LexemIndex;
-                if (AnalyzeNumber()) {
+                if (AnalyzeExpression()) {
                     if (lex[LexemIndex].get_text() == "]") {
                         ++LexemIndex;
                         if (lex[LexemIndex].get_text() == "=") {
@@ -222,31 +222,31 @@ bool SyntaxAnalyzer::AnalyzeVariableDeclaration() {
                                 }
                                 else {
                                     LexemIndex = LastLexemIndex;
-                                    throw std::runtime_error( "Error in AnalyzeVariableDeclaration()" + NumLine());
+                                    throw std::runtime_error( "Error in AnalyzeVariableDeclaration() (Terminator in []) error in " + NumLine() + " line");
                                     return false;
                                 }
                             }
                             else {
                                 LexemIndex = LastLexemIndex;
-                                throw std::runtime_error( "Error in AnalyzeVariableDeclaration()" + NumLine());
+                                throw std::runtime_error( "Error in AnalyzeVariableDeclaration() (InitList {}) error in " + NumLine() + " line");
                                 return false;
                             }
                         }
                         else {
                             LexemIndex = LastLexemIndex;
-                            throw std::runtime_error( "Error in AnalyzeVariableDeclaration()" + NumLine());
+                            throw std::runtime_error( "Error in AnalyzeVariableDeclaration() (in =) error in " + NumLine() + " line");
                             return false;
                         }
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        throw std::runtime_error( "Error in AnalyzeVariableDeclaration()" + NumLine());
+                        throw std::runtime_error( "Error in AnalyzeVariableDeclaration() (]) error in " + NumLine() + " line");
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeVariableDeclaration()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeVariableDeclaration() ({NUMBER}) error in " + NumLine() + " line");
                     return false;
                 }
             }
@@ -268,15 +268,15 @@ bool SyntaxAnalyzer::AnalyzeInitianalizerList() {
     int LastLexemIndex = LexemIndex;
 
     if (lex[LexemIndex].get_text() == "{") {
+        ++LexemIndex;
         if (AnalyzeExpression()) {
             while (lex[LexemIndex].get_text() == ",") {
                 ++LexemIndex;
                 if (!AnalyzeExpression()) {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeInitianalizerList()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeInitianalizerList()(Cycle Expression) error in " + NumLine() + " line");
                     return false;
                 }
-                ++LexemIndex;
             }
             if (lex[LexemIndex].get_text() == "}") {
                 ++LexemIndex;
@@ -284,7 +284,7 @@ bool SyntaxAnalyzer::AnalyzeInitianalizerList() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeInitianalizerList()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeInitianalizerList() (}) error in " + NumLine() + " line");
                 return false;
             }
         }
@@ -309,13 +309,13 @@ bool SyntaxAnalyzer::AnalyzeAssignment() {
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeAssignment()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeAssignment() error in " + NumLine() + " line");
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeAssignment()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeAssignment() error in " + NumLine() + " line");
                 return false;
             }
         }
@@ -330,13 +330,13 @@ bool SyntaxAnalyzer::AnalyzeAssignment() {
     }
     else {
         LexemIndex = LastLexemIndex;
-        throw std::runtime_error( "Error in AnalyzeAssignment()" + NumLine());
+        throw std::runtime_error( "Error in AnalyzeAssignment() error in " + NumLine() + " line");
         return false;
     }
 
     if (!AnalyzeExpression()) {
         LexemIndex = LastLexemIndex;
-        throw std::runtime_error( "Error in AnalyzeAssignment()" + NumLine());
+        throw std::runtime_error( "Error in AnalyzeAssignment() error in " + NumLine() + " line");
         return false;
     }
 
@@ -345,7 +345,7 @@ bool SyntaxAnalyzer::AnalyzeAssignment() {
     }
     else {
         LexemIndex = LastLexemIndex;
-        throw std::runtime_error( "Error in AnalyzeAssignment()" + NumLine());
+        throw std::runtime_error( "Error in AnalyzeAssignment() error in " + NumLine() + " line");
         return false;
     }
 }
@@ -361,13 +361,13 @@ bool SyntaxAnalyzer::AnalyzeIfStatement() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeIfStatement()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeIfStatement() error in " + NumLine() + " line");
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzeIfStatement()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzeIfStatement() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -386,13 +386,13 @@ bool SyntaxAnalyzer::AnalyzeWhileStatement() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeWhileStatement()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeWhileStatement() error in " + NumLine() + " line");
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzeWhileStatement()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzeWhileStatement() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -413,25 +413,25 @@ bool SyntaxAnalyzer::AnalyzeDoWhileStatement() {
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        throw std::runtime_error( "Error in AnalyzeDoWhileStatement()" + NumLine());
+                        throw std::runtime_error( "Error in AnalyzeDoWhileStatement() error in " + NumLine() + " line");
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeDoWhileStatement()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeDoWhileStatement() error in " + NumLine() + " line");
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeDoWhileStatement()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeDoWhileStatement() error in " + NumLine() + " line");
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzeDoWhileStatement()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzeDoWhileStatement() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -460,55 +460,55 @@ bool SyntaxAnalyzer::AnalyzeForStatement() {
                                         }
                                         else {
                                             LexemIndex = LastLexemIndex;
-                                            throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+                                            throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
                                             return false;
                                         }
                                     }
                                     else {
                                         LexemIndex = LastLexemIndex;
-                                        throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+                                        throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
                                         return false;
                                     }
                                 }
                                 else {
                                     LexemIndex = LastLexemIndex;
-                                    throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+                                    throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
                                     return false;
                                 }
                             }
                             else {
                                 LexemIndex = LastLexemIndex;
-                                throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+                                throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
                                 return false;
                             }
                         }
                         else {
                             LexemIndex = LastLexemIndex;
-                            throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+                            throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
                             return false;
                         }
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+                        throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzeForStatement()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzeForStatement() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -531,25 +531,25 @@ bool SyntaxAnalyzer::AnalyzeFieldView() {
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        throw std::runtime_error( "Error in AnalyzeFieldView()" + NumLine());
+                        throw std::runtime_error( "Error in AnalyzeFieldView() error in " + NumLine() + " line");
                         return false;
                     }
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeFieldView()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeFieldView() error in " + NumLine() + " line");
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeFieldView()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeFieldView() error in " + NumLine() + " line");
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzeFieldView()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzeFieldView() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -572,22 +572,22 @@ bool SyntaxAnalyzer::AnalyzePrintStatement() {
                     }
                     else {
                         LexemIndex = LastLexemIndex;
-                        throw std::runtime_error( "Error in AnalyzePrintStatement()" + NumLine());
+                        throw std::runtime_error( "Error in AnalyzePrintStatement() error in " + NumLine() + " line");
                         return false;
                     }
                 } else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzePrintStatement()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzePrintStatement() error in " + NumLine() + " line");
                     return false;
                 }
             } else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzePrintStatement()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzePrintStatement() error in " + NumLine() + " line");
                 return false;
             }
         } else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzePrintStatement()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzePrintStatement() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -606,13 +606,13 @@ bool SyntaxAnalyzer::AnalyzeReturnStatement() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeReturnStatement()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeReturnStatement() error in " + NumLine() + " line");
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzeReturnStatement()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzeReturnStatement() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -629,7 +629,7 @@ bool SyntaxAnalyzer::AnalyzeCaseExpression() {
                 ++LexemIndex;
                 if (!AnalyzeExpression()) {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeCaseExpression()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeCaseExpression() error in " + NumLine() + " line");
                     return false;
                 }
             }
@@ -640,13 +640,13 @@ bool SyntaxAnalyzer::AnalyzeCaseExpression() {
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeCaseExpression()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeCaseExpression() error in " + NumLine() + " line");
                 return false;
             }
         }
         else {
             LexemIndex = LastLexemIndex;
-            throw std::runtime_error( "Error in AnalyzeCaseExpression()" + NumLine());
+            throw std::runtime_error( "Error in AnalyzeCaseExpression() error in " + NumLine() + " line");
             return false;
         }
     }
@@ -662,7 +662,7 @@ bool SyntaxAnalyzer::AnalyzeExpression() {
             ++LexemIndex;
             if (!AnalyzeTerm()) {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeExpression()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeExpression() error in " + NumLine() + " line");
                 return false;
             }
         }
@@ -679,7 +679,7 @@ bool SyntaxAnalyzer::AnalyzeTerm() {
 
             if (!AnalyzeFactor()) {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeTerm()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeTerm() error in " + NumLine() + " line");
                 return false;
             }
         }
@@ -708,13 +708,13 @@ bool SyntaxAnalyzer::AnalyzeFactor() {
                 }
                 else {
                     LexemIndex = LastLexemIndex;
-                    throw std::runtime_error( "Error in AnalyzeFactor()" + NumLine());
+                    throw std::runtime_error( "Error in AnalyzeFactor() error in " + NumLine() + " line");
                     return false;
                 }
             }
             else {
                 LexemIndex = LastLexemIndex;
-                throw std::runtime_error( "Error in AnalyzeFactor()" + NumLine());
+                throw std::runtime_error( "Error in AnalyzeFactor() error in " + NumLine() + " line");
                 return false;
             }
         }
