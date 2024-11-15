@@ -174,7 +174,6 @@ bool SyntaxAnalyzer::AnalyzeParameterList() {
 
 bool SyntaxAnalyzer::AnalyzeVariableDeclaration() {
     int LastLexemIndex = LexemIndex;
-
     // Первый вариант: <Type> + <Identifier> + "=" + <Expression> + <StatementTerminator>
     if (AnalyzeType()) {
         if (AnalyzeIdentifier()) {
@@ -650,7 +649,18 @@ bool SyntaxAnalyzer::AnalyzeCaseExpression() {
             return false;
         }
     }
-
+    else {
+        if (AnalyzeExpression()) {
+            while (lex[LexemIndex].get_text() == "and" || lex[LexemIndex].get_text() == "or") {
+                ++LexemIndex;
+                if (!AnalyzeExpression()) {
+                    LexemIndex = LastLexemIndex;
+                    throw std::runtime_error( "Error in AnalyzeCaseExpression() error in " + NumLine() + " line");
+                    return false;
+                }
+            }
+        }
+    }
     return false;
 }
 

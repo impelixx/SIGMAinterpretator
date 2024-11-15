@@ -21,11 +21,11 @@ int main() {
             analyzer.PrintLexems();
             std::vector<Lexem> lexems = analyzer.GetLexems();
             SyntaxAnalyzer Syntaxer(lexems);
-            Syntaxer.Analyze();
+            // Syntaxer.Analyze();
         } catch (const std::exception& e) {
             std::cerr << "error: " << e.what() << std::endl;
             std::cerr << "At position: " << analyzer.GetCurrentPosition() << std::endl;
-            analyzer.PrintLexems();
+            // analyzer.PrintLexems();
             return 2;
         }
 
