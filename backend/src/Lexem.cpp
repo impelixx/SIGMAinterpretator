@@ -39,6 +39,9 @@ std::string Lexem::get_type() const {
     if (type_ == LexemType::BRACKET) {
         return "BRACKET";
     }
+    if (type_ == LexemType::STRING) {
+        return "STRING";
+    }
     if (type_ == LexemType::EOC) {
         return "EOC";
     }
