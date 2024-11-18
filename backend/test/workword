@@ -2,12 +2,10 @@ bool
 int
 float
 char
-string
 void
 return
 for
 while
-do
 break
 continue
 if

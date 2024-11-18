@@ -1,8 +1,9 @@
 #include <iostream>
-#include "LexemAnalyzer.h"
 #include <fstream>
 #include <sstream>
+#include "LexemAnalyzer.h"
 #include <SyntaxAnalyzer.h>
+#include <Semantic.h>
 
 int main() {
     try {
@@ -20,12 +21,12 @@ int main() {
             analyzer.Analyze();
             analyzer.PrintLexems();
             std::vector<Lexem> lexems = analyzer.GetLexems();
-            SyntaxAnalyzer Syntaxer(lexems);
-            // Syntaxer.Analyze();
+            SyntaxAnalyzer syntaxer(lexems);
+            Semantic semantic(lexems);
+            semantic.Analyze();
         } catch (const std::exception& e) {
             std::cerr << "error: " << e.what() << std::endl;
             std::cerr << "At position: " << analyzer.GetCurrentPosition() << std::endl;
-            // analyzer.PrintLexems();
             return 2;
         }
 
