@@ -19,6 +19,7 @@ file(
     "src/**/*.cpp"
     "src/*.cpp"
     "src/Lexem.cpp"
+    "src/Semantic.cpp"
 )
 
 set(
