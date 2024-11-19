@@ -7,7 +7,7 @@
 #include <utility>
 
 bool Semantic::Analyze() {
-    std::vector<std::string> WorkWords = {"bool", "int", "float", "char", "void", "return", "for", "while", "break", "continue", "if", "else", "print", "array"};
+    std::vector<std::string> WorkWords = {"bool", "int", "float", "char", "void", "return", "for", "while", "break", "continue", "if", "else", "print", "array", "def"};
 
     // Analyzing INDENT-DEDENT
     {
@@ -91,13 +91,18 @@ bool Semantic::Analyze() {
                         lex_[i].get_text() == "char" ||
                         lex_[i].get_text() == "string" ||
                         lex_[i].get_text() == "int" ||
-                        lex_[i].get_text() == "float") {
+                        lex_[i].get_text() == "float" ||
+                        lex_[i].get_text() == "def") {
                     VariableType = lex_[i].get_text();
                 }
             } else if (WordInLine == 2) {
                 if ((lex_[i].get_type() == "IDENTIFIER" || lex_[i].get_type() == "KEYWORD") && VariableType != "") {
                     variables.push_back({FieldOfViewNow, VariableType, lex_[i].get_text()});
                 }
+            }
+
+            if (lex_[i].get_type() == "DEDENT") {
+                variables.push_back({-1000000, "NONE_TYPE", "NONE"});
             }
 
             if (lex_[i].get_type() == "NEWLINE" || lex_[i].get_type() == "INDENT" || lex_[i].get_type() == "DEDENT") {
@@ -124,15 +129,19 @@ bool Semantic::Analyze() {
             if (i > 0) {
                 if (get<0>(variables[i]) < get<0>(variables[i - 1])) {
                     for (int j = i - 1; j >= 0 && get<0>(variables[j]) == get<0>(variables[i - 1]); --j) {
-                        vised[get<2>(variables[i])] = false;
+                        // std::cout << "-vising " << get<2>(variables[j]) << std::endl;
+                        vised[get<2>(variables[j])] = false;
                     }
                     continue;
                 }
             }
             if (vised[get<2>(variables[i])]) {
+                // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
                 throw std::runtime_error("Redeclaring an existing variable");
             }
-            vised[get<2>(variables[i])] = true;
+            if (get<0>(variables[i]) != -1000000) {
+                vised[get<2>(variables[i])] = true;
+            }
         }
     }
 
