@@ -30,7 +30,7 @@ int main() {
             return 2;
         }
 
-        std::cout << "Я победил" << std::endl;
+        std::cout << "No errors were found, the program is correct" << std::endl;
     } catch (const std::exception& e) {
         std::cerr << "error: " << e.what() << std::endl;
         return 1;

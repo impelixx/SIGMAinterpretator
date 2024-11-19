@@ -208,8 +208,8 @@ void LexemAnalyzer::AnalyzeVariableDeclaration() {
         else {
             AnalyzeExpression();
         }
-        std::cout << lexems_.back().get_type() << std::endl;
-        std::cout << lexems_.back().get_text() << std::endl;
+        // std::cout << lexems_.back().get_type() << std::endl;
+        // std::cout << lexems_.back().get_text() << std::endl;
         if (lexems_.back().get_type() != "NUMBER" && lexems_.back().get_type() != "IDENTIFIER" && lexems_.back().get_type() != "STRING") {
             throw std::runtime_error("Expected number or identifier after '=' in variable declaration, but get '" + lexems_.back().get_text() + "'");
         }
@@ -366,7 +366,7 @@ void LexemAnalyzer::AnalyzeAssignment() {
     else if (ch_ == '=') {
         lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", index_ - 1, index_));
         GetNextChar();
-        std::cout << ch_ << std::endl;
+        // std::cout << ch_ << std::endl;
         AnalyzeExpression();
         SkipWhitespace();
         
@@ -411,7 +411,7 @@ void LexemAnalyzer::AnalyzeExpression() {
             if (ch_ != ')') {
                 throw std::runtime_error("Expected closing ')' after array size expression, but get '" + std::string(1, ch_) + "'");
             }
-            std::cout << lexems_.back().get_type() << std::endl;
+            // std::cout << lexems_.back().get_type() << std::endl;
             lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_));
             GetNextChar();
         }
@@ -583,7 +583,7 @@ void LexemAnalyzer::AnalyzeIfStatement() {
         lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_));
     GetNextChar();
     SkipWhitespace();
-    std::cout << lexems_.back().get_type() << std::endl;
+    // std::cout << lexems_.back().get_type() << std::endl;
     if (ch_ == ':') {
         lexems_.emplace_back(Lexem(LexemType::OPERATOR, ":", index_ - 1, index_));
         GetNextChar();
