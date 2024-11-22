@@ -91,8 +91,7 @@ bool Semantic::Analyze() {
                         lex_[i].get_text() == "char" ||
                         lex_[i].get_text() == "string" ||
                         lex_[i].get_text() == "int" ||
-                        lex_[i].get_text() == "float" ||
-                        lex_[i].get_text() == "def") {
+                        lex_[i].get_text() == "float") {
                     VariableType = lex_[i].get_text();
                 }
             } else if (WordInLine == 2) {
@@ -112,12 +111,14 @@ bool Semantic::Analyze() {
                 ++WordInLine;
             }
 
-            if (lex_[i].get_type() == "IDENTIFIER") {
+            if (lex_[i].get_type() == "IDENTIFIER" && !lex_[i].get_text().empty()) {
                 bool WasDeclared = false;
                 for (int j = 0; j < variables.size(); ++j) {
                     if (get<2>(variables[j]) == lex_[i].get_text()) {
                         WasDeclared = true;
                         break;
+                    } else {
+                        // std::cout << get<2>(variables[j]) << "!=" << lex_[i].get_text() << "\n";
                     }
                 }
                 if (!WasDeclared) {
@@ -163,6 +164,18 @@ bool Semantic::Analyze() {
     }
 
     // Analyzing variables (connecting types)
+    {
+        std::vector<std::vector<Lexem>> LinesLexems = {{}};
+        int LineNum = 0;
+        for (int i = 0; i < lex_.size(); ++i) {
+            if (lex_[i].get_type() == "NEWLINE") {
+                LinesLexems.push_back({});
+            } else {
+                LinesLexems[LineNum].push_back(lex_[i]);
+            }
+            // LinesLexems.push_back();
+        }
+    }
 
     return true;
 }
