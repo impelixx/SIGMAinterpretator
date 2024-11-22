@@ -111,6 +111,19 @@ bool Semantic::Analyze() {
             } else {
                 ++WordInLine;
             }
+
+            if (lex_[i].get_type() == "IDENTIFIER") {
+                bool WasDeclared = false;
+                for (int j = 0; j < variables.size(); ++j) {
+                    if (get<2>(variables[j]) == lex_[i].get_text()) {
+                        WasDeclared = true;
+                        break;
+                    }
+                }
+                if (!WasDeclared) {
+                    throw std::runtime_error("Using undeclared variable");
+                }
+            }
         }
 
         for (int i = 0; i < variables.size(); ++i) {
@@ -142,6 +155,10 @@ bool Semantic::Analyze() {
             if (get<0>(variables[i]) != -1000000) {
                 vised[get<2>(variables[i])] = true;
             }
+        }
+
+        for (int i = 0; i < lex_.size(); ++i) {
+
         }
     }
 
