@@ -73,7 +73,6 @@ bool Semantic::Analyze() {
     // Analyzing variables (field of view)
     {
         std::vector<std::tuple<int, std::string, std::string>> variables; // <field of view, type of the variable, name of the variable>
-        std::vector<std::pair<int, std::string>> UsedVars; // <field of view, name of the variable>
 
         int WordInLine = 1;
         int FieldOfViewNow = 0;
@@ -87,17 +86,28 @@ bool Semantic::Analyze() {
                 --FieldOfViewNow;
             }
 
+            bool MeetIf = false;
+
             if (WordInLine == 1) {
                 if (lex_[i].get_text() == "bool" ||
                         lex_[i].get_text() == "char" ||
                         lex_[i].get_text() == "string" ||
                         lex_[i].get_text() == "int" ||
                         lex_[i].get_text() == "float") {
+                    MeetIf = true;
                     VariableType = lex_[i].get_text();
                 }
             } else if (WordInLine == 2) {
                 if ((lex_[i].get_type() == "IDENTIFIER" || lex_[i].get_type() == "KEYWORD") && VariableType != "") {
+                    MeetIf = true;
                     variables.push_back({FieldOfViewNow, VariableType, lex_[i].get_text()});
+                }
+            }
+
+            if (!MeetIf) {
+                if (lex_[i].get_type() == "IDENTIFIER" && !lex_[i].get_text().empty()) {
+                    // std::cout << "USING-1- " << lex_[i].get_text() << "\n";
+                    variables.push_back({FieldOfViewNow, "USING", lex_[i].get_text()});
                 }
             }
 
@@ -112,9 +122,22 @@ bool Semantic::Analyze() {
                 ++WordInLine;
             }
 
+            /*
             if (lex_[i].get_type() == "IDENTIFIER" && !lex_[i].get_text().empty()) {
-                UsedVars.push_back({FieldOfViewNow, lex_[i].get_text()});
+                bool WasDeclared = false;
+                for (int j = 0; j < variables.size(); ++j) {
+                    if (get<2>(variables[j]) == lex_[i].get_text()) {
+                        WasDeclared = true;
+                        break;
+                    } else {
+                        // std::cout << get<2>(variables[j]) << "!=" << lex_[i].get_text() << "\n";
+                    }
+                }
+                if (!WasDeclared) {
+                    throw std::runtime_error("Using undeclared variable " + lex_[i].get_text());
+                }
             }
+            */
         }
 
         for (int i = 0; i < variables.size(); ++i) {
@@ -130,25 +153,34 @@ bool Semantic::Analyze() {
         std::map<std::string, bool> vised;
 
         for (int i = 0; i < variables.size(); ++i) {
-            if (i > 0) {
-                if (get<0>(variables[i]) < get<0>(variables[i - 1])) {
-                    for (int j = i - 1; j >= 0 && get<0>(variables[j]) == get<0>(variables[i - 1]); --j) {
-                        // std::cout << "-vising " << get<2>(variables[j]) << std::endl;
-                        vised[get<2>(variables[j])] = false;
+            if (get<1>(variables[i]) == "USING") {
+                // std::cout << get<1>(variables[i]) << " " << get<2>(variables[i]) << "\n";
+                if (!vised[get<2>(variables[i])]) {
+                    // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
+                    throw std::runtime_error("Using undeclared variable");
+                }
+            } else {
+                if (i > 0) {
+                    if (get<0>(variables[i]) < get<0>(variables[i - 1])) {
+                        for (int j = i - 1; j >= 0 && get<0>(variables[j]) == get<0>(variables[i - 1]); --j) {
+                            // std::cout << "-vising " << get<2>(variables[j]) << std::endl;
+                            vised[get<2>(variables[j])] = false;
+                        }
+                        continue;
                     }
-                    continue;
+                }
+                if (vised[get<2>(variables[i])]) {
+                    // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
+                    throw std::runtime_error("Redeclaring an existing variable");
+                }
+                if (get<0>(variables[i]) != -1000000) {
+                    vised[get<2>(variables[i])] = true;
                 }
             }
-            if (vised[get<2>(variables[i])]) {
-                // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
-                throw std::runtime_error("Redeclaring an existing variable");
-            }
-            if (get<0>(variables[i]) != -1000000) {
-                vised[get<2>(variables[i])] = true;
-            }
         }
+
     }
-    
+
     // Analyzing variables (connecting types)
     {
         std::vector<std::vector<Lexem>> LinesLexems = {{}};

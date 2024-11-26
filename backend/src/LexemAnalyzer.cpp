@@ -507,7 +507,7 @@ void LexemAnalyzer::AnalyzeNumber() {
 
 void LexemAnalyzer::PrintLexems() const {
     for (auto& lexem : lexems_) {
-        // std::cout << "Type: " << lexem.get_type() << ", Text: " << lexem.get_text() << std::endl;
+        std::cout << "Type: " << lexem.get_type() << ", Text: " << lexem.get_text() << std::endl;
     }
 }
 

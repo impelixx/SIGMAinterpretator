@@ -33,7 +33,7 @@ int main() {
 
         try {
             analyzer.Analyze();
-            //analyzer.PrintLexems();
+            analyzer.PrintLexems();
             std::vector<Lexem> lexems = analyzer.GetLexems();
             SyntaxAnalyzer syntaxer(lexems);
             Semantic semantic(lexems);
