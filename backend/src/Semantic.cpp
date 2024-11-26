@@ -73,6 +73,7 @@ bool Semantic::Analyze() {
     // Analyzing variables (field of view)
     {
         std::vector<std::tuple<int, std::string, std::string>> variables; // <field of view, type of the variable, name of the variable>
+        std::vector<std::pair<int, std::string>> UsedVars; // <field of view, name of the variable>
 
         int WordInLine = 1;
         int FieldOfViewNow = 0;
@@ -112,18 +113,7 @@ bool Semantic::Analyze() {
             }
 
             if (lex_[i].get_type() == "IDENTIFIER" && !lex_[i].get_text().empty()) {
-                bool WasDeclared = false;
-                for (int j = 0; j < variables.size(); ++j) {
-                    if (get<2>(variables[j]) == lex_[i].get_text()) {
-                        WasDeclared = true;
-                        break;
-                    } else {
-                        // std::cout << get<2>(variables[j]) << "!=" << lex_[i].get_text() << "\n";
-                    }
-                }
-                if (!WasDeclared) {
-                    throw std::runtime_error("Using undeclared variable");
-                }
+                UsedVars.push_back({FieldOfViewNow, lex_[i].get_text()});
             }
         }
 
@@ -157,12 +147,8 @@ bool Semantic::Analyze() {
                 vised[get<2>(variables[i])] = true;
             }
         }
-
-        for (int i = 0; i < lex_.size(); ++i) {
-
-        }
     }
-
+    
     // Analyzing variables (connecting types)
     {
         std::vector<std::vector<Lexem>> LinesLexems = {{}};

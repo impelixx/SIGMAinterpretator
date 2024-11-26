@@ -25,3 +25,4 @@ backend/.DS_Store
 .vscode/
 .vscode/settings.json
 test/
+CMakeFiles/clion-Default-log.txt

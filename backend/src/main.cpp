@@ -33,12 +33,13 @@ int main() {
 
         try {
             analyzer.Analyze();
-            analyzer.PrintLexems();
+            //analyzer.PrintLexems();
             std::vector<Lexem> lexems = analyzer.GetLexems();
             SyntaxAnalyzer syntaxer(lexems);
             Semantic semantic(lexems);
             semantic.Analyze();
         } catch (const std::exception& e) {
+            analyzer.PrintLexems();
             std::cout << "============================================" << std::endl;
             std::cerr << "error: " << e.what() << std::endl;
             std::cerr << "At line: " << GetLine((int) analyzer.GetCurrentPosition(), analyzer.GetLexems()) << std::endl;
