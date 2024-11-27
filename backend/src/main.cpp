@@ -36,8 +36,15 @@ int main() {
             analyzer.PrintLexems();
             std::vector<Lexem> lexems = analyzer.GetLexems();
             SyntaxAnalyzer syntaxer(lexems);
-            Semantic semantic(lexems);
-            semantic.Analyze();
+
+            try {
+                Semantic semantic(lexems);
+                semantic.Analyze();
+            } catch (const std::exception& e) {
+                std::cout << "============================================" << std::endl;
+                std::cerr << "error: " << e.what() << std::endl;
+                return 3;
+            }
         } catch (const std::exception& e) {
             analyzer.PrintLexems();
             std::cout << "============================================" << std::endl;

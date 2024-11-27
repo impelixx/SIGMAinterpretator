@@ -6,6 +6,18 @@
 #include <map>
 #include <utility>
 
+int Semantic::GetLine(int index) {
+    int NumLine = 1;
+
+    for (int i = 0; i <= index; ++i) {
+        if (lex_[i].get_type() == "NEWLINE") {
+            ++NumLine;
+        }
+    }
+
+    return NumLine;
+}
+
 bool Semantic::Analyze() {
     std::vector<std::string> WorkWords = {"bool", "int", "float", "char", "void", "return", "for", "while", "break", "continue", "if", "else", "print", "array", "def"};
 
@@ -20,7 +32,7 @@ bool Semantic::Analyze() {
         for (int i = 0; i < lex_.size(); ++i) {
             if (i < lex_.size() - 1) {
                 if (lex_[i].get_type() == "INDENT" && lex_[i + 1].get_type() == "INDENT") {
-                    throw std::runtime_error("A sharp increase in the number of INDENTS");
+                    throw std::runtime_error("A sharp increase in the number of INDENTS\nAt line: " + std::to_string(GetLine(i)));
                     return false;
                 }
             }
@@ -35,7 +47,7 @@ bool Semantic::Analyze() {
                     // return false;
                 }
             } else if (lex_[i].get_type() == "INDENT") {
-                throw std::runtime_error("Have INDENT after line without special keyword");
+                throw std::runtime_error("Have INDENT after line without special keyword\nAt line: " + std::to_string(GetLine(i)));
                 return false;
             }
 
@@ -64,7 +76,7 @@ bool Semantic::Analyze() {
             }
 
             if (k1 < 0 || k2 < 0) {
-                throw std::runtime_error("Different amount of INDENT and DEDENT");
+                throw std::runtime_error("Different amount of INDENT and DEDENT\nAt line: " + std::to_string(GetLine(i)));
                 return false;
             }
         }
@@ -144,7 +156,7 @@ bool Semantic::Analyze() {
             // std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
             for (int j = 0; j < WorkWords.size(); ++j) {
                 if (get<2>(variables[i]) == WorkWords[j]) {
-                    throw std::runtime_error("Impossible variable name (KEYWORD)");
+                    throw std::runtime_error("Impossible variable name (KEYWORD)\nIn " + std::to_string(i) + " variable used");
                     return false;
                 }
             }
@@ -157,7 +169,7 @@ bool Semantic::Analyze() {
                 // std::cout << get<1>(variables[i]) << " " << get<2>(variables[i]) << "\n";
                 if (!vised[get<2>(variables[i])]) {
                     // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
-                    throw std::runtime_error("Using undeclared variable");
+                    throw std::runtime_error("Using undeclared variable\nIn " + std::to_string(i) + " variable used");
                 }
             } else {
                 if (i > 0) {
@@ -171,7 +183,7 @@ bool Semantic::Analyze() {
                 }
                 if (vised[get<2>(variables[i])]) {
                     // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
-                    throw std::runtime_error("Redeclaring an existing variable");
+                    throw std::runtime_error("Redeclaring an existing variable\nIn " + std::to_string(i) + " variable used");
                 }
                 if (get<0>(variables[i]) != -1000000) {
                     vised[get<2>(variables[i])] = true;

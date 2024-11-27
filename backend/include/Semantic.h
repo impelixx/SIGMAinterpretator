@@ -7,6 +7,7 @@ class Semantic {
 public:
     explicit Semantic(std::vector<Lexem> lexems) {lex_ = lexems;};
     bool Analyze();
+    int GetLine(int index);
 private:
     std::vector<Lexem> lex_;
 };
