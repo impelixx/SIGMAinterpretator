@@ -105,7 +105,8 @@ bool Semantic::Analyze() {
                         lex_[i].get_text() == "char" ||
                         lex_[i].get_text() == "string" ||
                         lex_[i].get_text() == "int" ||
-                        lex_[i].get_text() == "float") {
+                        lex_[i].get_text() == "float" ||
+                        lex_[i].get_text() == "def") {
                     MeetIf = true;
                     VariableType = lex_[i].get_text();
                 }

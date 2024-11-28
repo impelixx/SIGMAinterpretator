@@ -553,30 +553,27 @@ void LexemAnalyzer::AnalyzeFunctionDeclaration() {
 
 // Analyze function parameters
 void LexemAnalyzer::AnalyzeParameters() {
+    SkipWhitespace();
     if (ch_ == ')') {
         return;
     }
 
-    while (ch_ != ')' && ch_ != '\0' && (isdigit(ch_) || isalpha(ch_))) {
-        SkipWhitespace();
-        
-        if (isalpha(ch_)) {
-            std::string type;
-            size_t startPos = index_ - 1;
-            while (isalpha(ch_)) {
-                type += ch_;
-                GetNextChar();
-            }
-            if (keywords_.has(type.c_str(), type.length(), startPos).first) {
-                lexems_.emplace_back(Lexem(LexemType::KEYWORD, type, startPos, index_));
-            } else {
-                lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, type, startPos, index_));
-            }
+    while (ch_ != ')' && ch_ != '\0') {
+        std::string type;
+        size_t startPos = index_ - 1;
+        while (isalpha(ch_)) {
+            type += ch_;
+            GetNextChar();
         }
-        
+        if (!keywords_.has(type.c_str(), type.length(), startPos).first) {
+            throw std::runtime_error("Expected type name in function parameter list, but get '" + type + "'");
+        }
+        lexems_.emplace_back(Lexem(LexemType::KEYWORD, type, startPos, index_));
         SkipWhitespace();
+
         AnalyzeIdentifier();
         SkipWhitespace();
+
         if (ch_ == '[') {
             lexems_.emplace_back(Lexem(LexemType::BRACKET, "[", index_ - 1, index_));
             GetNextChar();
@@ -584,14 +581,17 @@ void LexemAnalyzer::AnalyzeParameters() {
                 lexems_.emplace_back(Lexem(LexemType::BRACKET, "]", index_ - 1, index_));
                 GetNextChar();
             } else {
-                throw std::runtime_error("Expected ']' after '[', but get '" + std::string(1, ch_) + "'");
+                throw std::runtime_error("Expected ']' after '[', but got '" + std::string(1, ch_) + "'");
             }
+            SkipWhitespace();
         }
-        
-        SkipWhitespace();
+
         if (ch_ == ',') {
             lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", index_ - 1, index_));
             GetNextChar();
+            SkipWhitespace();
+        } else if (ch_ != ')') {
+            throw std::runtime_error("Expected ',' or ')' in function parameter list, but got '" + std::string(1, ch_) + "'");
         }
     }
 }
