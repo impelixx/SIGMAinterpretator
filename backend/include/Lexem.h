@@ -17,7 +17,7 @@ enum LexemType {
     INDENT,     // Увеличение отступа
     EOS,        // End of string
     UNKNOWN,     // Неизвестные токен
-    EOC         // конец файлы
+    EOC         // конец файла
 };
 
 
