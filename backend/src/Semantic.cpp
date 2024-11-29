@@ -109,14 +109,19 @@ bool Semantic::Analyze() {
                     lex_[i].get_text() == "string" ||
                     lex_[i].get_text() == "int" ||
                     lex_[i].get_text() == "float" ||
-                    lex_[i].get_text() == "def") {
+                    lex_[i].get_text() == "def" ||
+                    lex_[i].get_text() == "for") {
                 WordInLine = 2;
                 MeetIf = true;
                 VariableType = lex_[i].get_text();
             } else if (WordInLine == 2) {
                 if ((lex_[i].get_type() == "IDENTIFIER" || lex_[i].get_type() == "KEYWORD") && VariableType != "") {
                     MeetIf = true;
-                    variables.push_back({FieldOfViewNow - (VariableType == "def"), VariableType, lex_[i].get_text()});
+                    std::string WhatType = VariableType;
+                    if (VariableType == "for") {
+                        WhatType = "int";
+                    }
+                    variables.push_back({FieldOfViewNow - (VariableType == "def"), WhatType, lex_[i].get_text()});
                 }
                 WordInLine = 0;
             }
@@ -151,7 +156,7 @@ bool Semantic::Analyze() {
         }
 
         for (int i = 0; i < variables.size(); ++i) {
-            std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
+            // std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
             for (int j = 0; j < WorkWords.size(); ++j) {
                 if (get<2>(variables[i]) == WorkWords[j]) {
                     throw std::runtime_error("Impossible variable name (KEYWORD)\nIn " + std::to_string(i) + " variable used");
@@ -173,7 +178,7 @@ bool Semantic::Analyze() {
                 if (i > 0) {
                     if (get<0>(variables[i - 1]) > 0 && get<0>(variables[i]) < get<0>(variables[i - 1])) {
                         for (int j = i - 1; j >= 0 && get<0>(variables[j]) == get<0>(variables[i - 1]); --j) {
-                            std::cout << "-vising " << get<2>(variables[j]) << std::endl;
+                            // std::cout << "-vising " << get<2>(variables[j]) << std::endl;
                             vised[get<2>(variables[j])] = false;
                         }
                     }
@@ -182,7 +187,7 @@ bool Semantic::Analyze() {
                     // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
                     throw std::runtime_error("Redeclaring an existing variable\nIn " + std::to_string(i) + " variable used");
                 } else {
-                    std::cout << "not vised " << get<2>(variables[i]) << std::endl;
+                    // std::cout << "not vised " << get<2>(variables[i]) << std::endl;
                 }
                 if (get<0>(variables[i]) > -1000000) {
                     vised[get<2>(variables[i])] = true;
