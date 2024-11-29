@@ -51,10 +51,7 @@ bool Semantic::Analyze() {
                 return false;
             }
 
-            if (lex_[i].get_type() == "INDENT") {
-                // std::cout << "+tab" << std::endl;
-                ++k1;
-            } else if (lex_[i].get_type() == "DEDENT") {
+            if (lex_[i].get_type() == "DEDENT") {
                 // std::cout << "-tab" << std::endl;
                 --k1;
                 --k2;
@@ -73,6 +70,7 @@ bool Semantic::Analyze() {
                         lex_[i].get_text() == "else")) {
                 WasNewFieldOfViewInThisLine = true;
                 ++k2;
+                ++k1;
             }
 
             if (k1 < 0 || k2 < 0) {
@@ -92,29 +90,35 @@ bool Semantic::Analyze() {
         std::string VariableType = "";
 
         for (int i = 0; i < lex_.size(); ++i) {
-            if (lex_[i].get_type() == "INDENT") {
-                ++FieldOfViewNow;
-            } else if (lex_[i].get_type() == "DEDENT") {
+            if (lex_[i].get_type() == "DEDENT") {
                 --FieldOfViewNow;
+            }
+
+            if (lex_[i].get_text() == "def" ||
+                lex_[i].get_text() == "if" ||
+                lex_[i].get_text() == "for" ||
+                lex_[i].get_text() == "while" ||
+                lex_[i].get_text() == "else") {
+                ++FieldOfViewNow;
             }
 
             bool MeetIf = false;
 
-            if (WordInLine == 1) {
-                if (lex_[i].get_text() == "bool" ||
-                        lex_[i].get_text() == "char" ||
-                        lex_[i].get_text() == "string" ||
-                        lex_[i].get_text() == "int" ||
-                        lex_[i].get_text() == "float" ||
-                        lex_[i].get_text() == "def") {
-                    MeetIf = true;
-                    VariableType = lex_[i].get_text();
-                }
+            if (lex_[i].get_text() == "bool" ||
+                    lex_[i].get_text() == "char" ||
+                    lex_[i].get_text() == "string" ||
+                    lex_[i].get_text() == "int" ||
+                    lex_[i].get_text() == "float" ||
+                    lex_[i].get_text() == "def") {
+                WordInLine = 2;
+                MeetIf = true;
+                VariableType = lex_[i].get_text();
             } else if (WordInLine == 2) {
                 if ((lex_[i].get_type() == "IDENTIFIER" || lex_[i].get_type() == "KEYWORD") && VariableType != "") {
                     MeetIf = true;
-                    variables.push_back({FieldOfViewNow, VariableType, lex_[i].get_text()});
+                    variables.push_back({FieldOfViewNow - (VariableType == "def"), VariableType, lex_[i].get_text()});
                 }
+                WordInLine = 0;
             }
 
             if (!MeetIf) {
@@ -126,13 +130,6 @@ bool Semantic::Analyze() {
 
             if (lex_[i].get_type() == "DEDENT") {
                 variables.push_back({-1000000, "NONE_TYPE", "NONE"});
-            }
-
-            if (lex_[i].get_type() == "NEWLINE" || lex_[i].get_type() == "INDENT" || lex_[i].get_type() == "DEDENT") {
-                WordInLine = 1;
-                VariableType = "";
-            } else {
-                ++WordInLine;
             }
 
             /*
@@ -154,7 +151,7 @@ bool Semantic::Analyze() {
         }
 
         for (int i = 0; i < variables.size(); ++i) {
-            // std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
+            std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
             for (int j = 0; j < WorkWords.size(); ++j) {
                 if (get<2>(variables[i]) == WorkWords[j]) {
                     throw std::runtime_error("Impossible variable name (KEYWORD)\nIn " + std::to_string(i) + " variable used");
@@ -174,19 +171,20 @@ bool Semantic::Analyze() {
                 }
             } else {
                 if (i > 0) {
-                    if (get<0>(variables[i]) < get<0>(variables[i - 1])) {
+                    if (get<0>(variables[i - 1]) > 0 && get<0>(variables[i]) < get<0>(variables[i - 1])) {
                         for (int j = i - 1; j >= 0 && get<0>(variables[j]) == get<0>(variables[i - 1]); --j) {
-                            // std::cout << "-vising " << get<2>(variables[j]) << std::endl;
+                            std::cout << "-vising " << get<2>(variables[j]) << std::endl;
                             vised[get<2>(variables[j])] = false;
                         }
-                        continue;
                     }
                 }
                 if (vised[get<2>(variables[i])]) {
                     // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
                     throw std::runtime_error("Redeclaring an existing variable\nIn " + std::to_string(i) + " variable used");
+                } else {
+                    std::cout << "not vised " << get<2>(variables[i]) << std::endl;
                 }
-                if (get<0>(variables[i]) != -1000000) {
+                if (get<0>(variables[i]) > -1000000) {
                     vised[get<2>(variables[i])] = true;
                 }
             }
