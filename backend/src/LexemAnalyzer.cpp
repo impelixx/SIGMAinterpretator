@@ -210,7 +210,7 @@ void LexemAnalyzer::AnalyzeVariableDeclaration() {
         }
         // std::cout << lexems_.back().get_type() << std::endl;
         // std::cout << lexems_.back().get_text() << std::endl;
-        if (lexems_.back().get_type() != "NUMBER" && lexems_.back().get_type() != "IDENTIFIER" && lexems_.back().get_type() != "STRING") {
+        if (lexems_.back().get_type() != "NUMBER" && lexems_.back().get_type() != "IDENTIFIER" && lexems_.back().get_type() != "STRING" && lexems_.back().get_type() == "BRACKETS") {
             throw std::runtime_error("Expected number or identifier after '=' in variable declaration, but get '" + lexems_.back().get_text() + "'");
         }
         SkipWhitespace();
@@ -266,7 +266,13 @@ void LexemAnalyzer::AnalyzeForStatement() {
     GetNextChar();
     SkipWhitespace();
 
-    AnalyzeExpression();
+    if (isalpha(ch_)) {
+        AnalyzeIdentifier();
+    }
+    else
+    {
+        AnalyzeNumber();
+    }
     SkipWhitespace();
 
     if (ch_ != ')') {

@@ -110,7 +110,8 @@ bool Semantic::Analyze() {
                     lex_[i].get_text() == "int" ||
                     lex_[i].get_text() == "float" ||
                     lex_[i].get_text() == "def" ||
-                    lex_[i].get_text() == "for") {
+                    lex_[i].get_text() == "for" ||
+                    lex_[i].get_text() == "string") {
                 WordInLine = 2;
                 MeetIf = true;
                 VariableType = lex_[i].get_text();
