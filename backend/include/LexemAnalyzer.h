@@ -46,6 +46,7 @@ private:
     size_t index_;
     size_t currentPosition_;
     bor keywords_;
+    size_t curLine_ = 0;
 };
 
 #endif // LEXEM_ANALYZER_H

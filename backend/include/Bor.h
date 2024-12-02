@@ -32,16 +32,16 @@ public:
         for(size_t i = 0; i < size; ++i) {
             unsigned char c = static_cast<unsigned char>(s[i]);
             if (!cur->to[c]) {
-                return {false, Lexem(LexemType::KEYWORD, line, s_index, s_index + i)};
+                return {false, Lexem(LexemType::KEYWORD, line, s_index, s_index + i, 0)};
             }
             cur = cur->to[c];
             line.push_back(s[i]);
 
             if (cur->terminal && i == size - 1) {
-                return {true, Lexem(LexemType::KEYWORD, line, s_index, s_index + i + 1)};
+                return {true, Lexem(LexemType::KEYWORD, line, s_index, s_index + i + 1, 0)};
             }
         }
-        return {false, Lexem(LexemType::KEYWORD, line, s_index, s_index + size)};
+        return {false, Lexem(LexemType::KEYWORD, line, s_index, s_index + size, 0)};
     }
 
     ~bor() {

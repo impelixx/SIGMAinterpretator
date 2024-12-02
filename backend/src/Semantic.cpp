@@ -117,14 +117,19 @@ bool Semantic::Analyze() {
                 VariableType = lex_[i].get_text();
             } else if (WordInLine == 2) {
                 if ((lex_[i].get_type() == "IDENTIFIER" || lex_[i].get_type() == "KEYWORD") && VariableType != "") {
-                    MeetIf = true;
-                    std::string WhatType = VariableType;
-                    if (VariableType == "for") {
-                        WhatType = "int";
-                    }
-                    variables.push_back({FieldOfViewNow - (VariableType == "def"), WhatType, lex_[i].get_text()});
+                MeetIf = true;
+                std::string WhatType = VariableType;
+                if (VariableType == "for") {
+                    WhatType = "int";
                 }
-                WordInLine = 0;
+
+                if (VariableType == "def" || VariableType == "for") {
+                    variables.push_back({FieldOfViewNow - 1, WhatType, lex_[i].get_text()});
+                } else {
+                    variables.push_back({FieldOfViewNow, WhatType, lex_[i].get_text()});
+                }
+            }
+            WordInLine = 0;
             }
 
             if (!MeetIf) {
