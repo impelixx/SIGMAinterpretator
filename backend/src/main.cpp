@@ -5,19 +5,39 @@
 #include <SyntaxAnalyzer.h>
 #include <Semantic.h>
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " <input_file> <workword_file>" << std::endl;
+        return 1;
+    }
+
+    std::string code;
+    std::string workwords;
+
     try {
-        std::ifstream file("../test/code.us");
+        if (argc < 3) {
+            std::ifstream codeFile("../test/code.us");
+            std::ifstream workwordFile("../test/keywords");
+            if (!codeFile.is_open()) {
+                throw std::runtime_error("Failed to open code file '../test/code.us'");
+            }
+            if (!workwordFile.is_open()) {
+                throw std::runtime_error("Failed to open workword file '../test/keywords'");
+            }
+            std::stringstream codeBuffer;
+            codeBuffer << codeFile.rdbuf();
+            code = codeBuffer.str();
 
-        if (!file.is_open()) {
-            throw std::runtime_error("Failed to open file '../test/code.us'");
         }
+        std::ifstream codeFile(argv[1]);
+        if (!codeFile.is_open()) {
+            throw std::runtime_error(std::string("Failed to open code file '") + argv[1] + "'");
+        }
+        std::stringstream codeBuffer;
+        codeBuffer << codeFile.rdbuf();
+        code = codeBuffer.str();
 
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        std::string code = buffer.str();
-
-        LexemAnalyzer analyzer(code);
+        LexemAnalyzer analyzer(code, argv[2]);
 
         try {
             analyzer.Analyze();
@@ -26,22 +46,15 @@ int main() {
                 Semantic semantic(lexems);
                 semantic.Analyze();
             } catch (const std::exception& e) {
-                std::cout << "============================================" << std::endl;
-                std::cerr << "error: " << e.what() << std::endl;
-                return 3;
+                std::cerr << "Semantic analysis error: " << e.what() << std::endl;
+                return 1;
             }
         } catch (const std::exception& e) {
-            std::cout << "============================================" << std::endl;
-            std::cerr << "error: " << e.what() << std::endl;
-            std::cerr << "At line: " << analyzer.GetCurrentPosition() << std::endl;
-            // std::cerr << "At position: " << analyzer.GetCurrentPosition() << std::endl;
-            return 2;
+            std::cerr << "Lexical analysis error: " << e.what() << std::endl;
+            return 1;
         }
-
-        std::cout << "============================================" << std::endl;
-        std::cout << "No errors were found, the program is correct" << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "error: " << e.what() << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
 

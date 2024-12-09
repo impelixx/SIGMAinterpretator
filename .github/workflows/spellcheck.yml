@@ -1,19 +1,29 @@
-name: Spell Check
+name: runTests
 
 on:
-  pull_request:
-  push:
-
+  pull_request: 
+    branches:
+      - master
+      - main
 jobs:
-  spellcheck:
+  name: LexerTestOnUbuntu:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - name: Spell check
-        uses: codespell-project/actions-codespell@master
-        with:
-          check_filenames: true
-          check_hidden: true
-          ignore_words_file: etc/codespell-ignore-words-list.txt
+        uses: actions/checkout@v2
+      - name: Install cpp + cmake
+        run: |
+          sudo apt-get install -y cmake
+          sudo apt-get install -y ninja
+          sudo apt-get install -y g++
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake -G Ninja ../backend
+          ninja
+      - name: Run tests
+        run: |
+          cd build
+          ./backend 
+          

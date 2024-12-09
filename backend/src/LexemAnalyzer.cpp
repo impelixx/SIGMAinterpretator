@@ -5,12 +5,15 @@
 #include <stack>
 #include <fstream>
 
-LexemAnalyzer::LexemAnalyzer(const std::string& code)
+LexemAnalyzer::LexemAnalyzer(const std::string& code, const std::string& pathToKeywords)
     : code_(code), ch_('\0'), index_(0), currentPosition_(0) {
+        if (code_.empty()) {
+            return;
+        }
     indentStack_.push_back(0);
-    std::ifstream keywords("../test/workword");
+    std::ifstream keywords(pathToKeywords);
     if (!keywords.is_open()) {
-        throw std::runtime_error("Failed to open file '../test/workword.txt'");
+        throw std::runtime_error(pathToKeywords);
     }
     std::string word;
     while (keywords >> word) {
@@ -577,7 +580,6 @@ void LexemAnalyzer::AnalyzeParameters() {
             type += ch_;
             GetNextChar();
         }
-        std::cout << type << std::endl;
         if (!keywords_.has(type.c_str(), type.length(), startPos).first || type != "string")
         {
             throw std::runtime_error("Expected type name in function parameter list, but get '" + type + "'");
