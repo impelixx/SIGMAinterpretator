@@ -1,0 +1,19 @@
+name: Spell Check
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  spellcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Spell check
+        uses: codespell-project/actions-codespell@master
+        with:
+          check_filenames: true
+          check_hidden: true
+          ignore_words_file: etc/codespell-ignore-words-list.txt
