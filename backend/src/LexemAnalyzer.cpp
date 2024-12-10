@@ -8,7 +8,7 @@
 LexemAnalyzer::LexemAnalyzer(const std::string& code)
     : code_(code), ch_('\0'), index_(0), currentPosition_(0) {
     indentStack_.push_back(0);
-    std::ifstream keywords("../test/workword");
+    std::ifstream keywords("../test/workword.txt");
     if (!keywords.is_open()) {
         throw std::runtime_error("Failed to open file '../test/workword.txt'");
     }
