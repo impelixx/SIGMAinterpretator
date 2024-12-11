@@ -31,7 +31,6 @@ jobs:
           cd ../tests
       - name: Start Tests
         run: |
-          ls
           cd tests
+          ls
           python3 tester.py
-          
