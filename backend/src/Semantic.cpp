@@ -180,7 +180,7 @@ bool Semantic::Analyze() {
         }
 
         for (int i = 0; i < variables.size(); ++i) {
-            std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
+            // std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
             for (int j = 0; j < WorkWords.size(); ++j) {
                 if (get<2>(variables[i]) == WorkWords[j]) {
                     throw std::runtime_error("Impossible variable name (KEYWORD): " + get<2>(variables[i]));

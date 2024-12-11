@@ -32,6 +32,9 @@ private:
     void AnalyzeExpression();
     void AnalyzeIdentifier();
     void AnalyzeNumber();
+    void AnalyzeString();
+    void AnalyzeTerm();
+    void AnalyzeFactor();
 
     // Util
     void GetNextChar();

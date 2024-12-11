@@ -48,7 +48,6 @@ int main(int argc, char* argv[]) {
                 return 2;
             }
         } catch (const std::exception& e) {
-            analyzer.PrintLexems();
             std::cerr << "Lexical analysis error: " << e.what() << std::endl;
             return 1;
         }
