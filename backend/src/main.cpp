@@ -5,7 +5,12 @@
 #include <SyntaxAnalyzer.h>
 #include <Semantic.h>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+
+
+
+
+{
     if (argc < 3) {
         if (argc != 1) {
             std::cerr << "Usage: " << argv[0] << " <path to code file> <path to workwords file>" << std::endl;
