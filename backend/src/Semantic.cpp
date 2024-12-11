@@ -89,6 +89,8 @@ bool Semantic::Analyze() {
 
         std::string VariableType = "";
 
+        bool was_pushed = false;
+
         for (int i = 0; i < lex_.size(); ++i) {
             if (lex_[i].get_type() == "DEDENT") {
                 --FieldOfViewNow;
@@ -101,6 +103,12 @@ bool Semantic::Analyze() {
                 lex_[i].get_text() == "else") {
                 ++FieldOfViewNow;
             }
+
+            if ((was_pushed && lex_[i].get_text() == "=" || lex_[i].get_text() == "==") && get<1>(variables[variables.size() - 1]) == "USING") {
+                variables[variables.size() - 1] = {get<0>(variables[variables.size() - 1]), "ASSIGNMENT", get<2>(variables[variables.size() - 1])};
+            }
+
+            was_pushed = false;
 
             bool MeetIf = false;
 
@@ -117,30 +125,34 @@ bool Semantic::Analyze() {
                 VariableType = lex_[i].get_text();
             } else if (WordInLine == 2) {
                 if ((lex_[i].get_type() == "IDENTIFIER" || lex_[i].get_type() == "KEYWORD") && VariableType != "") {
-                MeetIf = true;
-                std::string WhatType = VariableType;
-                if (VariableType == "for") {
-                    WhatType = "int";
-                }
+                    MeetIf = true;
+                    std::string WhatType = VariableType;
+                    if (VariableType == "for") {
+                        WhatType = "int";
+                    }
 
-                if (VariableType == "def" || VariableType == "for") {
-                    variables.push_back({FieldOfViewNow - 1, WhatType, lex_[i].get_text()});
-                } else {
-                    variables.push_back({FieldOfViewNow, WhatType, lex_[i].get_text()});
+                    if (VariableType == "def") {
+                        variables.push_back({FieldOfViewNow - 1, WhatType, lex_[i].get_text()});
+                        was_pushed = true;
+                    } else {
+                        variables.push_back({FieldOfViewNow, WhatType, lex_[i].get_text()});
+                        was_pushed = true;
+                    }
                 }
-            }
-            WordInLine = 0;
+                WordInLine = 0;
             }
 
             if (!MeetIf) {
                 if (lex_[i].get_type() == "IDENTIFIER" && !lex_[i].get_text().empty()) {
                     // std::cout << "USING-1- " << lex_[i].get_text() << "\n";
                     variables.push_back({FieldOfViewNow, "USING", lex_[i].get_text()});
+                    was_pushed = true;
                 }
             }
 
             if (lex_[i].get_type() == "DEDENT") {
                 variables.push_back({-1000000, "NONE_TYPE", "NONE"});
+                was_pushed = true;
             }
 
             /*
@@ -162,10 +174,16 @@ bool Semantic::Analyze() {
         }
 
         for (int i = 0; i < variables.size(); ++i) {
-            // std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
+            while (get<2>(variables[i]) == "true" || get<2>(variables[i]) == "false") {
+                variables.erase(variables.begin() + i);
+            }
+        }
+
+        for (int i = 0; i < variables.size(); ++i) {
+            std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
             for (int j = 0; j < WorkWords.size(); ++j) {
                 if (get<2>(variables[i]) == WorkWords[j]) {
-                    throw std::runtime_error("Impossible variable name (KEYWORD)\nIn " + std::to_string(i) + " variable used");
+                    throw std::runtime_error("Impossible variable name (KEYWORD): " + get<2>(variables[i]));
                     return false;
                 }
             }
@@ -174,24 +192,25 @@ bool Semantic::Analyze() {
         std::map<std::string, bool> vised;
 
         for (int i = 0; i < variables.size(); ++i) {
-            if (get<1>(variables[i]) == "USING") {
+            if (get<1>(variables[i]) == "USING" || get<1>(variables[i]) == "ASSIGNMENT") {
                 // std::cout << get<1>(variables[i]) << " " << get<2>(variables[i]) << "\n";
                 if (!vised[get<2>(variables[i])]) {
                     // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
-                    throw std::runtime_error("Using undeclared variable\nIn " + std::to_string(i) + " variable used");
+                    throw std::runtime_error("Using undeclared variable: " + get<2>(variables[i]));
                 }
             } else {
                 if (i > 0) {
-                    if (get<0>(variables[i - 1]) > 0 && get<0>(variables[i]) < get<0>(variables[i - 1])) {
+                    if (get<0>(variables[i]) < get<0>(variables[i - 1])) {
                         for (int j = i - 1; j >= 0 && get<0>(variables[j]) == get<0>(variables[i - 1]); --j) {
-                            // std::cout << "-vising " << get<2>(variables[j]) << std::endl;
-                            vised[get<2>(variables[j])] = false;
+                            if (get<1>(variables[j]) != "ASSIGNMENT" && get<1>(variables[j]) != "USING" && get<1>(variables[j]) != "NONE_TYPE") {
+                                vised[get<2>(variables[j])] = false;
+                            }
                         }
                     }
                 }
                 if (vised[get<2>(variables[i])]) {
                     // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
-                    throw std::runtime_error("Redeclaring an existing variable\nIn " + std::to_string(i) + " variable used");
+                    throw std::runtime_error("Redeclaring an existing variable: " + get<2>(variables[i]));
                 } else {
                     // std::cout << "not vised " << get<2>(variables[i]) << std::endl;
                 }
@@ -201,6 +220,15 @@ bool Semantic::Analyze() {
             }
         }
 
+        for (int i = 0; i < variables.size(); ++i) {
+            if (get<1>(variables[i]) == "ASSIGNMENT") {
+                for (int j = 0; j < i; ++j) {
+                    if (get<2>(variables[i]) == get<2>(variables[j]) && get<1>(variables[j]) == "def") {
+                        throw std::runtime_error("You cannot equate the value of the function " + get<2>(variables[i]) + " to anything");
+                    }
+                }
+            }
+        }
     }
 
     // Analyzing variables (connecting types)
