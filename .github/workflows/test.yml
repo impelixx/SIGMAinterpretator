@@ -45,6 +45,7 @@ jobs:
           sudo apt-get install -y clang-format
       - name: Format
         run: |
+          ls
           clang-format -i -style=.clang-format backend/*.cpp
           clang-format -i -style=.clang-format backend/*.h
           git diff --exit-code
