@@ -1,11 +1,14 @@
 name: runTests
 
 on:
+
   pull_request:
+
     branches:
       - master
       - main
   push:
+
 
 jobs:
   FormatCode:
@@ -13,7 +16,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
       - name: Install clang-format
         run: |
           sudo apt-get update
@@ -97,7 +99,6 @@ jobs:
           cd build
           cmake -G Ninja ../backend
           ninja
-
       - name: Setup Python
         run: | 
           sudo apt-get install -y python3 python3-pip
