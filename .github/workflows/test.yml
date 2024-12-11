@@ -33,7 +33,7 @@ jobs:
             VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
             DISABLE_LINTERS: 'ALL'
             ENABLE_LINTERS: 'CPP, PYTHON'
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   TestOnUbuntu:
