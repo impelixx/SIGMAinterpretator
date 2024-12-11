@@ -7,7 +7,7 @@ def run_test(command):
 
 def lexerTest():
     print("Running lexers tests")
-    for file in sorted(os.listdir("tests/lexerTests")):
+    for file in sorted(os.listdir("lexerTests")):
         print(f"Testing {file}")
         result = run_test(f"./tests/backend tests/lexerTests/{file}/code.us tests/lexerTests/{file}/workword")
         if result.returncode == 1:
