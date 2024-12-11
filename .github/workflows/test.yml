@@ -1,32 +1,36 @@
-name: cpp-linter
+name: runTests
 
 on:
+  pull_request: 
+    branches:
+      - master
+      - main
   push:
-    paths:
-      - "*"
-  pull_request:
-    paths:
-      - "*"
-
-
 jobs:
-  cpp-linter:
+  LexerTestOnUbuntu:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: cpp-linter/cpp-linter-action@main
-        id: linter
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          style: file
-          files-changed-only: false
-          thread-comments: false
-
-      - name: Fail fast?!
-        if: steps.linter.outputs.checks-failed != 0
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install cpp + cmake
         run: |
-          echo "some linter checks failed. ${{ steps.linter.outputs.checks-failed }}"
-        # for actual deployment
-        # run: exit 1
+          sudo apt-get install -y cmake
+          sudo apt-get install -y ninja-build
+          sudo apt-get install -y g++
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake -G Ninja ../backend
+          ninja
+      - name: Setup Python
+        run: | 
+          sudo apt-get install -y python3
+          sudo apt-get install -y python3-pip
+          mv backend ../tests
+          cd ../tests
+      - name: Start Tests
+        run: |
+          cd tests
+          ls
+          python3 tester.py
