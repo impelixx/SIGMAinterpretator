@@ -28,7 +28,11 @@ jobs:
       - name: Run MegaLinter
         uses: oxsecurity/megalinter@v8
         env:
-          VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
+            APPLY_FIXES: all
+            APPLY_FIXES_MODE: commit
+            VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
+            DISABLE_LINTERS: 'ALL'
+            ENABLE_LINTERS: 'CPP, PYTHON'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
