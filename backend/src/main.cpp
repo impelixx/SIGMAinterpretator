@@ -45,15 +45,16 @@ int main(int argc, char* argv[]) {
                 semantic.Analyze();
             } catch (const std::exception& e) {
                 std::cerr << "Semantic analysis error: " << e.what() << std::endl;
-                return 1;
+                return 2;
             }
         } catch (const std::exception& e) {
+            analyzer.PrintLexems();
             std::cerr << "Lexical analysis error: " << e.what() << std::endl;
             return 1;
         }
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
+        return 3;
     }
 
     return 0;

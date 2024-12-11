@@ -1,0 +1,60 @@
+# Тест 5: Комплексный тест всех алгоритмов
+
+def binary_search(int arr, int target):
+    int left = 0;
+    int right = len(arr) - 1;
+    while (left <= right):
+        mid = (left + right) // 2;
+        if (arr[mid] == target):
+            return mid;
+        if (arr[mid] < target):
+            left = mid + 1;
+        else:
+            right = mid - 1;
+    return -1;
+
+def bubble_sort(int arr):
+    n = len(arr);
+    for i in (0, n-1):
+        swapped = false;
+        for j in (0, n-i-2):
+            if (arr[j] > arr[j+1]):
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+                swapped = true;
+        if (!swapped):
+            break;
+    return arr;
+
+def linear_search(arr, target):
+    for i in (0, len(arr)-1):
+        if (arr[i] == target):
+            return i;
+    return -1;
+
+# Инициализация данных
+data = [64, 34, 25, 12, 22, 11, 90];
+print("Исходный массив:");
+print(data);
+
+# Сортировка массива
+sorted_data = bubble_sort(data);
+print("Отсортированный массив:");
+print(sorted_data);
+
+# Бинарный поиск
+target = 25;
+index = binary_search(sorted_data, target);
+if (index != -1):
+    print("Бинарный поиск: Элемент", target, "найден на позиции:", index);
+else:
+    print("Бинарный поиск: Элемент", target, "не найден.");
+
+# Линейный поиск
+target = 22;
+index = linear_search(sorted_data, target);
+if (index != -1):
+    print("Линейный поиск: Элемент", target, "найден на позиции:", index);
+else:
+    print("Линейный поиск: Элемент", target, "не найден.");
