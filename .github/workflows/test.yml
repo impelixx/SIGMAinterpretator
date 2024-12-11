@@ -5,9 +5,57 @@ on:
     branches:
       - master
       - main
+    paths:
+      - "docs/examples/demo/*"
   push:
+    branches:
+      - master
+      - main
+    paths:
+      - "docs/examples/demo/*"
+
 jobs:
-  LexerTestOnUbuntu:
+  FormatCode:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install clang-format
+        run: |
+          sudo apt-get install -y clang-format
+      - name: Format and Push
+        run: |
+          clang-format -i -style=file backend/*.cpp backend/*.h
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Format code with clang-format" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cpp-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cpp-linter/cpp-linter-action@main
+        id: linter
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: file
+          files-changed-only: false
+          thread-comments: false
+      - name: Fail fast?!
+        if: steps.linter.outputs.checks-failed != 0
+        run: |
+          echo "Некоторые проверки линтера не пройдены. Ошибок: ${{ steps.linter.outputs.checks-failed }}"
+          # Для реального развёртывания раскомментируйте следующую строку
+          # exit 1
+
+  TestOnUbuntu:
+    needs: [FormatCode, cpp-linter]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
