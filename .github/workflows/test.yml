@@ -43,11 +43,13 @@ jobs:
       - name: Install clang-format
         run: |
           sudo apt-get install -y clang-format
-      - name: Format
-        run: |
-          ls -a
-          clang-format -style=.clang-format
-          git diff --exit-code
+      - uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: 'file'
+          tidy-checks: ''
       - name: PushOnGit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
