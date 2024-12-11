@@ -1,14 +1,15 @@
 #include "../include/LexemAnalyzer.h"
+#include "../include/Lexem.h"  // Include the header for Lexem
 #include <cctype>
 #include <stdexcept>
 #include <iostream>
 #include <stack>
 #include <fstream>
 
-LexemAnalyzer::LexemAnalyzer(const std::string& code)
+LexemAnalyzer::LexemAnalyzer(const std::string& code, const std::string& pathToKeywords)
     : code_(code), ch_('\0'), index_(0), currentPosition_(0) {
     indentStack_.push_back(0);
-    std::ifstream keywords("../test/workword.txt");
+    std::ifstream keywords(pathToKeywords);
     if (!keywords.is_open()) {
         throw std::runtime_error("Failed to open file '../test/workword.txt'");
     }
@@ -20,6 +21,9 @@ LexemAnalyzer::LexemAnalyzer(const std::string& code)
 
 void LexemAnalyzer::GetNextChar() {
     if (index_ < code_.length()) {
+        if (ch_ == '\n') {
+            curLine_++;
+        }
         ch_ = code_[index_++];
         currentPosition_ = index_;
     } else {
@@ -74,7 +78,6 @@ void LexemAnalyzer::SkipWhitespace() {
     }
 }
 
-// считаем отступы
 void LexemAnalyzer::HandleIndentation(int currentIndent) {
     int previousIndent = indentStack_.back();
     if (currentIndent > previousIndent) {
@@ -86,12 +89,12 @@ void LexemAnalyzer::HandleIndentation(int currentIndent) {
             indentStack_.pop_back();
             lexems_.emplace_back(Lexem(LexemType::DEDENT, "DEDENT", index_, index_, curLine_));
             if (indentStack_.empty()) {
-                throw std::runtime_error("Indentation error: No matching indentation level.");
+                throw std::runtime_error("Indentation error: No matching indentation level.\n On line: " + std::to_string(curLine_));
             }
             previousIndent = indentStack_.back();
         }
         if (currentIndent != previousIndent) {
-            throw std::runtime_error("Indentation error: Inconsistent indentation.");
+            throw std::runtime_error("Indentation error: Inconsistent indentation.\n On line: " + std::to_string(curLine_));
         }
     }
 }
@@ -103,651 +106,321 @@ void LexemAnalyzer::Analyze() {
 }
 
 void LexemAnalyzer::AnalyzeProgram() {
-    int iteration = 0;
-
     while (ch_ != '\0') {
         SkipWhitespace();
-        if (ch_ == '\0') break;
+        if (ch_ == '\0') {
+            break;
+        }
         AnalyzeStatement();
-    }
-
-    while (indentStack_.size() > 1) {
-        indentStack_.pop_back();
-        lexems_.emplace_back(Lexem(LexemType::DEDENT, "DEDENT", index_, index_, curLine_));
     }
 }
 
-// просто выражение
 void LexemAnalyzer::AnalyzeStatement() {
-    if (ch_ == 'd' && code_.substr(index_ - 1, 3) == "def") {
-        AnalyzeFunctionDeclaration();
+    SkipWhitespace();
+    if (ch_ == '\0') {
+        return;
     }
-    else if (isalpha(ch_) || ch_ == '_') {
-        size_t tempIndex = index_ - 1;
-        std::string word;
-        while (ch_ != '\0' && (isalnum(ch_) || ch_ == '_')) {
+    size_t startPos = currentPosition_;
+    std::string word;
+    if (isalpha(ch_)) {
+        while (isalnum(ch_) || ch_ == '_') {
             word += ch_;
             GetNextChar();
         }
-        if (word == "int" || word == "float" || word == "string" || word == "bool") {
-            lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, tempIndex, index_, curLine_));
-            AnalyzeVariableDeclaration();
-        } else if (word == "if") {
-            AnalyzeIfStatement();
-        } else if (word == "while") {
-            AnalyzeWhileStatement();
-        } else if (word == "print") {
-            AnalyzePrintStatement();
-        } else if (word == "else") {
-            AnalyzeElseStatement();
-        } else if (word == "return") {
-            AnalyzeReturnStatement();
-        } else if (word == "for") {
-            AnalyzeForStatement();
-        } else if (keywords_.has(word.c_str(), word.length(), index_ - word.length()).first) {
-            lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, index_ - word.length(), index_, curLine_));
+        auto [isKeyword, lexem] = keywords_.has(word.c_str(), word.length(), startPos);
+        std::cout << isKeyword << std::endl;
+        std::cout << "Word: " << word << std::endl;
+        if (isKeyword) {
+            lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
+            if (word == "int" || word == "float" || word == "bool" || word == "string") {
+                GetNextChar();
+                AnalyzeVariableDeclaration();
+            }
+            if (word == "def") {
+                lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
+                GetNextChar();
+                AnalyzeFunctionDeclaration();
+            }
+            if (word == "if") {
+                lexems_.emplace_back(Lexem(LexemType::KEYWORD, "if", currentPosition_ - 2, currentPosition_, curLine_));
+                GetNextChar();
+                AnalyzeIfStatement();
+            } 
+            if (word == "elif") {
+                GetNextChar();
+                AnalyzeIfStatement();
+            }
+            if (word == "else") {
+                GetNextChar();
+                AnalyzeElseStatement();
+            } 
+            if (word == "for") {
+                GetNextChar();
+                AnalyzeForStatement();
+            }
+            if (word == "while") {
+                GetNextChar();
+                AnalyzeWhileStatement();
+            }
+            if (word == "print") {
+                AnalyzePrintStatement();
+            }
+            if (word == "return") {
+                AnalyzeReturnStatement();
+            }
+            
         } else {
-            lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, index_ - word.length(), index_, curLine_));
-            AnalyzeAssignment();
+            lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, startPos, currentPosition_, curLine_));
+            SkipWhitespace();
+            if (ch_ == '(') {
+                AnalyzeFunctionDeclaration();
+            } else if (ch_ == '=') {
+                AnalyzeAssignment();
+            }
+            AnalyzeExpression();
         }
-    } else if (ch_ == ';') {
-        lexems_.emplace_back(Lexem(LexemType::EOS, ";", index_ - 1, index_, curLine_));
+    } else {
+        AnalyzeExpression();
+    }
+}
+
+void LexemAnalyzer::AnalyzeAssignment() {
+    SkipWhitespace();
+    std::cout << "Start analyze assign" << ch_ << std::endl;
+    if (ch_ == '=') {
+        lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", currentPosition_, currentPosition_ + 1, curLine_));
+        GetNextChar();
+        AnalyzeExpression();
+    }
+}
+
+void LexemAnalyzer::PrintLexems() const {
+    for (const auto& lexem : lexems_) {
+        std::cout << "TYPE: " << lexem.get_type() << " VALUE: " << lexem.get_text() << " On line: " << lexem.get_line() << std::endl;
+    }
+}
+
+void LexemAnalyzer::AnalyzeVariableDeclaration() {
+    SkipWhitespace();
+    std::cout << "Start analyze var" << ch_ << std::endl;
+    size_t startPos = currentPosition_;
+    if (isalpha(ch_)) {
+        AnalyzeIdentifier();
+        SkipWhitespace();
+        if (ch_ == '=') {
+            lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", currentPosition_, currentPosition_ + 1, curLine_));
+            GetNextChar();
+            AnalyzeExpression();
+        }
+        if (ch_ == ';') {
+            lexems_.emplace_back(Lexem(LexemType::OPERATOR, ";", currentPosition_, currentPosition_ + 1, curLine_));
+            GetNextChar();
+            AnalyzeStatement();
+        }
+    }
+}
+
+void LexemAnalyzer::AnalyzeIdentifier() {
+    size_t startPos = currentPosition_;
+    std::string word;
+    while (isalnum(ch_) || ch_ == '_') {
+        word += ch_;
+        GetNextChar();
+    }
+    auto [isKeyword, lexem] = keywords_.has(word.c_str(), word.length(), startPos);
+    if (isKeyword) {
+        lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
+    } else {
+        lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, startPos, currentPosition_, curLine_));
+    }
+}
+
+void LexemAnalyzer::AnalyzeExpression() {
+    std::cout << "Start analyze expr" << ch_ << std::endl;
+    if (ch_ == ';') {
+        lexems_.emplace_back(Lexem(LexemType::OPERATOR, ";", currentPosition_, currentPosition_ + 1, curLine_));
+        GetNextChar();
+        AnalyzeStatement();
+        return;
+    }
+        while (ch_ != '\0' && ch_ != '\n' && ch_ != ';') {
+            SkipWhitespace();
+            if (isdigit(ch_)) {
+                AnalyzeNumber();
+            } else if (isalpha(ch_)) {
+                AnalyzeIdentifier();
+            } else if (ch_ == '"') {
+                AnalyzeString();
+            } else if (ch_ == '(' || ch_ == ')' ||
+                     ch_ == '{' || ch_ == '}' ||
+                     ch_ == '[' || ch_ == ']') {
+                lexems_.emplace_back(Lexem(LexemType::BRACKET, std::string(1, ch_), currentPosition_, currentPosition_ + 1, curLine_));
+                GetNextChar();
+            } else if (ispunct(ch_)) {
+                lexems_.emplace_back(Lexem(LexemType::OPERATOR, std::string(1, ch_), currentPosition_, currentPosition_ + 1, curLine_));
+                GetNextChar();
+            } else {
+                GetNextChar();
+            }
+        }
+}
+
+void LexemAnalyzer::AnalyzeNumber() {
+    std::string number;
+    while (isdigit(ch_)) {
+        number += ch_;
+        GetNextChar();
+    }
+    if (ch_ == '.') {
+        number += ch_;
+        GetNextChar();
+        while (isdigit(ch_)) {
+            number += ch_;
+            GetNextChar();
+        }
+    }
+    lexems_.emplace_back(Lexem(LexemType::NUMBER, number, currentPosition_ - number.length(), currentPosition_, curLine_));
+    return;
+}
+
+void LexemAnalyzer::AnalyzeString() {
+    GetNextChar();
+    std::string str;
+    while (ch_ != '"') {
+        str += ch_;
+        GetNextChar();
+    }
+    lexems_.emplace_back(Lexem(LexemType::STRING, str, currentPosition_ - str.length(), currentPosition_, curLine_));
+    GetNextChar();
+}
+
+void LexemAnalyzer::AnalyzeArrayDeclaration() {
+    lexems_.emplace_back(Lexem(LexemType::BRACKET, "{", currentPosition_, currentPosition_ + 1, curLine_));
+    GetNextChar();
+    SkipWhitespace();
+    while (ch_ != '}' && ch_ != '\0') {
+        AnalyzeExpression();
+        SkipWhitespace();
+        if (ch_ == ',') {
+            lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", currentPosition_, currentPosition_ + 1, curLine_));
+            GetNextChar();
+            SkipWhitespace();
+        } else if (ch_ != '}') {
+            GetNextChar();
+            return;
+        }
+    }
+    if (ch_ == '}') {
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, "}", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
     } else {
-        throw std::runtime_error("Unexpected character in AnalyzeStatement(): '" + std::string(1, ch_) + "'");
         GetNextChar();
+        return;
+    }
+}
+
+void LexemAnalyzer::AnalyzeFunctionDeclaration() {
+    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
+    SkipWhitespace();
+    AnalyzeIdentifier();
+    SkipWhitespace();
+    std::cout << "Start analyze param" << ch_ << std::endl;
+    if (ch_ == '(') {
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_, currentPosition_ + 1, curLine_));
+        GetNextChar();
+        AnalyzeParameters();
+    }
+}
+
+void LexemAnalyzer::AnalyzeParameters() {
+    SkipWhitespace();
+    if (ch_ == ')') {
+        // Нет параметров
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", currentPosition_, currentPosition_ + 1, curLine_));
+        GetNextChar();
+        return;
+    }
+    while (ch_ != ')' && ch_ != '\0') {
+        AnalyzeIdentifier();
+        SkipWhitespace();
+        if (ch_ == ',') {
+            lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", currentPosition_, currentPosition_ + 1, curLine_));
+            GetNextChar();
+            SkipWhitespace();
+        } else if (ch_ != ')') {
+            GetNextChar();
+            return;
+        }
+    }
+    if (ch_ == ')') {
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", currentPosition_, currentPosition_ + 1, curLine_));
+        GetNextChar();
+    } else {
+        GetNextChar();
+        return;
+    }
+}
+
+void LexemAnalyzer::AnalyzeIfStatement() {
+    GetNextChar();
+    SkipWhitespace();
+    if (ch_ == '(') {
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_, currentPosition_ + 1, curLine_));
+        GetNextChar();
+        AnalyzeExpression();
     }
 }
 
 void LexemAnalyzer::AnalyzeElseStatement() {
+    GetNextChar();
+    SkipWhitespace();
     if (ch_ == ':') {
-        lexems_.emplace_back(Lexem(LexemType::KEYWORD, "else", index_ - 4, index_, curLine_));
+        lexems_.emplace_back(Lexem(LexemType::OPERATOR, ":", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
-        SkipWhitespace();
-    }
-}
-
-// Analyze variable Declaration
-void LexemAnalyzer::AnalyzeVariableDeclaration() {
-    SkipWhitespace();
-    AnalyzeIdentifier();
-    SkipWhitespace();
-    if (lexems_.back().get_text().empty()) {
-        throw std::runtime_error("Expected variable name in variable declaration, but get '" + lexems_.back().get_text() + "'");
-    }
-
-    // Handle array declarations
-    if (ch_ == '[') {
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "[", index_ - 1, index_, curLine_));
-        GetNextChar();
-        SkipWhitespace();
-        AnalyzeExpression();
-        SkipWhitespace();
-
-        if (ch_ == ']') {
-            lexems_.emplace_back(Lexem(LexemType::BRACKET, "]", index_ - 1, index_, curLine_));
-            GetNextChar();
-            SkipWhitespace();
-        } else {
-            throw std::runtime_error("Expected ']' after array size expression, but get" + std::string(1, ch_));
-        }
-    }
-
-    SkipWhitespace();
-    
-    if (ch_ == '=') {
-        lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", index_ - 1, index_, curLine_));
-        SkipWhitespace();
-        GetNextChar();
-        SkipWhitespace();
-        if (ch_ == '{') {
-            //lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", index_, curLine_ index_ + 1));
-            AnalyzeArrayDeclaration();
-            return;
-        }
-        else {
-            AnalyzeExpression();
-        }
-        // std::cout << lexems_.back().get_type() << std::endl;
-        // std::cout << lexems_.back().get_text() << std::endl;
-        if (lexems_.back().get_type() != "NUMBER" && lexems_.back().get_type() != "IDENTIFIER" && lexems_.back().get_type() != "STRING" && lexems_.back().get_type() == "BRACKETS") {
-            throw std::runtime_error("Expected number or identifier after '=' in variable declaration, but get '" + lexems_.back().get_text() + "'");
-        }
-        SkipWhitespace();
-        if (ch_ == ';') {
-            lexems_.emplace_back(Lexem(LexemType::EOS, ";", index_ - 1, index_, curLine_));
-            GetNextChar();
-        } else if (ch_ == '\n') {
-            lexems_.emplace_back(Lexem(LexemType::NEWLINE, "\\n", index_ - 1, index_, curLine_));
-            curLine_++;
-            GetNextChar();
-        } else {
-            throw std::runtime_error("Expected ';' or newline after assignment, but get '" + std::string(1, ch_) + "'");
-        }
+        AnalyzeStatement();
     }
 }
 
 void LexemAnalyzer::AnalyzeForStatement() {
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "for", index_ - 1, index_ + 2, curLine_));
-    SkipWhitespace();
-
-    if (!(isalpha(ch_) || ch_ == '_')) {
-        throw std::runtime_error("Expected type name in for statement, but get '" + std::string(1, ch_) + "'");
-    }
-    AnalyzeIdentifier();
-    SkipWhitespace();
-
-    if (!(isalpha(ch_) || ch_ == '_')) {
-        throw std::runtime_error("Expected variable name in for statement, but get '" + std::string(1, ch_) + "'");
-    }
-    // AnalyzeIdentifier();
-    // SkipWhitespace();
-    if (code_.substr(index_-1, 2) != "in") {
-        throw std::runtime_error("Expected 'in' keyword in for statement but get '" + code_.substr(index_-1, 2) + "'");
-    }
-    GetNextChar();
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", index_ - 2, index_, curLine_));
-    GetNextChar(); 
-    SkipWhitespace();
-
-    if (ch_ != '(') {
-        throw std::runtime_error("Expected '(' after 'in' keyword in for statement");
-    }
-    lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", index_ - 1, index_, curLine_));
-    GetNextChar();
-    SkipWhitespace();
-
-    AnalyzeExpression();
-    SkipWhitespace();
-
-    if (ch_ != ',') {
-        throw std::runtime_error("Expected ',' between range values, but get '" + std::string(1, ch_) + "'");
-    }
-    lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", index_ - 1, index_, curLine_));
-    GetNextChar();
-    SkipWhitespace();
-
-    if (isalpha(ch_)) {
-        AnalyzeIdentifier();
-    }
-    else
-    {
-        AnalyzeNumber();
-    }
-    SkipWhitespace();
-
-    if (ch_ != ')') {
-        throw std::runtime_error("Expected ')' after range values, but get '" + std::string(1, ch_) + "'");
-    }
-    lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_, curLine_));
-    GetNextChar();
-    SkipWhitespace();
-
-    if (ch_ != ':') {
-        throw std::runtime_error("Expected ':' after for statement, but get '" + std::string(1, ch_) + "'");
-    }
-    lexems_.emplace_back(Lexem(LexemType::EOS, ":", index_ - 1, index_, curLine_));
-    GetNextChar();
-    SkipWhitespace();
-}
-
-// Analyze array declaration
-void LexemAnalyzer::AnalyzeArrayDeclaration() {
-    if (ch_ != '{') {
-        throw std::runtime_error("Expected '{' at start of array declaration, but get '" + std::string(1, ch_) + "'");
-    }
-
-    lexems_.emplace_back(Lexem(LexemType::BRACKET, "{", index_ - 1, index_, curLine_));
-
-    SkipWhitespace();
-    GetNextChar();
-    while (true) {
-        if (ch_ == '}') {
-            break;
-        }
-        if (isdigit(ch_)) {
-            AnalyzeNumber();
-        } else if (isalpha(ch_) || ch_ == '_') {
-            AnalyzeIdentifier();
-        } else if (ch_ == '}') { 
-            break;
-        } else {
-            throw std::runtime_error("Expected number or identifier in array, but get '" + std::string(1, ch_) + "'");
-        }
-        
-        SkipWhitespace();
-        
-        if (ch_ == ',') {
-            lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", index_ - 1, index_, curLine_));
-            GetNextChar();
-            SkipWhitespace();
-        } else if (ch_ != '}') {
-            throw std::runtime_error("Expected ',' or '}' in array declaration, but get '" + std::string(1, ch_) + "'");
-        }
-    }
-    
-    lexems_.emplace_back(Lexem(LexemType::BRACKET, "}", index_ - 1, index_, curLine_));
-    GetNextChar();
-    SkipWhitespace();
-    
-    if (ch_ != ';') {
-        throw std::runtime_error("Expected ';' after array declaration, but get '" + std::string(1, ch_) + "'");
-    }
-    
-    lexems_.emplace_back(Lexem(LexemType::EOS, ";", index_ - 1, index_, curLine_));
-    GetNextChar();
-}
-
-// Analyze assignments
-void LexemAnalyzer::AnalyzeAssignment() {
-    AnalyzeIdentifier();
-    SkipWhitespace();
-    if (ch_ == '(') {
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", index_ - 1, index_, curLine_));
-        GetNextChar();
-        SkipWhitespace();
-        while (ch_ != ')') {
-            AnalyzeExpression();
-            SkipWhitespace();
-            
-            if (ch_ == ',') {
-                lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", index_ - 1, index_, curLine_));
-                GetNextChar();
-                SkipWhitespace();
-            } else if (ch_ != ')') {
-                throw std::runtime_error("Expected ',' or ')' in function call, but get '" + std::string(1, ch_) + "'");
-            }
-        }
-        
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_, curLine_));
-        GetNextChar();
-        SkipWhitespace();
-        if (ch_ == ';') {
-            lexems_.emplace_back(Lexem(LexemType::EOS, ";", index_ - 1, index_, curLine_));
-            GetNextChar();
-        } else if (ch_ == '\n') {
-            lexems_.emplace_back(Lexem(LexemType::NEWLINE, "\\n", index_ - 1, index_, curLine_));
-            curLine_++;
-            GetNextChar();
-        }
-    }
-    else if (ch_ == '[') {
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "[", index_ - 1, index_, curLine_));
-        GetNextChar();
-        AnalyzeExpression();
-        if (ch_ != ']') {
-            throw std::runtime_error("Expected ']' after array index, but get '" + std::string(1, ch_) + "'");
-        }
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "]", index_ - 1, index_, curLine_));
-        GetNextChar(); 
-        SkipWhitespace();
-        if (ch_ != '=') {
-            throw std::runtime_error("Expected '=' after array index, but get '" + std::string(1, ch_) + "'");
-        }
-        lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", index_ - 1, index_, curLine_));
-        GetNextChar();
-        SkipWhitespace();
-        //std::cout << ch_ << std::endl;
-        AnalyzeExpression();
-    }
-    else if (ch_ == '=') {
-        lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", index_ - 1, index_, curLine_));
-        GetNextChar();
-        // std::cout << ch_ << std::endl;
-        AnalyzeExpression();
-        SkipWhitespace();
-        
-        if (ch_ == ';') {
-            lexems_.emplace_back(Lexem(LexemType::EOS, ";", index_ - 1, index_, curLine_));
-            GetNextChar();
-        } else if (ch_ == '\n') {
-            lexems_.emplace_back(Lexem(LexemType::NEWLINE, "\\n", index_ - 1, index_, curLine_));
-            curLine_++;
-            GetNextChar();
-        }
-    } else {
-        throw std::runtime_error("Expected '=' or '(' after identifier, but get '" + std::string(1, ch_) + "'");
-    }
-}
-
-// Analyze expressions
-void LexemAnalyzer::AnalyzeExpression() {
-    SkipWhitespace();
-    if (ch_ == '"' || ch_ == '\'') {
-        GetNextChar();
-        std::string temp = "";
-        while (ch_ != '"' && ch_ != '\'') {
-            temp += ch_;
-            GetNextChar();
-        }
-        GetNextChar();
-        lexems_.emplace_back(Lexem(LexemType::STRING, temp, index_ - temp.length(), index_, curLine_));
-        return;
-    }
-    while (isdigit(ch_) || isalpha(ch_) || ch_ == '_' || ch_ == '[' || ch_ == '+' || ch_ == '-' || ch_ == '*' || ch_ == '/' || ch_ == ';' || ch_ == '\n' || ch_ == ',' || ch_ == '\0' || ch_ == '(') {
-        // std::cout << ch_ << ' ' << std::endl;
-        if (isdigit(ch_)){
-            AnalyzeNumber();
-        }
-        else if (isalpha(ch_) || ch_ == '_') {
-            AnalyzeIdentifier(); 
-        } else if (ch_ == '\'') {
-            std::string temp = "";
-            while (ch_ != '\'') {
-                GetNextChar();
-                temp += ch_;
-            }
-            lexems_.emplace_back(Lexem(LexemType::STRING, temp, index_ - temp.length(), index_, curLine_));
-            GetNextChar();
-        } else if (ch_ == '(') {
-            lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", index_ - 1, index_, curLine_));
-            GetNextChar();
-            AnalyzeExpression();
-            
-            if (ch_ != ')') {
-                throw std::runtime_error("Expected closing ')' after array size expression, but get '" + std::string(1, ch_) + "'");
-            }
-            // std::cout << lexems_.back().get_type() << std::endl;
-            lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_, curLine_));
-            GetNextChar();
-        }
-        else if (ch_ == '+' || ch_ == '-' || ch_ == '*' || ch_ == '/') {
-            std::string op(1, ch_);
-            lexems_.emplace_back(Lexem(LexemType::OPERATOR, op, index_ - 1, index_, curLine_));
-            GetNextChar();
-        }
-        else if (ch_ == ';' || ch_ == '\n' || ch_ == ',') {
-            if (lexems_.back().get_type() == "OPERATOR") {
-                throw std::runtime_error("Expected expression in expression, but get '" + lexems_.back().get_text() + "'");
-            }
-            break;
-        } else if (ch_ == ']') {
-            // std::cout << "exit" << ch_ << std::endl;
-            break;
-        }
-        else if (ch_ == '\0') {
-            throw std::runtime_error("Unexpected end of file while parsing expression, but get '" + std::string(1, ch_) + "'");
-        }
-        else {
-            throw std::runtime_error("Unexpected character in expression: '" + std::string(1, ch_) + "'");
-        }
-        SkipWhitespace();
-    }
-}
-
-// Analyze identifiers
-void LexemAnalyzer::AnalyzeIdentifier() {
-    std::string identifier;
-    size_t startPos = index_ - 1;
-    
-    while (isalnum(ch_) || ch_ == '_') {
-        identifier += ch_;
-        GetNextChar();
-    }
-    
-    auto [isKeyword, lexem] = keywords_.has(identifier.c_str(), identifier.length(), startPos);
-    if (identifier.empty()) {
-        return;
-    }
-    if (isKeyword) {
-        lexems_.emplace_back(Lexem(LexemType::KEYWORD, identifier, startPos, index_, curLine_));
-    } else {
-        lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, identifier, startPos, index_, curLine_));
-    }
-}
-
-// Analyze numbers
-void LexemAnalyzer::AnalyzeNumber() {
-    std::string number;
-    size_t startPos = index_ - 1;
-
-    bool was_point = false;
-
-    while (isdigit(ch_) || (ch_ == '.' && !was_point)) {
-        number += ch_;
-        if (ch_ == '.') {
-            was_point = true;
-        }
-        GetNextChar();
-        if (was_point && ch_ == '.'){
-            throw std::runtime_error("No second '.' into number");
-        }
-    }
-
-    lexems_.emplace_back(Lexem(LexemType::NUMBER, number, startPos, index_, curLine_));
-}
-
-void LexemAnalyzer::PrintLexems() const {
-    for (auto& lexem : lexems_) {
-        std::cout << "Type: " << lexem.get_type() << ", Text: " << lexem.get_text() << " On line: " << lexem.get_line() << std::endl;
-    }
-}
-
-// Analyze function
-void LexemAnalyzer::AnalyzeFunctionDeclaration() {
-    // Skip def
-    for (int i = 0; i < 3; ++i) {
-        GetNextChar();
-    }
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", index_ - 3, index_, curLine_));
-
     SkipWhitespace();
     AnalyzeIdentifier();
     SkipWhitespace();
-
-    if (ch_ == '(') {
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", index_ - 1, index_, curLine_));
+    auto temp = "";
+    for (int i = 0; i < 2; i++) {
+        temp += ch_;
         GetNextChar();
-        AnalyzeParameters();
-        if (lexems_.back().get_type() == "OPERATOR") {
-            throw std::runtime_error("expected identifier");
-        }
-
-        if (ch_ == ')') {
-            lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_, curLine_));
-            GetNextChar();
-        } else {
-            throw std::runtime_error("Expected ')' after function parameters");
-        }
-    } else {
-        throw std::runtime_error("Expected '(' after function name, but get '" + std::string(1, ch_) + "'");
     }
-
-    SkipWhitespace();
-
-    if (ch_ == ':') {
-        lexems_.emplace_back(Lexem(LexemType::OPERATOR, ":", index_ - 1, index_, curLine_));
+    std::cout << "Tmp: " << temp << std::endl;
+    if (temp == "in") {
+        lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", currentPosition_ - 2, currentPosition_, curLine_));
         GetNextChar();
-    } else {
-        throw std::runtime_error("Expected ':' after function declaration, but get '" + std::string(1, ch_) + "'");
+        AnalyzeArrayDeclaration();
     }
 }
 
-// Analyze function parameters
-void LexemAnalyzer::AnalyzeParameters() {
-    SkipWhitespace();
-    if (ch_ == ')') {
-        return;
-    }
-
-    while (ch_ != ')' && ch_ != '\0') {
-        std::string type;
-        size_t startPos = index_ - 1;
-        while (isalpha(ch_)) {
-            type += ch_;
-            GetNextChar();
-        }
-        std::cout << type << std::endl;
-        if (!keywords_.has(type.c_str(), type.length(), startPos).first || type != "string")
-        {
-            throw std::runtime_error("Expected type name in function parameter list, but get '" + type + "'");
-        }
-        lexems_.emplace_back(Lexem(LexemType::KEYWORD, type, startPos, index_, curLine_));
-        SkipWhitespace();
-
-        AnalyzeIdentifier();
-        SkipWhitespace();
-
-        if (ch_ == '[') {
-            lexems_.emplace_back(Lexem(LexemType::BRACKET, "[", index_ - 1, index_, curLine_));
-            GetNextChar();
-            if (ch_ == ']') {
-                lexems_.emplace_back(Lexem(LexemType::BRACKET, "]", index_ - 1, index_, curLine_));
-                GetNextChar();
-            } else {
-                throw std::runtime_error("Expected ']' after '[', but got '" + std::string(1, ch_) + "'");
-            }
-            SkipWhitespace();
-        }
-
-        if (ch_ == ',') {
-            lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", index_ - 1, index_, curLine_));
-            GetNextChar();
-            SkipWhitespace();
-        } else if (ch_ != ')') {
-            throw std::runtime_error("Expected ',' or ')' in function parameter list, but got '" + std::string(1, ch_) + "'");
-        }
-    }
-}
-
-// Analyze if statements
-void LexemAnalyzer::AnalyzeIfStatement() {
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "if", index_ - 2, index_, curLine_));
-    SkipWhitespace();
-    // GetNextChar();
-    SkipWhitespace();
-    if (ch_ == '(')
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", index_, index_ + 1, curLine_));
-    GetNextChar();
-    AnalyzeExpression();
-    if (lexems_.back().get_type() == "OPERATOR") {
-        throw std::runtime_error("Expected expression in if condition, but get '" + lexems_.back().get_text() + "'");
-    }
-    if (ch_ == ')')
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_, curLine_));
-    GetNextChar();
-    SkipWhitespace();
-    // std::cout << lexems_.back().get_type() << std::endl;
-    if (ch_ == ':') {
-        lexems_.emplace_back(Lexem(LexemType::OPERATOR, ":", index_ - 1, index_, curLine_));
-        GetNextChar();
-    }
-    else {
-        throw std::runtime_error("Expected ':' after if condition, but get '" + std::string(1, ch_) + "'");
-    }
-}
-
-// Analyze while statements
 void LexemAnalyzer::AnalyzeWhileStatement() {
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "while", index_ - 5, index_, curLine_));
     SkipWhitespace();
-    
     if (ch_ == '(') {
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", index_ - 1, index_, curLine_));
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
-        SkipWhitespace();
-        while (ch_ != ')' && ch_ != '\0') {
-            if (isdigit(ch_)) {
-                AnalyzeNumber();
-            }
-            else if (isalpha(ch_) || ch_ == '_') {
-                AnalyzeIdentifier();
-            }
-            else if (ch_ == '<' || ch_ == '>' || ch_ == '=' || ch_ == '!') {
-                std::string op;
-                op += ch_;
-                GetNextChar();
-                if (ch_ == '=') {
-                    op += ch_;
-                    GetNextChar();
-                }
-                lexems_.emplace_back(Lexem(LexemType::OPERATOR, op, index_ - op.length(), index_, curLine_));
-            }
-            SkipWhitespace();
-        }
-        if (lexems_.back().get_type() == "BRACKET" ) {
-            throw std::runtime_error("Expected expression in while condition, but get '" + lexems_.back().get_text() + "'");
-        }
-        if (ch_ == ')') {
-            lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_, curLine_));
-            GetNextChar();
-        } else {
-            throw std::runtime_error("Expected ')' after while condition, but get '" + std::string(1, ch_) + "'");
-        }
-    } else {
-        throw std::runtime_error("Expected '(' after while keyword, but get '" + std::string(1, ch_) + "'");
-    }
-
-    SkipWhitespace();
-
-    if (ch_ == ':') {
-        lexems_.emplace_back(Lexem(LexemType::OPERATOR, ":", index_ - 1, index_, curLine_));
-        GetNextChar();
-    } else {
-        throw std::runtime_error("Expected ':' after while condition, but get '" + std::string(1, ch_) + "'");
+        AnalyzeExpression();
     }
 }
 
-// Analyze print statements
 void LexemAnalyzer::AnalyzePrintStatement() {
     SkipWhitespace();
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "print", index_ - 5, index_, curLine_));
-    SkipWhitespace();
     if (ch_ == '(') {
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", index_ - 1, index_, curLine_));
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
-        
         AnalyzeExpression();
-        if (ch_ == ')') {
-            lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", index_ - 1, index_, curLine_));
-            GetNextChar();
-            SkipWhitespace();
-            if (ch_ != ';'){
-                throw std::runtime_error("Expected ';' after print statement, but get " + std::string(1, ch_) + "'");
-            }
-        }
-        else {
-            throw std::runtime_error("Expected ')' after print expression, but get '" + std::string(1, ch_) + "'");
-        }
-    }
-    else {
-        throw std::runtime_error("Expected '(' after print, but get '" + std::string(1, ch_) + "'");
-    }
-
-    SkipWhitespace();
-    if (ch_ == ';') {
-        lexems_.emplace_back(Lexem(LexemType::EOS, ";", index_ - 1, index_, curLine_));
-        GetNextChar();
-    } else if (ch_ == '\n') {
-        lexems_.emplace_back(Lexem(LexemType::NEWLINE, "\\n", index_ - 1, index_, curLine_));
-        curLine_++;
-        GetNextChar();
-    }
-    else {
-        //  simple warning  чтобы не втыкал
-        std::cout << "Warning: Expected ';' or newline after print statement but found '" << ch_ << "'" << std::endl;
-        GetNextChar();
     }
 }
 
-// Analyze return 
 void LexemAnalyzer::AnalyzeReturnStatement() {
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "return", index_ - 6, index_, curLine_));
-    SkipWhitespace();
-    AnalyzeExpression();
     SkipWhitespace();
     if (ch_ == ';') {
-        lexems_.emplace_back(Lexem(LexemType::EOS, ";", index_ - 1, index_, curLine_));
+        lexems_.emplace_back(Lexem(LexemType::OPERATOR, ";", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
-    }
-    else if (ch_ == '\n') {
-        lexems_.emplace_back(Lexem(LexemType::NEWLINE, "\\n", index_ - 1, index_, curLine_));
-        curLine_++;
-        GetNextChar();
-    }
-    else {
-        // simple warn чтобы не втыкал
-        std::cout << "Warning: Expected ';' or newline after return statement but found '" << ch_ << "'" << std::endl;
-        GetNextChar();
+        AnalyzeStatement();
     }
 }

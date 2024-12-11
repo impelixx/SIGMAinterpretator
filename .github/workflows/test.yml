@@ -1,0 +1,36 @@
+name: runTests
+
+on:
+  pull_request: 
+    branches:
+      - master
+      - main
+  push:
+jobs:
+  LexerTestOnUbuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install cpp + cmake
+        run: |
+          sudo apt-get install -y cmake
+          sudo apt-get install -y ninja-build
+          sudo apt-get install -y g++
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake -G Ninja ../backend
+          ninja
+      - name: Setup Python
+        run: | 
+          sudo apt-get install -y python3
+          sudo apt-get install -y python3-pip
+          mv backend ../tests
+          cd ../tests
+      - name: Start Tests
+        run: |
+          cd tests
+          ls
+          python3 tester.py

@@ -1,0 +1,21 @@
+# Тест 2: Сортировка пузырьком
+
+def bubble_sort(int arr):
+    n = len(arr);
+    for i in (0, n-1):
+        swapped = false;
+        for j in (0, n-i-2):
+            if (arr[j] > arr[j+1]):
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+                swapped = true;
+        if (!swapped):
+            break;
+    return arr;
+
+# Пример использования Сортировки пузырьком
+data = [64, 34, 25, 12, 22, 11, 90];
+sorted_data = bubble_sort(data);
+print("Отсортированный массив:");
+print(sorted_data);

@@ -4,7 +4,7 @@ tests/node_modules
 data/
 */cmake-build-debug
 .idea/
-*.us
+test/code.us
 /backend/CMakeFiles/
 /backend/.cmake
 backend/Makefile
@@ -26,3 +26,5 @@ backend/.DS_Store
 .vscode/settings.json
 test/
 CMakeFiles/clion-Default-log.txt
+.idea
+tests/backend

@@ -9,7 +9,7 @@
 
 class LexemAnalyzer {
 public:
-    LexemAnalyzer(const std::string& code);
+    LexemAnalyzer(const std::string& code, const std::string& pathToKeywords);
     void Analyze();
     void PrintLexems() const;
     size_t GetCurrentPosition() const { return currentPosition_; }
@@ -32,6 +32,9 @@ private:
     void AnalyzeExpression();
     void AnalyzeIdentifier();
     void AnalyzeNumber();
+    void AnalyzeString();
+    void AnalyzeTerm();
+    void AnalyzeFactor();
 
     // Util
     void GetNextChar();
