@@ -1,88 +1,39 @@
 name: runTests
 
 on:
-
-  pull_request:
-
-    branches:
-      - master
-      - main
   push:
+  pull_request:
+    branches:
+      - main
+      - master
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  APPLY_FIXES: all
+  APPLY_FIXES_EVENT: pull_request
+  APPLY_FIXES_MODE: commit
 
 jobs:
-  FormatCode:
+  linter:
+    name: Run MegaLinter
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install clang-format
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clang-format
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Run MegaLinter
+        uses: oxsecurity/megalinter@v8
         env:
+          VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run clang-format
-        run: |
-          clang-format -i -style=file backend/**/*.cpp backend/**/*.h
-
-      - name: Commit changes if any
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add .
-          if ! git diff --cached --quiet; then
-            git commit -m "Format code with clang-format"
-          else
-            echo "No formatting changes detected."
-          fi
-
-      - name: Push changes
-        if: steps.Commit_changes_if_any.outputs.commit != ''
-        run: |
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  cpp-linter:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: 📂 Load .env file
-        if: hashFiles('.github/workflows/.env') != ''
-        uses: xom9ikk/dotenv@v2
-        with:
-          path: .github/workflows
-
-      - name: ⬇️ Setup CMake
-        uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: ^3
-          ninjaVersion: ^1.11.1
-
-      - name: 🔧 Configure
-        run: cmake -S ${{ env.CMAKE_SOURCE_PREFIX }} -B ${{ env.CMAKE_BINARY_PREFIX }} -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} -DCMAKE_PREFIX_PATH="~/micromamba" -DCMAKE_INSTALL_PREFIX=${{ env.CMAKE_INSTALL_PREFIX }}  -D CPPTERMINAL_ENABLE_DOCS=OFF
-
-      - name: ☑️ cpp-linter
-        uses: cpp-linter/cpp-linter-action@v3
-        id: linter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          style: 'file'
-          database: ${{ env.CMAKE_BINARY_PREFIX }}
-          step-summary: true
-          thread-comments: true
-          files-changed-only: true
-          lines-changed-only: false
-          version: '17'
-          tidy-checks: ''
-          ignore: '.github|${{ env.CMAKE_BINARY_PREFIX }}/_deps'
 
   TestOnUbuntu:
-    needs: [FormatCode, cpp-linter]
+    needs: [linter]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
