@@ -27,7 +27,6 @@ jobs:
         run: | 
           sudo apt-get install -y python3
           sudo apt-get install -y python3-pip
-          pip3 install 
           mv backend ../tests
           cd ../tests
           
