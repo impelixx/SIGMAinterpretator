@@ -46,6 +46,5 @@ jobs:
       - name: Format
         run: |
           ls -a
-          clang-format -i -style=.clang-format backend/*.cpp
-          clang-format -i -style=.clang-format backend/*.h
+          clang-format -style=.clang-format
           git diff --exit-code
