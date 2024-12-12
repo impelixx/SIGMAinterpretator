@@ -31,8 +31,8 @@ jobs:
           APPLY_FIXES: all
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
-          ENABLE_LINTERS: 'CPP, PYTHON'
           DISABLE_LINTERS: 'ALL'
+          ENABLE_LINTERS: 'CPP, PYTHON'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Changes
