@@ -7,15 +7,15 @@
 
 //есть
 <Statement> → <FunctionDeclaration>
-	          | <VariableDeclaration>
-	          | <Assignment>
-	          | <IfStatement>
-	          | <WhileStatement>
-	          | <DoWhileStatement>
-	          | <ForStatement>
-	          | <PrintStatement>
-	          | <ReturnStatement>
-	          | <EmptyStatement>
+           | <VariableDeclaration>
+           | <Assignment>
+           | <IfStatement>
+           | <WhileStatement>
+           | <DoWhileStatement>
+           | <ForStatement>
+           | <PrintStatement>
+           | <ReturnStatement>
+           | <EmptyStatement>
 
 //есть
 <EmptyStatement> → ";" | NEWLINE
@@ -28,7 +28,7 @@
 
 //есть
 <VariableDeclaration> → <Type> + <Identifier> + "=" + <Expression> + <StatementTerminator>
-	              | <Type> + <Identifier> + "[" + <Number> + "]" + "=" + <Initianalizer list> + <StatementTerminator> 
+               | <Type> + <Identifier> + "[" + <Number> + "]" + "=" + <Initianalizer list> + <StatementTerminator> 
 
 //есть
 <InitianalizerList> → "{" +  [<Expression> + { "," + <Expression>] } + "}"
