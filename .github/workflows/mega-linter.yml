@@ -8,7 +8,7 @@ on:
     branches: [main, master]
 
 permissions:
-  contents: read
+  contents: write
   packages: read
   statuses: write
   pull-requests: write
@@ -72,6 +72,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "[MegaLinter] Apply linter fixes"
           title: "chore: MegaLinter fixes"
+          branch: "fix/megalinter-updates"
+          base: ${{ github.head_ref }}  
+          delete-branch: true               
           body: |
             ## Автоматические исправления от MegaLinter
             
