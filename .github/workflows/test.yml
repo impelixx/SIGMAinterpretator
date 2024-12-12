@@ -3,7 +3,7 @@ name: MegaLinter Workflow
 on:
   push:
     branches-ignore:
-      - 'fix/**' # Ignore branches starting with fix/
+      - "fix/**" # Ignore branches starting with fix/
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,7 +29,7 @@ jobs:
           APPLY_FIXES: all
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
-          DISABLE_LINTERS: 'CSPELL'
+          DISABLE_LINTERS: "CSPELL"
           DISABLE_ERRORS: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
