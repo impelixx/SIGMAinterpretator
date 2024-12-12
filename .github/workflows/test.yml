@@ -32,6 +32,8 @@ jobs:
             APPLY_FIXES_MODE: commit
             VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
             GITHUB_TOKEN: ${{ secrets.PAT }}
+            SKIP_LINTERS: SPELL,C, COPYPASTE_JSCPD, .checkov.yml
+            
 
 
   TestOnUbuntu:

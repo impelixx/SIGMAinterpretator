@@ -1,0 +1,105 @@
+# MegaLinter GitHub Action configuration file
+# More info at https://megalinter.io
+---
+name: MegaLinter
+on:
+  push:
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: write
+  packages: read
+  statuses: write
+  pull-requests: write
+  issues: write
+
+env:
+  APPLY_FIXES: all
+  APPLY_FIXES_EVENT: pull_request
+  APPLY_FIXES_MODE: pull_request
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  megalinter:
+    name: MegaLinter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: MegaLinter
+        id: megalinter
+        uses: oxsecurity/megalinter/flavors/python@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Используем PAT_TOKEN вместо GITHUB_TOKEN
+          CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
+          C_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
+          PYTHON_BLACK_ARGUMENTS: "--line-length=100"
+          PYTHON_FLAKE8_ARGUMENTS: "--max-line-length=100"
+          MARKDOWN_MARKDOWNLINT_DISABLE_ERRORS: true
+          REPOSITORY_CHECKOV_DISABLE_ERRORS: true
+          REPOSITORY_KICS_DISABLE_ERRORS: true
+          SPELL_CSPELL_DISABLE: true
+          SPELL_MISSPELL_DISABLE: true
+
+      - name: Debug Output
+        run: |
+          echo "MegaLinter outcome: ${{ steps.megalinter.outcome }}"
+          echo "MegaLinter result: ${{ steps.megalinter.result }}"
+
+      - name: Get Changes
+        id: get-changes
+        if: always() && (steps.megalinter.outcome != 'skipped')
+        run: |
+          changes=$(git diff --no-color)
+          echo "changes<<EOF" >> $GITHUB_ENV
+          echo "$changes" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        if: github.event_name == 'push' && always() && (steps.megalinter.outcome != 'skipped')
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          commit-message: "[MegaLinter] Apply linter fixes"
+          title: "chore: MegaLinter fixes"
+          branch: "fix/megalinter-updates"
+          base: ${{ github.head_ref }}
+          body: |
+            ## Автоматические исправления от MegaLinter
+            
+            Этот PR содержит исправления, предложенные MegaLinter.
+            
+            ### Предлагаемые изменения:
+            ```diff
+            ${{ env.changes }}
+            ```
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.PAT_TOKEN }}
+          script: |
+            const output = `## MegaLinter Результаты
+
+            ${process.env.MEGALINTER_RESULT || 'Нет результатов'}
+
+            ### Найденные проблемы:
+            \`\`\`
+            ${process.env.changes || 'Нет изменений'}
+            \`\`\`
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
