@@ -1,24 +1,61 @@
 name: Run clang-format Linter
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write  # Необходимо для выполнения push-операций
 
 jobs:
-  build:
+  lint-and-format:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - uses: DoozyX/clang-format-lint-action@v0.18.1
-      with:
-        source: '.'
-        exclude: './lib'
-        extensions: 'h,cpp,c'
-        clangFormatVersion: 16
-        inplace: True
-    - uses: EndBug/add-and-commit@v9
-      with:
-        author_name: Clang Robot
-        author_email: robot@example.com
-        message: 'Committing clang-format changes'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Run clang-format
+        uses: DoozyX/clang-format-lint-action@v0.18.1
+        with:
+          source: '.'
+          exclude: './lib'
+          extensions: 'h,cpp,c'
+          clangFormatVersion: 16
+          inplace: true
+
+      - name: Commit and Push Changes
+        if: github.event_name == 'push' && steps.clang_format_lint_action.outcome == 'success'
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: impelixx
+          author_email: helloimgood@list.ru
+          message: 'format: run clang-format'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Report clang-format Issues
+        if: github.event_name == 'pull_request' && steps.clang_format_lint_action.outcome == 'failure'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const msg = "⚠️ **clang-format** обнаружил проблемы форматирования. Пожалуйста, отформатируйте код перед слиянием.";
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: msg,
+            });
