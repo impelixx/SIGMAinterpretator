@@ -17,6 +17,7 @@ jobs:
   megalinter:
     name: MegaLinter
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -90,7 +91,6 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-
 
   TestOnUbuntu:
     needs: [megalinter]
