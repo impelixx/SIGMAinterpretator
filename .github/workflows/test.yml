@@ -96,7 +96,6 @@ jobs:
               body: output
             })
 
-
   TestOnUbuntu:
     needs: [megalinter]
     runs-on: ubuntu-latest
