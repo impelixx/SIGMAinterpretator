@@ -1,5 +1,4 @@
-name: runTests
-
+name: MegaLinter Workflow
 on:
   push:
   pull_request:
@@ -16,6 +15,7 @@ env:
 jobs:
   linter:
     name: Run MegaLinter
+
     runs-on: ubuntu-latest
 
     steps:
@@ -38,6 +38,61 @@ jobs:
 
   TestOnUbuntu:
     needs: [linter]
+
+          fetch-depth: 0
+
+      - name: MegaLinter
+        id: megalinter
+        uses: oxsecurity/megalinter/flavors/python@v7
+        env:
+          DISABLE_ERRORS: true
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+          CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
+          C_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
+          PYTHON_BLACK_ARGUMENTS: "--line-length=100"
+          PYTHON_FLAKE8_ARGUMENTS: "--max-line-length=100"
+          DISABLE_LINTERS: bandit, actionlint, jscpd, checkov, kics, cspell
+          MARKDOWN_MARKDOWNLINT_DISABLE_ERRORS: true
+          REPOSITORY_CHECKOV_DISABLE_ERRORS: true
+          REPOSITORY_KICS_DISABLE_ERRORS: true
+          SPELL_CSPELL_DISABLE: true
+          SPELL_MISSPELL_DISABLE: true
+
+      - name: Get Changes
+        id: get-changes
+        if: always() && (steps.megalinter.outcome != 'skipped')
+        run: |
+          changes=$(git diff --no-color)
+          echo "changes<<EOF" >> $GITHUB_ENV
+          echo "$changes" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        if: github.event_name == 'push' && always() && (steps.megalinter.outcome != 'skipped')
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: "[MegaLinter] Apply linter fixes"
+          title: "MegaLinter fixes"
+          branch: "fix/${{ github.head_ref }}"
+          base: ${{ github.head_ref }}
+          body: |
+            ## Автоматические исправления от MegaLinter
+
+            Этот PR содержит исправления, предложенные MegaLinter.
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mega-Linter reports
+          path: |
+            megalinter-reports
+            mega-linter.log
+            
+
+  TestOnUbuntu:
+    needs: [megalinter]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
