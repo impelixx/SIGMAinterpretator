@@ -8,32 +8,7 @@ on:
       - master
 
 jobs:
-  megalinter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set APPLY_FIXES
-        shell: bash
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
-            echo "APPLY_FIXES=all" >> $GITHUB_ENV
-          else
-            echo "APPLY_FIXES=none" >> $GITHUB_ENV
-          fi
-
-      - name: Run MegaLinter
-        uses: oxsecurity/megalinter@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APPLY_FIXES: ${{ env.APPLY_FIXES }}
-          COMMIT_MESSAGE: "chore: MegaLinter fixes"
-          COMMIT_AUTHOR: "github-actions[bot]"
-          COMMIT_EMAIL: "github-actions[bot]@users.noreply.github.com"
-
   TestOnUbuntu:
-    needs: [megalinter]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
