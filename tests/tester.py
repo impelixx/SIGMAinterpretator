@@ -9,7 +9,9 @@ def Test():
     print("Running lexers tests")
     for file in sorted(os.listdir("tests")):
         print(f"Testing {file}")
-        result = run_test(f"./tests/backend tests/lexerTests/{file}/code.us tests/lexerTests/{file}/workword")
+        result = run_test(
+            f"./tests/backend tests/lexerTests/{file}/code.us tests/lexerTests/{file}/workword"
+        )
         if result.returncode == 1:
             print("Test failed")
             print(result.stderr.decode())
