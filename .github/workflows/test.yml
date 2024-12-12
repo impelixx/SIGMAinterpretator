@@ -1,4 +1,4 @@
-name: runTests
+name: firstDevOps-experience
 
 on:
   push:
