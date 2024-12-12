@@ -1,15 +1,17 @@
-on: push
-name: clang-format Code Formatter
+name: test-clang-format
+
+on: [push]
+
 jobs:
-  lint:
-    name: clang-format Code Formatter
+  build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    - name: Set Git safe directory
-      run: git config --global --add safe.directory /github/workspace
-    - name: Clang Code Formatter
-      uses: antoinealb/clang-format-action@clang9
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v2
+    - uses: DoozyX/clang-format-lint-action@v0.18.1
+      with:
+        source: '.'
+        exclude: './third_party ./external'
+        extensions: 'h,cpp'
+        clangFormatVersion: 18
+        style: chromium
