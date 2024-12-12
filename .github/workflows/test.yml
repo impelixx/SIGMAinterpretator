@@ -1,22 +1,53 @@
 name: runTests
 
 on:
-  pull_request: 
-    branches:
-      - master
-      - main
   push:
+  pull_request:
+    branches:
+      - main
+      - master
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  APPLY_FIXES: all
+  APPLY_FIXES_EVENT: pull_request
+  APPLY_FIXES_MODE: commit
+
 jobs:
-  LexerTestOnUbuntu:
+  linter:
+    name: Run MegaLinter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Run MegaLinter
+        uses: oxsecurity/megalinter@v8
+        env:
+            APPLY_FIXES: all
+            APPLY_FIXES_MODE: commit
+            VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
+            DISABLE_LINTERS: 'ALL'
+            ENABLE_LINTERS: 'CPP, PYTHON'
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  TestOnUbuntu:
+    needs: [linter]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Install cpp + cmake
         run: |
-          sudo apt-get install -y cmake
-          sudo apt-get install -y ninja-build
-          sudo apt-get install -y g++
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build g++
+
       - name: Build
         run: |
           mkdir build
@@ -25,10 +56,10 @@ jobs:
           ninja
       - name: Setup Python
         run: | 
-          sudo apt-get install -y python3
-          sudo apt-get install -y python3-pip
+          sudo apt-get install -y python3 python3-pip
           mv backend ../tests
           cd ../tests
+
       - name: Start Tests
         run: |
           cd tests
