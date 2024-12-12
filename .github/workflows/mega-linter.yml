@@ -46,7 +46,11 @@ jobs:
           REPOSITORY_CHECKOV_DISABLE_ERRORS: true
           REPOSITORY_KICS_DISABLE_ERRORS: true
           SPELL_CSPELL_DISABLE: true
-          DISABLE_LINTERS: cspell, git_diff, bandit, jscpd
+          DISABLE_LINTERS: 
+            - cspell
+            - git_diff
+            - bandit
+            - jscpd
           DISABLE: C
           SPELL_MISSPELL_DISABLE: true
 
