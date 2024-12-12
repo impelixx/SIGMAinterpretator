@@ -37,7 +37,7 @@ jobs:
         id: megalinter
         uses: oxsecurity/megalinter/flavors/python@v7
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Используем PAT_TOKEN вместо GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем PAT_TOKEN вместо GITHUB_TOKEN
           CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
           C_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
           PYTHON_BLACK_ARGUMENTS: "--line-length=100"
@@ -74,9 +74,9 @@ jobs:
           base: ${{ github.head_ref }}
           body: |
             ## Автоматические исправления от MegaLinter
-            
+
             Этот PR содержит исправления, предложенные MegaLinter.
-            
+
             ### Предлагаемые изменения:
             ```diff
             ${{ env.changes }}
@@ -97,7 +97,7 @@ jobs:
             ${process.env.changes || 'Нет изменений'}
             \`\`\`
             `;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
