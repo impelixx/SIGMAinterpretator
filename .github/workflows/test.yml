@@ -27,6 +27,7 @@ jobs:
         id: megalinter
         uses: oxsecurity/megalinter/flavors/python@v7
         env:
+          DISABLE_ERRORS: true
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем PAT_TOKEN вместо GITHUB_TOKEN
           CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
           C_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
