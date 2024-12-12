@@ -44,7 +44,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Create Pull Request
-        if: github.event_name == 'push' && always() && (steps.megalinter.outcome != 'skipped')
+        if: github.event_name == 'push'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.PAT }}
