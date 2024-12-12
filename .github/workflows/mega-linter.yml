@@ -56,8 +56,17 @@ jobs:
           echo "MegaLinter outcome: ${{ steps.megalinter.outcome }}"
           echo "MegaLinter result: ${{ steps.megalinter.result }}"
 
+      - name: Get Changes
+        id: get-changes
+        if: always() && (steps.megalinter.outcome != 'skipped')
+        run: |
+          changes=$(git diff --no-color)
+          echo "changes<<EOF" >> $GITHUB_ENV
+          echo "$changes" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create Pull Request
-        if: always() && (steps.megalinter.outcome != 'skipped')  # Изменено условие
+        if: always() && (steps.megalinter.outcome != 'skipped')
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -67,6 +76,5 @@ jobs:
             ## Автоматические исправления от MegaLinter
             
             Этот PR содержит исправления, предложенные MegaLinter.
-            Пожалуйста, проверьте изменения перед слиянием.
             
-            Статус проверки: ${{ steps.megalinter.outcome }}
+            ### Предлагаемые изменения:
