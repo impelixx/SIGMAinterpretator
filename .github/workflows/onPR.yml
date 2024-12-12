@@ -1,7 +1,9 @@
 name: myFirstDevOpsExperienceOnPush
 
 on:
-  push:
+  pull_request: 
+    branches: 
+      -main
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,20 +40,6 @@ jobs:
           echo "changes<<EOF" >> $GITHUB_ENV
           echo "$changes" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-
-      - name: Create Pull Request
-        if: github.event_name == 'push'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.PAT }}
-          commit-message: "[MegaLinter] Apply linter fixes"
-          title: "MegaLinter fixes"
-          branch: "fix/AutoLinterFixes"
-          base: ${{ github.head_ref }}
-          body: |
-            ## Автоматические исправления от MegaLinter
-
-            Этот PR содержит исправления, предложенные MegaLinter.
 
       - name: Upload Reports
         if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
