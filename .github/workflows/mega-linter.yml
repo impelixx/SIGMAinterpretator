@@ -64,9 +64,9 @@ jobs:
 
       - name: Create Pull Request
         if: always() && (steps.megalinter.outcome != 'skipped')
-        uses: peter-evans/create-pull-request@v4
+        uses: github-actions/create-pull-request@v1
         with:
-          token: ${{ secrets.WORKFLOW_GITHUB_TOKEN}}  # Используем GITHUB_TOKEN вместо PAT_TOKEN
+          token: ${{ secrets.GITHUB_TOKEN }}  # Используем GITHUB_TOKEN вместо PAT_TOKEN
           commit-message: "[MegaLinter] Apply linter fixes"
           title: "chore: MegaLinter fixes"
           branch: "fix/megalinter-updates"
