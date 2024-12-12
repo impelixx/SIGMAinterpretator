@@ -28,13 +28,11 @@ jobs:
       - name: Run MegaLinter
         uses: oxsecurity/megalinter@v8
         env:
-            APPLY_FIXES: all
-            APPLY_FIXES_MODE: commit
-            VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
-            GITHUB_TOKEN: ${{ secrets.PAT }}
-            SKIP_LINTERS: SPELL,C, COPYPASTE_JSCPD, .checkov.yml
-            
-
+          APPLY_FIXES: all
+          APPLY_FIXES_MODE: commit
+          VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+          SKIP_LINTERS: SPELL,C, COPYPASTE_JSCPD, .checkov.yml
 
   TestOnUbuntu:
     needs: [linter]
@@ -55,7 +53,7 @@ jobs:
           cmake -G Ninja ../backend
           ninja
       - name: Setup Python
-        run: | 
+        run: |
           sudo apt-get install -y python3 python3-pip
           mv backend ../tests
           cd ../tests
