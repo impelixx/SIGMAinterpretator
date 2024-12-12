@@ -1,7 +1,9 @@
-name: myFirstDevOpsExperienceOnPush
+name: MegaLinter Workflow
 
 on:
   push:
+    branches-ignore:
+      - 'fix/**' # Ignore branches starting with fix/
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,7 +29,8 @@ jobs:
           APPLY_FIXES: all
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
-          DISABLE_ERRORS: true
+          ENABLE_LINTERS: 'CPP, PYTHON'
+          DISABLE_LINTERS: 'ALL'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Changes
@@ -40,18 +43,27 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Create Pull Request
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && always() && (steps.megalinter.outcome != 'skipped')
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.PAT }}
           commit-message: "[MegaLinter] Apply linter fixes"
           title: "MegaLinter fixes"
-          branch: "fix/AutoLinterFixes"
-          base: ${{ github.head_ref }}
+          branch: "fix/${{ github.ref_name }}" # Create fix/ branch for the current branch
+          base: ${{ github.ref_name }}
           body: |
             ## Автоматические исправления от MegaLinter
 
             Этот PR содержит исправления, предложенные MegaLinter.
+
+      - name: Upload Reports
+        if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mega-Linter reports
+          path: |
+            megalinter-reports
+            mega-linter.log
 
   build-and-test:
     name: Build and Test on Ubuntu

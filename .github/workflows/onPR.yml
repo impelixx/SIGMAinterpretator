@@ -28,18 +28,10 @@ jobs:
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
           DISABLE_ERRORS: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISABLE_LINTERS: cspell
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Get Changes
-        id: get-changes
-        if: always() && (steps.megalinter.outcome != 'skipped')
-        run: |
-          changes=$(git diff --no-color)
-          echo "changes<<EOF" >> $GITHUB_ENV
-          echo "$changes" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Upload Reports
+      - name: Comment PR
         if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
         uses: actions/upload-artifact@v4
         with:
@@ -47,29 +39,3 @@ jobs:
           path: |
             megalinter-reports
             mega-linter.log
-
-  build-and-test:
-    name: Build and Test on Ubuntu
-    needs: linter
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Install Build Tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake ninja-build g++ python3 python3-pip
-
-      - name: Build Project
-        run: |
-          mkdir -p build
-          cd build
-          cmake -G Ninja ../backend
-          ninja
-
-      - name: Run Tests
-        run: |
-          cd tests
-          python3 tester.py
