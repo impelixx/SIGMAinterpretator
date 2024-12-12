@@ -36,7 +36,6 @@ jobs:
       - name: MegaLinter
         id: megalinter
         uses: oxsecurity/megalinter/flavors/python@v7
-        continue-on-error: true  # Добавляем это для гарантированного выполнения
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
@@ -47,8 +46,6 @@ jobs:
           REPOSITORY_CHECKOV_DISABLE_ERRORS: true
           REPOSITORY_KICS_DISABLE_ERRORS: true
           SPELL_CSPELL_DISABLE: true
-          DISABLE_LINTERS: cspell,git_diff,bandit,COPYPASTE_JSCPD
-          DISABLE: C
           SPELL_MISSPELL_DISABLE: true
 
       - name: Debug Output
@@ -73,11 +70,15 @@ jobs:
           commit-message: "[MegaLinter] Apply linter fixes"
           title: "chore: MegaLinter fixes"
           branch: "fix/megalinter-updates"
-          base: ${{ github.head_ref }}  
-          delete-branch: true               
+          base: ${{ github.head_ref }}
           body: |
             ## Автоматические исправления от MegaLinter
             
             Этот PR содержит исправления, предложенные MegaLinter.
             
             ### Предлагаемые изменения:
+            ```diff
+            ${{ env.changes }}
+            ```
+            
+            Статус проверки: ${{ steps.megalinter.outcome }}
