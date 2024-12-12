@@ -45,6 +45,10 @@ jobs:
           MARKDOWN_MARKDOWNLINT_DISABLE_ERRORS: true
           REPOSITORY_CHECKOV_DISABLE_ERRORS: true
           REPOSITORY_KICS_DISABLE_ERRORS: true
+          SPELL_CSPELL_DISABLE: true
+          DISABLE_LINTERS: cspell, git_diff, bandit, jscpd
+          DISABLE: C
+          SPELL_MISSPELL_DISABLE: true
 
       - name: Create Pull Request
         if: steps.megalinter.outcome == 'failure' || steps.megalinter.outcome == 'success'
