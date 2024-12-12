@@ -128,10 +128,8 @@ void LexemAnalyzer::AnalyzeStatement() {
             GetNextChar();
         }
         auto [isKeyword, lexem] = keywords_.has(word.c_str(), word.length(), startPos);
-        std::cout << isKeyword << std::endl;
-        std::cout << "Word: " << word << std::endl;
         if (isKeyword) {
-            lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
+            //lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
             if (word == "int" || word == "float" || word == "bool" || word == "string") {
                 GetNextChar();
                 AnalyzeVariableDeclaration();
@@ -186,7 +184,6 @@ void LexemAnalyzer::AnalyzeStatement() {
 
 void LexemAnalyzer::AnalyzeAssignment() {
     SkipWhitespace();
-    std::cout << "Start analyze assign" << ch_ << std::endl;
     if (ch_ == '=') {
         lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
@@ -202,7 +199,6 @@ void LexemAnalyzer::PrintLexems() const {
 
 void LexemAnalyzer::AnalyzeVariableDeclaration() {
     SkipWhitespace();
-    std::cout << "Start analyze var" << ch_ << std::endl;
     size_t startPos = currentPosition_;
     if (isalpha(ch_)) {
         AnalyzeIdentifier();
@@ -224,8 +220,8 @@ void LexemAnalyzer::AnalyzeIdentifier() {
     size_t startPos = currentPosition_;
     std::string word;
     while (isalnum(ch_) || ch_ == '_') {
-        word += ch_;
-        GetNextChar();
+      word += ch_;
+      GetNextChar();
     }
     auto [isKeyword, lexem] = keywords_.has(word.c_str(), word.length(), startPos);
     if (isKeyword) {
@@ -236,7 +232,6 @@ void LexemAnalyzer::AnalyzeIdentifier() {
 }
 
 void LexemAnalyzer::AnalyzeExpression() {
-    std::cout << "Start analyze expr" << ch_ << std::endl;
     if (ch_ == ';') {
         lexems_.emplace_back(Lexem(LexemType::OPERATOR, ";", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
@@ -320,11 +315,10 @@ void LexemAnalyzer::AnalyzeArrayDeclaration() {
 }
 
 void LexemAnalyzer::AnalyzeFunctionDeclaration() {
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
+    //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
     SkipWhitespace();
     AnalyzeIdentifier();
     SkipWhitespace();
-    std::cout << "Start analyze param" << ch_ << std::endl;
     if (ch_ == '(') {
         lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
@@ -338,15 +332,15 @@ void LexemAnalyzer::AnalyzeParameters() {
         // Нет параметров
         lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", currentPosition_, currentPosition_ + 1, curLine_));
         GetNextChar();
-        return;
+        AnalyzeStatement();
     }
     while (ch_ != ')' && ch_ != '\0') {
         AnalyzeIdentifier();
-        SkipWhitespace();
+        // GetNextChar();
+        // SkipWhitespace();
         if (ch_ == ',') {
             lexems_.emplace_back(Lexem(LexemType::OPERATOR, ",", currentPosition_, currentPosition_ + 1, curLine_));
             GetNextChar();
-            SkipWhitespace();
         } else if (ch_ != ')') {
             GetNextChar();
             return;
@@ -390,7 +384,6 @@ void LexemAnalyzer::AnalyzeForStatement() {
         temp += ch_;
         GetNextChar();
     }
-    std::cout << "Tmp: " << temp << std::endl;
     if (temp == "in") {
         lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", currentPosition_ - 2, currentPosition_, curLine_));
         GetNextChar();
