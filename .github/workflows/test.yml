@@ -60,7 +60,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           commit-message: "[MegaLinter] Apply linter fixes"
-          title: "chore: MegaLinter fixes"
+          title: "MegaLinter fixes"
           branch: "fix/megalinter-updates"
           base: ${{ github.head_ref }}
           body: |
@@ -68,16 +68,11 @@ jobs:
 
             Этот PR содержит исправления, предложенные MegaLinter.
 
-            ### Предлагаемые изменения:
-            ```diff
-            ${{ env.changes }}
-            ```
-
       - name: Comment PR
         if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.PAT_TOKEN }}
+          github-token: ${{ secrets.PAT}}
           script: |
             const output = `## MegaLinter Результаты
 
