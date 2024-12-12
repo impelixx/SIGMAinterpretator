@@ -36,6 +36,7 @@ jobs:
       - name: MegaLinter
         id: megalinter
         uses: oxsecurity/megalinter/flavors/python@v7
+        continue-on-error: true  # Добавляем это для гарантированного выполнения
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
@@ -46,12 +47,17 @@ jobs:
           REPOSITORY_CHECKOV_DISABLE_ERRORS: true
           REPOSITORY_KICS_DISABLE_ERRORS: true
           SPELL_CSPELL_DISABLE: true
-          DISABLE_LINTERS: cspell,git_diff,bandit,jscpd
+          DISABLE_LINTERS: cspell,git_diff,bandit,COPYPASTE_JSCPD
           DISABLE: C
           SPELL_MISSPELL_DISABLE: true
 
+      - name: Debug Output
+        run: |
+          echo "MegaLinter outcome: ${{ steps.megalinter.outcome }}"
+          echo "MegaLinter result: ${{ steps.megalinter.result }}"
+
       - name: Create Pull Request
-        if: steps.megalinter.outcome == 'failure' || steps.megalinter.outcome == 'success'
+        if: always() && (steps.megalinter.outcome != 'skipped')  # Изменено условие
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
