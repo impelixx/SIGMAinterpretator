@@ -34,29 +34,29 @@ jobs:
           fetch-depth: 0
 
       - name: MegaLinter
+        id: megalinter
         uses: oxsecurity/megalinter/flavors/python@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-          # Отключаем некоторые проверки cpplint
           CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
           C_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
-          
-          # Настройка Python линтеров
           PYTHON_BLACK_ARGUMENTS: "--line-length=100"
           PYTHON_FLAKE8_ARGUMENTS: "--max-line-length=100"
-          
-          # Игнорируем некритичные предупреждения
           MARKDOWN_MARKDOWNLINT_DISABLE_ERRORS: true
           REPOSITORY_CHECKOV_DISABLE_ERRORS: true
           REPOSITORY_KICS_DISABLE_ERRORS: true
 
       - name: Create Pull Request
-        if: ${{ success() }} || ${{ failure() }}
+        if: steps.megalinter.outcome == 'failure' || steps.megalinter.outcome == 'success'
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "[MegaLinter] Apply linter fixes"
           title: "chore: MegaLinter fixes"
           body: |
-            Auto-generated PR with fixes from MegaLinter
+            ## Автоматические исправления от MegaLinter
+            
+            Этот PR содержит исправления, предложенные MegaLinter.
+            Пожалуйста, проверьте изменения перед слиянием.
+            
+            Статус проверки: ${{ steps.megalinter.outcome }}
