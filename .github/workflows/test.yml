@@ -1,11 +1,8 @@
-name: firstDevOps-experience
+name: MegaLinter Workflow
 
 on:
   push:
   pull_request:
-    branches:
-      - main
-      - master
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -24,73 +21,53 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: MegaLinter
+      - name: Run MegaLinter
         id: megalinter
-        uses: oxsecurity/megalinter/flavors/python@v7
+        uses: oxsecurity/megalinter@v7
         env:
           DISABLE_ERRORS: true
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем PAT_TOKEN вместо GITHUB_TOKEN
-          CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
-          C_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
-          PYTHON_BLACK_ARGUMENTS: "--line-length=100"
-          PYTHON_FLAKE8_ARGUMENTS: "--max-line-length=100"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISABLE_LINTERS: bandit, actionlint, jscpd, checkov, kics, cspell
-          MARKDOWN_MARKDOWNLINT_DISABLE_ERRORS: true
-          REPOSITORY_CHECKOV_DISABLE_ERRORS: true
-          REPOSITORY_KICS_DISABLE_ERRORS: true
-          SPELL_CSPELL_DISABLE: true
-          SPELL_MISSPELL_DISABLE: true
 
-      - name: Debug Output
+      - name: Format MegaLinter Results
+        id: format-results
         run: |
-          echo "MegaLinter outcome: ${{ steps.megalinter.outcome }}"
-          echo "MegaLinter result: ${{ steps.megalinter.result }}"
+          table="| Descriptor | Linter | Found | Fixed | Errors | Elapsed time |\n| --- | --- | --- | --- | --- | --- |"
+          while read -r line; do
+            if [[ "$line" =~ \| ]]; then
+              table+="\n$line"
+            fi
+          done < /github/workspace/.mega-linter-reports/summary.md
 
-      - name: Get Changes
-        id: get-changes
-        if: always() && (steps.megalinter.outcome != 'skipped')
-        run: |
-          changes=$(git diff --no-color)
-          echo "changes<<EOF" >> $GITHUB_ENV
-          echo "$changes" >> $GITHUB_ENV
+          echo "results_table<<EOF" >> $GITHUB_ENV
+          echo "$table" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Create Pull Request
-        if: github.event_name == 'push' && always() && (steps.megalinter.outcome != 'skipped')
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.PAT }}
-          commit-message: "[MegaLinter] Apply linter fixes"
-          title: "MegaLinter fixes"
-          branch: "fix/megalinter-updates"
-          base: ${{ github.head_ref }}
-          body: |
-            ## Автоматические исправления от MegaLinter
-
-            Этот PR содержит исправления, предложенные MegaLinter.
-
-      - name: Comment PR
-        if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
+      - name: Comment PR with MegaLinter Results
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.PAT}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `## MegaLinter Результаты
-
-            ${process.env.MEGALINTER_RESULT || 'Нет результатов'}
-
-            ### Найденные проблемы:
-            \`\`\`
-            ${process.env.changes || 'Нет изменений'}
-            \`\`\`
-            `;
-
+            const body = `### MegaLinter Results\n\n${process.env.results_table}`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: output
-            })
+              body: body
+            });
+
+      - name: Create Pull Request for Fixes
+        if: github.event_name == 'push'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "[MegaLinter] Apply linter fixes"
+          title: "MegaLinter Fixes"
+          branch: "fix/megalinter"
+          body: |
+            ## MegaLinter Automatic Fixes
+            This PR contains linter fixes applied by MegaLinter. Please review and merge.
 
   TestOnUbuntu:
     needs: [megalinter]
@@ -110,6 +87,7 @@ jobs:
           cd build
           cmake -G Ninja ../backend
           ninja
+
       - name: Setup Python
         run: |
           sudo apt-get install -y python3 python3-pip
