@@ -28,7 +28,13 @@ jobs:
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
           DISABLE_ERRORS: true
-          ENABLE: CPP_CPPLINT, CPP_CLANG_FORMAT, PYTHON_PYLINT, PYTHON_BLACK, PYTHON_ISORT, REPOSITORY_DEVSKIM
+          ENABLE_LINTERS:
+             - CPP_CPPLINT
+             - CPP_CLANG_FORMAT
+             - PYTHON_PYLINT
+             - PYTHON_BLACK-
+             - PYTHON_ISORT
+             - REPOSITORY_DEVSKIM
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Comment PR
