@@ -28,7 +28,15 @@ jobs:
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
           DISABLE_ERRORS: true
-          ENABLE_LINTERS: CPP_CLANG_FORMAT, CPP_CPPLINT, PYTHON_PYLINT, PYTHON_BLACK, PYTHON_MYPY, PYTHON_RUFF, MARKDOWN_MARKDOWNLINT, YAML_PRETTIER, SPELL_LYCHEE
+          ENABLE_LINTERS: CPP_CLANG_FORMAT
+            - CPP_CPPLINT
+            - PYTHON_PYLINT
+            - PYTHON_BLACK
+            - PYTHON_MYPY,
+            - PYTHON_RUFF,
+            - MARKDOWN_MARKDOWNLINT
+            - YAML_PRETTIER
+            - SPELL_LYCHEE
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Comment PR
