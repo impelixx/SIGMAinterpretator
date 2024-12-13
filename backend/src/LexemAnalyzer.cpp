@@ -129,18 +129,18 @@ void LexemAnalyzer::AnalyzeStatement() {
         }
         auto [isKeyword, lexem] = keywords_.has(word.c_str(), word.length(), startPos);
         if (isKeyword) {
-            //lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
+            lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
             if (word == "int" || word == "float" || word == "bool" || word == "string") {
                 GetNextChar();
                 AnalyzeVariableDeclaration();
             }
             if (word == "def") {
-                lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
+                //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
                 GetNextChar();
                 AnalyzeFunctionDeclaration();
             }
             if (word == "if") {
-                lexems_.emplace_back(Lexem(LexemType::KEYWORD, "if", currentPosition_ - 2, currentPosition_, curLine_));
+                //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "if", currentPosition_ - 2, currentPosition_, curLine_));
                 GetNextChar();
                 AnalyzeIfStatement();
             } 
@@ -168,10 +168,16 @@ void LexemAnalyzer::AnalyzeStatement() {
             }
             
         } else {
+          if (word.empty()) {
+            GetNextChar();
+            SkipWhitespace();
+            return;
+          }
             lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, startPos, currentPosition_, curLine_));
             SkipWhitespace();
             if (ch_ == '(') {
-                AnalyzeFunctionDeclaration();
+              lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_, currentPosition_ + 1, curLine_));
+              AnalyzeFunctionDeclaration();
             } else if (ch_ == '=') {
                 AnalyzeAssignment();
             }
@@ -222,6 +228,11 @@ void LexemAnalyzer::AnalyzeIdentifier() {
     while (isalnum(ch_) || ch_ == '_') {
       word += ch_;
       GetNextChar();
+    }
+    if (word.empty()) {
+            GetNextChar();
+            SkipWhitespace();
+            return;
     }
     auto [isKeyword, lexem] = keywords_.has(word.c_str(), word.length(), startPos);
     if (isKeyword) {
@@ -316,7 +327,6 @@ void LexemAnalyzer::AnalyzeArrayDeclaration() {
 
 void LexemAnalyzer::AnalyzeFunctionDeclaration() {
     //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
-    SkipWhitespace();
     AnalyzeIdentifier();
     SkipWhitespace();
     if (ch_ == '(') {
