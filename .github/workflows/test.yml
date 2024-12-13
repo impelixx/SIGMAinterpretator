@@ -29,16 +29,6 @@ jobs:
           APPLY_FIXES: all
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
-          ENABLE_LINTERS: >
-            CPP_CLANG_FORMAT,
-            CPP_CPPLINT,
-            PYTHON_PYLINT,
-            PYTHON_BLACK,
-            PYTHON_MYPY,
-            PYTHON_RUFF,
-            MARKDOWN_MARKDOWNLINT,
-            YAML_PRETTIER,
-            SPELL_LYCHEE
           DISABLE_ERRORS: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
