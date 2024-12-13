@@ -49,7 +49,7 @@ jobs:
           token: ${{ secrets.PAT }}
           commit-message: "[MegaLinter] Apply linter fixes"
           title: "MegaLinter fixes"
-          branch: "fix/${{ github.ref_name }}" # Create fix/ branch for the current branch
+          branch: "fix/${{ github.ref_name }}"
           base: ${{ github.ref_name }}
           body: |
             ## Автоматические исправления от MegaLinter
