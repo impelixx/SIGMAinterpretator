@@ -16,7 +16,7 @@ jobs:
   linter:
     name: Run MegaLinter
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -38,10 +38,7 @@ jobs:
         id: get-changes
         if: always() && (steps.megalinter.outcome != 'skipped')
         run: |
-          changes=$(git diff --no-color)
-          echo "changes<<EOF" >> $GITHUB_ENV
-          echo "$changes" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          ls
 
       - name: Create Pull Request
         if: github.event_name == 'push' && always() && (steps.megalinter.outcome != 'skipped')
