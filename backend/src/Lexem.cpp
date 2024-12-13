@@ -13,7 +13,6 @@ std::string Lexem::get_type() const {
     return "NUMBER";
   }
   if (type_ == LexemType::EOS)
-
   {
     return "EOS";
   }
