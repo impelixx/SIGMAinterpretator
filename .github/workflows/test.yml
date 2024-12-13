@@ -3,7 +3,7 @@ name: MegaLinter Workflow
 on:
   push:
     branches-ignore:
-      - 'fix/**' # Ignore branches starting with fix/
+      - "fix/**" # Ignore branches starting with fix/
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
