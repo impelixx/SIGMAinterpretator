@@ -29,7 +29,7 @@ jobs:
           APPLY_FIXES: all
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
-          ENABLE_LINTERS: |
+          ENABLE_LINTERS: >
             CPP_CLANG_FORMAT,
             CPP_CPPLINT,
             PYTHON_PYLINT,
