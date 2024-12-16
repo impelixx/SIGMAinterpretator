@@ -136,28 +136,28 @@ void LexemAnalyzer::AnalyzeStatement() {
             }
             if (word == "def") {
                 //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
-                GetNextChar();
+                // GetNextChar();
                 AnalyzeFunctionDeclaration();
             }
             if (word == "if") {
                 //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "if", currentPosition_ - 2, currentPosition_, curLine_));
-                GetNextChar();
+                // GetNextChar();
                 AnalyzeIfStatement();
             } 
             if (word == "elif") {
-                GetNextChar();
+                // GetNextChar();
                 AnalyzeIfStatement();
             }
             if (word == "else") {
-                GetNextChar();
+                // GetNextChar();
                 AnalyzeElseStatement();
             } 
             if (word == "for") {
-                GetNextChar();
+                // GetNextChar();
                 AnalyzeForStatement();
             }
             if (word == "while") {
-                GetNextChar();
+                // GetNextChar();
                 AnalyzeWhileStatement();
             }
             if (word == "print") {
