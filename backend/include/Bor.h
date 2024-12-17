@@ -9,6 +9,17 @@ struct vertex {
 
 class bor {
  public:
+  /**
+   * @brief Adds a string to the trie data structure
+   * 
+   * This function traverses the trie character by character, creating new vertices
+   * as needed, and marks the last vertex as terminal.
+   * 
+   * @param s The string to be added to the trie
+   * 
+   * Time Complexity: O(|s|) where |s| is the length of the input string
+   * Space Complexity: O(|s|) in worst case when creating new vertices
+   */
   void add(const std::string& s) {
     vertex* v = v0;
     for (char c : s) {
@@ -23,6 +34,20 @@ class bor {
 
   void print() { printVertex(v0); }
 
+  /**
+   * @brief Checks if a given string exists in the trie and returns the corresponding lexeme
+   * @param s Pointer to the character array to check
+   * @param size Length of the string to check
+   * @param s_index Starting index of the string in the source code
+   * @return std::pair<bool, Lexem> First element indicates if string was found,
+   *         second element contains the constructed Lexem regardless of whether string was found
+   * 
+   * The function traverses the trie character by character checking if the given string
+   * exists. If at any point a character is not found in the trie, returns false with
+   * a partial lexeme. If the entire string is found and ends at a terminal node,
+   * returns true with the complete lexeme. Otherwise returns false with the complete
+   * but non-terminal lexeme.
+   */
   std::pair<bool, Lexem> has(const char* s, size_t size, size_t s_index) {
     vertex* cur = v0;
     std::string line;
@@ -49,6 +74,15 @@ class bor {
  private:
   vertex* v0 = new vertex;
 
+  /**
+   * @brief Recursively traverses and prints the vertices of a trie data structure
+   * 
+   * This function performs a depth-first traversal of the trie starting from the given vertex.
+   * It visits each child vertex and recursively processes their children.
+   * 
+   * @param v Pointer to the current vertex in the trie
+   * @note If the input vertex is nullptr, the function returns without doing anything
+   */
   void printVertex(vertex* v) {
     if (!v)
       return;
@@ -59,6 +93,15 @@ class bor {
     }
   }
 
+  /**
+   * @brief Recursively deletes a vertex and all its descendants in the trie
+   * 
+   * This function performs a post-order traversal of the trie starting from the given vertex,
+   * deleting all child vertices before deleting the vertex itself. This ensures proper cleanup
+   * of the entire subtree rooted at the given vertex.
+   * 
+   * @param v Pointer to the vertex to be deleted
+   */
   void deleteVertex(vertex* v) {
     if (!v)
       return;
