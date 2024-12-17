@@ -1,5 +1,5 @@
 #include "../include/LexemAnalyzer.h"
-#include "../include/Lexem.h"  // Include the header for Lexem
+#include "../include/Lexem.h"
 #include <cctype>
 #include <stdexcept>
 #include <iostream>
@@ -7,13 +7,17 @@
 #include <fstream>
 
 /**
- * @brief Constructs a LexemAnalyzer object.
- *
- * Initializes the analyzer with the provided source code and loads keywords from the specified file.
- *
- * @param code The source code to be analyzed.
- * @param pathToKeywords The file path to the keywords list.
- * @throws std::runtime_error If the keywords file cannot be opened.
+ * @brief Constructor for the LexemAnalyzer class
+ * 
+ * @param code The source code string to be analyzed
+ * @param pathToKeywords Path to the file containing keywords
+ * 
+ * @details Initializes a LexemAnalyzer object by:
+ *          - Setting initial state (code, current character, indices)
+ *          - Pushing initial indent level (0) to indent stack
+ *          - Loading keywords from specified file into keywords_ collection
+ * 
+ * @throws std::runtime_error If the keywords file cannot be opened
  */
 LexemAnalyzer::LexemAnalyzer(const std::string& code, const std::string& pathToKeywords)
     : code_(code), ch_('\0'), index_(0), currentPosition_(0) {
@@ -29,12 +33,17 @@ LexemAnalyzer::LexemAnalyzer(const std::string& code, const std::string& pathToK
 }
 
 /**
- * @brief Retrieves the next character from the code.
- *
- * This function increments the current index and updates the current character `ch_`.
- * If the current character is a newline, it increments the `curLine_` counter.
- * It also updates the `currentPosition_` to reflect the new index.
- * If the end of the code is reached, it sets `ch_` to the null character.
+ * @brief Reads the next character from the input code and updates analyzer state
+ * 
+ * This method advances the lexical analyzer by one character in the input code.
+ * If a newline character is encountered, it increments the line counter.
+ * When the end of input is reached, it sets the current character to null terminator.
+ * 
+ * Updates:
+ * - ch_: The current character being processed
+ * - index_: Position in the input code 
+ * - curLine_: Current line number (incremented on newlines)
+ * - currentPosition_: Current position in the input
  */
 void LexemAnalyzer::GetNextChar() {
     if (index_ < code_.length()) {
@@ -43,22 +52,29 @@ void LexemAnalyzer::GetNextChar() {
         }
         ch_ = code_[index_++];
         currentPosition_ = index_;
-        // Debugging output
-        std::cout << "GetNextChar: ch_='" << ch_ << "', index_=" << index_ << ", curLine_=" << curLine_ << std::endl;
     } else {
         ch_ = '\0';
-        // Debugging output
-        std::cout << "GetNextChar: End of file reached." << std::endl;
     }
 }
 
 /**
- * @brief Skips whitespace and comments in the source code.
+ * @brief Skips whitespace characters and handles special cases in the source code
  * 
- * This function advances the current character position by skipping over
- * any whitespace characters, single-line comments (`//`), and multi-line
- * comments. It also handles newlines by updating the line count
- * and managing indentation levels.
+ * This method processes:
+ * - Regular whitespace characters
+ * - Newlines (generating NEWLINE lexems and handling indentation)
+ * - Single-line comments (// style)
+ * - Multi-line comments (cpp style)
+ * 
+ * When a newline is encountered, it:
+ * 1. Creates a NEWLINE lexem
+ * 2. Increments the line counter
+ * 3. Processes any indentation following the newline
+ * 
+ * Comments are completely skipped without generating lexems.
+ * 
+ * @note The method modifies the internal state by advancing the character pointer
+ *       and potentially adding new lexems to the lexem collection
  */
 void LexemAnalyzer::SkipWhitespace() {
     while (true) {
@@ -104,15 +120,18 @@ void LexemAnalyzer::SkipWhitespace() {
 }
 
 /**
- * @brief Handles the indentation levels based on the current indentation.
+ * @brief Processes indentation changes in the source code and generates corresponding INDENT/DEDENT lexems.
  * 
- * This function compares the current indentation level with the previous one
- * and updates the indentation stack accordingly. It adds INDENT or DEDENT
- * tokens based on whether the current indentation is greater or less than
- * the previous level. Throws an error if indentation levels are inconsistent.
+ * This method compares the current indentation level with the previous one and:
+ * - Creates an INDENT lexem when indentation increases
+ * - Creates DEDENT lexems when indentation decreases
+ * - Maintains a stack of indentation levels
  * 
- * @param currentIndent The current indentation level to handle.
- * @throws std::runtime_error if indentation is inconsistent or mismatched.
+ * @param currentIndent The number of spaces/tabs in the current line's indentation
+ * @throws std::runtime_error If there's no matching indentation level or inconsistent indentation
+ * 
+ * @note The method expects indentStack_ to never be empty (should contain at least the base level 0)
+ * @note Lexems are added to the lexems_ vector with appropriate position information
  */
 void LexemAnalyzer::HandleIndentation(int currentIndent) {
     int previousIndent = indentStack_.back();
@@ -136,12 +155,12 @@ void LexemAnalyzer::HandleIndentation(int currentIndent) {
 }
 
 /**
- * @brief Performs lexical analysis of the source code.
+ * @brief Performs lexical analysis of the program text.
  * 
- * This method executes the main lexical analysis process by:
- * 1. Getting the first character from the source
- * 2. Analyzing the program structure
- * 3. Adding an end-of-code (EOC) lexeme at the end
+ * This method drives the lexical analysis process by:
+ * 1. Getting the first character
+ * 2. Analyzing the program text
+ * 3. Adding an end-of-code (EOC) lexem at the end
  * 
  * The analysis results are stored in the lexems_ container.
  */
@@ -152,11 +171,16 @@ void LexemAnalyzer::Analyze() {
 }
 
 /**
- * @brief Analyzes the entire program by processing statements sequentially.
+ * @brief Analyzes the entire program by processing statements sequentially
  * 
- * This method iterates through the program text character by character,
- * skipping whitespace and analyzing each statement until the end of input is reached.
- * The analysis stops when the null terminator character '\0' is encountered.
+ * This method iterates through the input program character by character,
+ * skipping whitespace and analyzing individual statements until the end
+ * of input (null character) is reached.
+ * 
+ * The analysis is performed by:
+ * 1. Skipping any whitespace characters
+ * 2. Breaking if end of input is reached
+ * 3. Processing each statement using AnalyzeStatement()
  */
 void LexemAnalyzer::AnalyzeProgram() {
     while (ch_ != '\0') {
@@ -169,28 +193,31 @@ void LexemAnalyzer::AnalyzeProgram() {
 }
 
 /**
- * @brief Analyzes a single statement in the source code and generates corresponding lexems
+ * @brief Analyzes and processes a single statement in the source code.
  * 
- * This function processes statements by:
- * 1. Identifying keywords, identifiers and expressions
- * 2. Handling various statement types including:
- *    - Variable declarations (int, float, bool, string)
- *    - Function declarations
- *    - Control flow statements (if, elif, else, for, while)
- *    - Print statements
- *    - Return statements
- *    - Assignments
- *    - Function calls
- *    - General expressions
+ * This method is responsible for analyzing different types of statements including:
+ * - Variable declarations (int, float, bool, string)
+ * - Function declarations
+ * - Control flow statements (if, elif, else)
+ * - Loop statements (for, while) 
+ * - Print statements
+ * - Return statements
+ * - Assignments
+ * - Expressions
  * 
- * The function first skips whitespace and checks for end of input.
- * Then it processes alphabetic characters to form words that could be:
- * - Keywords (triggering specific analysis routines)
- * - Identifiers (possibly followed by function calls or assignments)
- * If no word is formed, it processes the input as a general expression.
+ * The analysis process includes:
+ * 1. Skipping whitespace
+ * 2. Identifying keywords and identifiers
+ * 3. Processing the statement based on its type
+ * 4. Generating appropriate lexems
  * 
- * @note The function advances the internal character pointer and populates
- *       the lexems_ vector with identified lexical tokens
+ * The method first checks if the current character is alphabetic to determine if it's
+ * a keyword or identifier. If not, it treats the statement as an expression.
+ * For keywords, it routes to specific analysis methods based on the keyword type.
+ * For identifiers, it checks for function calls or assignments.
+ * 
+ * @note This is a core method of the lexical analyzer that handles the primary 
+ *       statement processing logic
  */
 void LexemAnalyzer::AnalyzeStatement() {
     SkipWhitespace();
@@ -204,33 +231,35 @@ void LexemAnalyzer::AnalyzeStatement() {
             word += ch_;
             GetNextChar();
         }
-        if (word.empty()) {
-            GetNextChar();
-            SkipWhitespace();
-            return;
-        }
         auto [isKeyword, lexem] = keywords_.has(word.c_str(), word.length(), startPos);
         if (isKeyword) {
             lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
             if (word == "int" || word == "float" || word == "bool" || word == "string") {
+                GetNextChar();
                 AnalyzeVariableDeclaration();
             }
             if (word == "def") {
+                GetNextChar();
                 AnalyzeFunctionDeclaration();
             }
             if (word == "if") {
+                GetNextChar();
                 AnalyzeIfStatement();
             } 
             if (word == "elif") {
+                GetNextChar();
                 AnalyzeIfStatement();
             }
             if (word == "else") {
+                GetNextChar();
                 AnalyzeElseStatement();
             } 
             if (word == "for") {
+                GetNextChar();
                 AnalyzeForStatement();
             }
             if (word == "while") {
+                GetNextChar();
                 AnalyzeWhileStatement();
             }
             if (word == "print") {
@@ -239,31 +268,34 @@ void LexemAnalyzer::AnalyzeStatement() {
             if (word == "return") {
                 AnalyzeReturnStatement();
             }
+            
         } else {
-          if (word.empty()) {
-            GetNextChar();
-            SkipWhitespace();
-            return;
-          }
             lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, startPos, currentPosition_, curLine_));
             SkipWhitespace();
             if (ch_ == '(') {
-              lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_, currentPosition_ + 1, curLine_));
-              AnalyzeFunctionDeclaration();
+                AnalyzeFunctionDeclaration();
             } else if (ch_ == '=') {
                 AnalyzeAssignment();
             }
             AnalyzeExpression();
         }
-    } 
+    } else {
+        AnalyzeExpression();
+    }
 }
 
 /**
- * @brief Analyzes an assignment operation within the lexem stream.
- *
- * This method skips any leading whitespace, checks for the assignment operator '='.
- * If the '=' operator is found, it adds it as a lexem and proceeds to analyze the
- * subsequent expression.
+ * @brief Analyzes assignment operation in the input stream
+ * 
+ * This method processes the assignment operator ('=') and its right-hand expression.
+ * It performs the following steps:
+ * 1. Skips any leading whitespace
+ * 2. If an equals sign is found:
+ *    - Creates a new OPERATOR lexem for the '=' symbol
+ *    - Advances to the next character
+ *    - Analyzes the expression on the right side of the assignment
+ * 
+ * The method assumes that the current position is at the potential assignment operator.
  */
 void LexemAnalyzer::AnalyzeAssignment() {
     SkipWhitespace();
@@ -275,14 +307,12 @@ void LexemAnalyzer::AnalyzeAssignment() {
 }
 
 /**
- * @brief Prints all lexemes in the analyzer to standard output
+ * @brief Prints all lexemes stored in the analyzer to standard output
  * 
- * For each lexeme, displays:
- * - Its type
- * - Its text value
- * - The line number where it appears
+ * Outputs each lexeme's type, text value, and line number in the format:
+ * "TYPE: <type> VALUE: <value> On line: <line_number>"
  * 
- * The output format is: "TYPE: <type> VALUE: <value> On line: <line_number>"
+ * This method is const and does not modify the internal state of the analyzer.
  */
 void LexemAnalyzer::PrintLexems() const {
     for (const auto& lexem : lexems_) {
@@ -291,20 +321,23 @@ void LexemAnalyzer::PrintLexems() const {
 }
 
 /**
- * @brief Analyzes variable declaration statements in the source code.
+ * @brief Analyzes variable declarations in the source code.
  * 
- * This method handles the analysis of variable declarations, including:
- * - Skipping leading whitespace
- * - Processing identifiers (variable names)
- * - Handling assignment operations if present
- * - Processing expressions following assignments
- * - Detecting statement terminators (semicolons)
- * 
- * The method expects variable declarations to follow the pattern:
+ * This method processes variable declarations following this pattern:
  * identifier [= expression];
  * 
- * During analysis, it generates corresponding lexems and adds them to the lexems_ collection.
- * After processing a complete declaration, it proceeds to analyze the next statement.
+ * The method:
+ * 1. Skips leading whitespace
+ * 2. Processes an identifier if it starts with a letter
+ * 3. Handles optional assignment (=) followed by an expression
+ * 4. Processes semicolon terminator
+ * 5. Continues analyzing the next statement
+ * 
+ * Adds corresponding lexems to the lexems_ collection:
+ * - Identifiers
+ * - Assignment operator (=) if present
+ * - Expression components if assignment exists
+ * - Semicolon operator (;)
  */
 void LexemAnalyzer::AnalyzeVariableDeclaration() {
     SkipWhitespace();
@@ -326,19 +359,19 @@ void LexemAnalyzer::AnalyzeVariableDeclaration() {
 }
 
 /**
- * @brief Analyzes and processes an identifier or keyword from the input source.
+ * @brief Analyzes and processes an identifier or keyword token in the source code
  * 
- * This method reads characters from the current position until it encounters a character
- * that is not alphanumeric and not an underscore. It then checks if the accumulated
- * string is a keyword or an identifier and adds the appropriate lexem to the lexems list.
+ * This method reads characters from the current position as long as they form a valid
+ * identifier (alphanumeric characters or underscore). It then checks if the formed word
+ * is a keyword. Based on this check, it creates either a KEYWORD or IDENTIFIER lexem
+ * and adds it to the lexems collection.
  * 
- * The method performs the following steps:
- * 1. Accumulates characters while they are alphanumeric or underscore
- * 2. If no characters were accumulated, skips whitespace and returns
- * 3. Checks if the accumulated word is a keyword
- * 4. Creates either a KEYWORD or IDENTIFIER lexem and adds it to the lexems list
+ * The method automatically advances the current position to the first character after
+ * the identifier.
  * 
- * @note The method advances the current position pointer as it reads characters
+ * @note Assumes the current character (ch_) is valid start of an identifier
+ * @see keywords_
+ * @see lexems_
  */
 void LexemAnalyzer::AnalyzeIdentifier() {
     size_t startPos = currentPosition_;
@@ -346,11 +379,6 @@ void LexemAnalyzer::AnalyzeIdentifier() {
     while (isalnum(ch_) || ch_ == '_') {
       word += ch_;
       GetNextChar();
-    }
-    if (word.empty()) {
-            GetNextChar();
-            SkipWhitespace();
-            return;
     }
     auto [isKeyword, lexem] = keywords_.has(word.c_str(), word.length(), startPos);
     if (isKeyword) {
@@ -360,22 +388,6 @@ void LexemAnalyzer::AnalyzeIdentifier() {
     }
 }
 
-/**
- * @brief Analyzes and tokenizes an expression in the input text.
- * 
- * This method processes characters until it encounters a semicolon, newline, or end of file.
- * It identifies and creates lexems for:
- * - Numbers
- * - Identifiers
- * - String literals
- * - Brackets (parentheses, curly braces, square brackets)
- * - Operators and punctuation marks
- * 
- * If a semicolon is encountered first, it creates a semicolon lexem and continues
- * with statement analysis.
- * 
- * Whitespace is automatically skipped during processing.
- */
 void LexemAnalyzer::AnalyzeExpression() {
     if (ch_ == ';') {
         lexems_.emplace_back(Lexem(LexemType::OPERATOR, ";", currentPosition_, currentPosition_ + 1, curLine_));
@@ -405,22 +417,6 @@ void LexemAnalyzer::AnalyzeExpression() {
         }
 }
 
-/**
- * @brief Analyzes and processes a numeric literal in the input stream
- * 
- * This method processes both integer and floating-point numbers.
- * It accumulates digits until a non-digit character is encountered.
- * If a decimal point is found after the integer part, it continues
- * to process decimal digits for floating-point numbers.
- * 
- * The method creates a NUMBER lexem containing the complete numeric literal
- * and adds it to the lexems collection.
- * 
- * @details The number format supported is: [0-9]+(.[0-9]+)?
- * 
- * @note The method assumes the current character (ch_) is a digit when called
- * @note Updates the current position (currentPosition_) as it processes characters
- */
 void LexemAnalyzer::AnalyzeNumber() {
     std::string number;
     while (isdigit(ch_)) {
@@ -439,18 +435,6 @@ void LexemAnalyzer::AnalyzeNumber() {
     return;
 }
 
-/**
- * @brief Analyzes and processes a string literal encountered in the source code.
- * 
- * This method handles string literals enclosed in double quotes. It reads characters
- * until it encounters the closing double quote, building the string content.
- * After processing, it creates a STRING lexeme with the accumulated characters.
- * 
- * The method assumes that the current character (ch_) is positioned at the opening
- * double quote when called. It advances past the closing quote upon completion.
- * 
- * @note The method does not handle escape sequences or malformed strings.
- */
 void LexemAnalyzer::AnalyzeString() {
     GetNextChar();
     std::string str;
@@ -463,18 +447,20 @@ void LexemAnalyzer::AnalyzeString() {
 }
 
 /**
- * @brief Analyzes array declaration syntax in the form of {expr1, expr2, ..., exprN}
+ * @brief Analyzes array declaration in the source code and generates corresponding lexems.
  * 
- * Processes array declarations by:
- * 1. Adding opening brace lexem
- * 2. Analyzing comma-separated expressions inside braces
- * 3. Adding comma lexems between expressions
- * 4. Adding closing brace lexem
+ * This method processes array declarations enclosed in curly braces, handling the following:
+ * - Opening brace '{'
+ * - Array elements (expressions) separated by commas
+ * - Closing brace '}'
  * 
- * If syntax is invalid (missing closing brace or invalid expression separator),
- * the analysis stops and returns early.
+ * The method generates lexems for:
+ * - Opening and closing braces (LexemType::BRACKET)
+ * - Commas between elements (LexemType::OPERATOR)
+ * - Array element expressions (via AnalyzeExpression())
  * 
- * @note Position tracking and whitespace handling is managed internally
+ * @note Method advances the character pointer (ch_) and updates current position
+ * @note Invalid array declarations may result in early return
  */
 void LexemAnalyzer::AnalyzeArrayDeclaration() {
     lexems_.emplace_back(Lexem(LexemType::BRACKET, "{", currentPosition_, currentPosition_ + 1, curLine_));
@@ -504,16 +490,17 @@ void LexemAnalyzer::AnalyzeArrayDeclaration() {
 /**
  * @brief Analyzes function declaration in the source code.
  * 
- * This method processes function declarations by performing the following steps:
- * 1. Analyzes the function identifier (name)
- * 2. Skips any whitespace
- * 3. If an opening parenthesis is found, creates a bracket lexem
- * 4. Processes function parameters
+ * This method processes a function declaration by performing the following steps:
+ * 1. Skips leading whitespace
+ * 2. Analyzes the function identifier (name)
+ * 3. Processes the opening parenthesis
+ * 4. Analyzes function parameters if present
  * 
- * The method expects the current position to be at the start of a function declaration
- * and handles the parsing up until the parameter list.
+ * The method creates lexems for function identifier and opening bracket,
+ * and delegates parameter analysis to AnalyzeParameters method.
  */
 void LexemAnalyzer::AnalyzeFunctionDeclaration() {
+    SkipWhitespace();
     AnalyzeIdentifier();
     SkipWhitespace();
     if (ch_ == '(') {
@@ -526,17 +513,18 @@ void LexemAnalyzer::AnalyzeFunctionDeclaration() {
 /**
  * @brief Analyzes function parameters in the input source code.
  * 
- * This method processes function parameters between parentheses, handling:
- * - Empty parameter lists
- * - Single parameters
- * - Multiple parameters separated by commas
+ * This method processes function parameters within parentheses, tokenizing them into lexems.
+ * It handles parameter lists of the following form: (param1, param2, ..., paramN)
  * 
- * The method generates lexems for:
- * - Parameter identifiers
- * - Comma separators
- * - Closing parenthesis
+ * The method:
+ * - Processes closing parenthesis if it's the first character
+ * - Analyzes comma-separated identifiers as parameters
+ * - Creates lexems for parameters, commas, and closing parenthesis
+ * - Advances the character pointer through the input
  * 
- * If a syntax error is encountered, the method returns early.
+ * @note Assumes opening parenthesis has already been processed
+ * @note Calls AnalyzeIdentifier() for each parameter
+ * @note Stops on encountering EOF ('\0') or closing parenthesis
  */
 void LexemAnalyzer::AnalyzeParameters() {
     SkipWhitespace();
@@ -565,17 +553,16 @@ void LexemAnalyzer::AnalyzeParameters() {
 }
 
 /**
- * @brief Analyzes an if statement in the source code.
+ * @brief Analyzes an 'if' statement in the source code and generates corresponding lexems
  * 
- * This method processes an if statement by:
- * 1. Moving to the next character after 'if'
- * 2. Skipping any whitespace
- * 3. If an opening parenthesis is found:
- *    - Adds a BRACKET lexem to the lexem list
- *    - Processes the condition expression inside the parentheses
+ * The function processes the conditional part of an if statement by:
+ * 1. Moving past the 'if' keyword
+ * 2. Handling any whitespace
+ * 3. Processing the opening parenthesis
+ * 4. Analyzing the condition expression
  * 
- * @pre Current character position should be at 'if' keyword
- * @post Current character position will be at the end of the condition expression
+ * When an opening parenthesis is found, it creates a BRACKET lexem and proceeds
+ * to analyze the expression within the if statement's condition.
  */
 void LexemAnalyzer::AnalyzeIfStatement() {
     GetNextChar();
@@ -588,16 +575,17 @@ void LexemAnalyzer::AnalyzeIfStatement() {
 }
 
 /**
- * @brief Analyzes the 'else' statement in the source code
+ * @brief Analyzes an else statement in the source code.
  * 
- * Processes the 'else' clause by:
- * 1. Moving to the next character after 'else'
- * 2. Skipping any whitespace
- * 3. If a colon is found:
- *    - Creates a colon operator lexem
- *    - Processes the subsequent statement
+ * Processes the else branch of a conditional statement. After encountering the 'else' keyword,
+ * it checks for a colon ':' delimiter and creates corresponding lexems. If found, proceeds
+ * to analyze the statement following the else clause.
  * 
- * Expected syntax: else: <statement>
+ * The function expects to be called after an 'else' keyword has been identified.
+ * It advances the character pointer, skips any whitespace, and processes the statement structure.
+ * 
+ * @note This function modifies the internal state of the lexer by advancing the character pointer
+ * and potentially adding new lexems to the lexem collection.
  */
 void LexemAnalyzer::AnalyzeElseStatement() {
     GetNextChar();
@@ -610,28 +598,28 @@ void LexemAnalyzer::AnalyzeElseStatement() {
 }
 
 /**
- * @brief Analyzes a 'for' statement in the source code
+ * @brief Analyzes a 'for' statement in the source code.
  * 
- * This method processes a for statement by following these steps:
- * 1. Skips leading whitespace
- * 2. Analyzes the identifier (loop variable)
- * 3. Checks for the 'in' keyword
- * 4. If 'in' is found, creates a keyword lexem and processes the array declaration
+ * This function processes a 'for' loop statement by:
+ * 1. Skipping leading whitespace
+ * 2. Analyzing the loop variable identifier
+ * 3. Checking for the 'in' keyword
+ * 4. Processing the array declaration if 'in' keyword is found
  * 
- * Expected format: for identifier in array
+ * Expected format: "for identifier in array"
  * 
- * @throws May throw exceptions if the format is invalid or unexpected characters are encountered
+ * @throws May throw exceptions from AnalyzeIdentifier() or AnalyzeArrayDeclaration()
  */
 void LexemAnalyzer::AnalyzeForStatement() {
     SkipWhitespace();
     AnalyzeIdentifier();
     SkipWhitespace();
-    auto temp = "";
+    std::string temp = "";
     for (int i = 0; i < 2; i++) {
         temp += ch_;
         GetNextChar();
     }
-    if (temp == "in") {
+    if (temp.compare("in") == 0) {
         lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", currentPosition_ - 2, currentPosition_, curLine_));
         GetNextChar();
         AnalyzeArrayDeclaration();
@@ -639,16 +627,14 @@ void LexemAnalyzer::AnalyzeForStatement() {
 }
 
 /**
- * @brief Analyzes a while statement in the source code.
+ * @brief Analyzes a 'while' statement in the source code
  * 
- * This method processes the beginning of a while statement by:
- * 1. Skipping any leading whitespace
- * 2. Handling the opening parenthesis '('
- * 3. Creating a BRACKET lexem for the opening parenthesis
- * 4. Analyzing the condition expression inside the while statement
+ * This method processes the syntax of a while loop statement. It first skips any whitespace,
+ * then checks for and processes the opening parenthesis. After finding the opening parenthesis,
+ * it creates a corresponding BRACKET lexem and proceeds to analyze the condition expression
+ * inside the while statement.
  * 
- * @note The method expects to be called when a 'while' keyword has been identified
- * @note The method processes only the opening part of the while statement up to the condition
+ * The method expects to be called when the 'while' keyword has already been processed.
  */
 void LexemAnalyzer::AnalyzeWhileStatement() {
     SkipWhitespace();
@@ -662,14 +648,16 @@ void LexemAnalyzer::AnalyzeWhileStatement() {
 /**
  * @brief Analyzes a print statement in the source code.
  * 
- * This method handles the parsing of print statements, which have the following syntax:
- * print(expression)
+ * This method handles the parsing of print statements, which must follow the format:
+ * print(expression). It processes the opening parenthesis and delegates the
+ * expression analysis to AnalyzeExpression().
  * 
- * The method skips any leading whitespace, validates the opening parenthesis,
- * creates a BRACKET lexem, and proceeds to analyze the expression within the print statement.
- * 
- * @note This method assumes that 'print' keyword has already been processed
- * @see AnalyzeExpression()
+ * The method:
+ * 1. Skips any leading whitespace
+ * 2. Checks for and processes the opening parenthesis
+ * 3. Creates a BRACKET lexem for the opening parenthesis
+ * 4. Advances to the next character
+ * 5. Analyzes the expression inside the print statement
  */
 void LexemAnalyzer::AnalyzePrintStatement() {
     SkipWhitespace();
@@ -681,11 +669,14 @@ void LexemAnalyzer::AnalyzePrintStatement() {
 }
 
 /**
- * @brief Analyzes a return statement in the source code
+ * @brief Analyzes a return statement in the source code.
  * 
- * Processes a return statement by skipping whitespace and checking for semicolon.
- * If semicolon is found, creates a new OPERATOR lexem and continues analysis
- * of the next statement.
+ * Processes a return statement by checking for a semicolon terminator.
+ * If a semicolon is found, creates a new operator lexem and continues
+ * statement analysis.
+ * 
+ * @note This function assumes that 'return' keyword has already been processed
+ * @note Uses internal state variables: ch_, lexems_, currentPosition_, curLine_
  */
 void LexemAnalyzer::AnalyzeReturnStatement() {
     SkipWhitespace();
