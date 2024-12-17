@@ -68,6 +68,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "Semantic analysis error: " << e.what() << std::endl;
         return 2;
       }
+
     } catch (const std::exception& e) {
       std::cerr << "Lexical analysis error: " << e.what() << std::endl;
       return 1;

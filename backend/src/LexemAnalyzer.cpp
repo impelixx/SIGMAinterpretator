@@ -146,6 +146,7 @@ void LexemAnalyzer::AnalyzeStatement() {
         AnalyzeVariableDeclaration();
       }
       if (word == "def") {
+
         //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
         // GetNextChar();
         AnalyzeFunctionDeclaration();
@@ -183,7 +184,6 @@ void LexemAnalyzer::AnalyzeStatement() {
         GetNextChar();
         SkipWhitespace();
         return;
-      }
       lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, startPos,
                                  currentPosition_, curLine_));
       SkipWhitespace();
