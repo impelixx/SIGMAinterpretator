@@ -1,0 +1,64 @@
+# Doxyfile 1.9.1
+
+# Название проекта
+PROJECT_NAME           = "SIGMAinterpretator"
+
+# Краткое описание проекта
+PROJECT_BRIEF          = "Документация проекта SIGMAinterpretator"
+
+# Директория для генерируемой документации
+OUTPUT_DIRECTORY       = ./docs
+
+# Рекурсивный поиск в поддиректориях
+RECURSIVE              = YES
+
+# Папки и файлы для документирования
+INPUT                  = backend
+FILE_PATTERNS          = *.cpp *.h *.hpp *.c *.cc
+
+# Генерация HTML-документации
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_EXTRA_STYLESHEET  = style.css
+
+# Отключение ненужных форматов
+GENERATE_LATEX         = NO
+GENERATE_MAN           = NO
+GENERATE_RTF           = NO
+GENERATE_XML           = NO
+GENERATE_DOCBOOK       = NO
+
+# Удаление пути из документации (можно оставить пустым)
+STRIP_FROM_PATH        = 
+STRIP_FROM_INC_PATH    = 
+
+# Извлечение всей информации, даже без комментариев
+EXTRACT_ALL            = YES
+
+# Не извлекать приватные члены
+EXTRACT_PRIVATE        = NO
+
+# Не извлекать статические члены
+EXTRACT_STATIC         = NO
+
+# Включение исходного кода в документацию
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = YES
+VERBATIM_HEADERS       = YES
+
+# Дополнительные настройки для лучшего отображения
+EXTRACT_BRIEF          = YES
+HAVE_DOT               = YES
+DOT_PATH               = /usr/bin/dot
+CLASS_DIAGRAMS         = YES
+COLLABORATION_GRAPH    = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+
+# Включение предупреждений
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED    = YES
+WARN_IF_DOC_ERROR       = YES
+
+# Генерация дерева навигации
+GENERATE_TREEVIEW      = YES

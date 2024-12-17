@@ -5,6 +5,24 @@
 #include <sstream>
 #include "LexemAnalyzer.h"
 
+/**
+ * @brief Entry point of the program.
+ *
+ * This function handles command-line arguments to determine the paths to the code file and the workwords file.
+ * If no arguments are provided, it uses default test files. It then reads the code file, performs lexical analysis,
+ * and then semantic analysis on the code. Errors encountered during these processes are caught and reported.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv An array of command-line arguments.
+ *             - `argv[0]` is the program name.
+ *             - `argv[1]` (optional) is the path to the code file.
+ *             - `argv[2]` (optional) is the path to the workwords file.
+ * @return An integer exit code:
+ *         - `0` on successful execution.
+ *         - `1` on usage error or lexical analysis error.
+ *         - `2` on semantic analysis error.
+ *         - `3` on other errors.
+ */
 int main(int argc, char* argv[]) {
   if (argc < 3) {
     if (argc != 1) {
@@ -42,6 +60,7 @@ int main(int argc, char* argv[]) {
     try {
       analyzer.Analyze();
       std::vector<Lexem> lexems = analyzer.GetLexems();
+      analyzer.PrintLexems();
       try {
         Semantic semantic(lexems);
         semantic.Analyze();

@@ -12,7 +12,9 @@ std::string Lexem::get_type() const {
   if (type_ == LexemType::NUMBER) {
     return "NUMBER";
   }
-  if (type_ == LexemType::EOS) {
+  if (type_ == LexemType::EOS)
+
+  {
     return "EOS";
   }
   if (type_ == LexemType::OPERATOR) {
@@ -46,19 +48,21 @@ std::string Lexem::get_type() const {
     return "EOC";
   }
   return "UNKNOWN";
+}
 
-  std::string Lexem::get_text() const {
-    return text_;
-  }
+std::string Lexem::get_text() const {
+  return text_;
+}
 
-  size_t Lexem::get_line() const {
-    return line_;
-  }
+size_t Lexem::get_line() const {
+  return line_;
+}
 
-  size_t Lexem::get_start() const {
-    return s_;
-  }
+size_t Lexem::get_start() const {
+  return s_;
+}
 
-  size_t Lexem::get_end() const {
-    return e_;
-  }
+size_t Lexem::get_end() const {
+  return e_;
+}
+
