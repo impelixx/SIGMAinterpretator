@@ -1,4 +1,4 @@
-name: Update Wiki Documentation
+name: Update Documentation
 
 on:
   push:
