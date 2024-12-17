@@ -46,7 +46,6 @@ std::string Lexem::get_type() const {
     return "EOC";
   }
   return "UNKNOWN";
-}
 
 std::string Lexem::get_text() const {
   return text_;

@@ -180,7 +180,6 @@ void LexemAnalyzer::AnalyzeStatement() {
       if (word == "return") {
         AnalyzeReturnStatement();
       }
-
     } else {
       lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, startPos,
                                  currentPosition_, curLine_));

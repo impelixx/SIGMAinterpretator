@@ -1,5 +1,4 @@
 name: MegaLinter Workflow
-
 on:
   push:
     branches-ignore:
@@ -15,6 +14,7 @@ env:
 jobs:
   linter:
     name: Run MegaLinter
+
     runs-on: ubuntu-latest
 
     steps:
@@ -52,6 +52,7 @@ jobs:
             ## Автоматические исправления от MegaLinter
 
             Этот PR содержит исправления, предложенные MegaLinter.
+
 
       - name: Upload Reports
         if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
