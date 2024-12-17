@@ -1,12 +1,12 @@
 name: MegaLinter Workflow
+
 on:
   push:
-  pull_request:
-    branches:
-      - main
-      - master
+    branches-ignore:
+      - "fix/**" # Ignore branches starting with fix/
 
 env:
+  MEGALINTER_CONFIG_FILE: .github/.mega-linter.yml
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   APPLY_FIXES: all
   APPLY_FIXES_EVENT: pull_request
@@ -15,7 +15,6 @@ env:
 jobs:
   linter:
     name: Run MegaLinter
-
     runs-on: ubuntu-latest
 
     steps:
@@ -28,44 +27,17 @@ jobs:
       - name: Run MegaLinter
         uses: oxsecurity/megalinter@v8
         env:
-            APPLY_FIXES: all
-            APPLY_FIXES_MODE: commit
-            VALIDATE_ALL_CODEBASE: true # Change to true if you want to validate all code on every push
-            DISABLE_LINTERS: 'ALL'
-            ENABLE_LINTERS: 'CPP, PYTHON'
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-  TestOnUbuntu:
-    needs: [linter]
-
-          fetch-depth: 0
-
-      - name: MegaLinter
-        id: megalinter
-        uses: oxsecurity/megalinter/flavors/python@v7
-        env:
+          APPLY_FIXES: all
+          APPLY_FIXES_MODE: commit
+          VALIDATE_ALL_CODEBASE: true
           DISABLE_ERRORS: true
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-          CPP_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
-          C_CPPLINT_ARGUMENTS: "--filter=-whitespace,-legal/copyright"
-          PYTHON_BLACK_ARGUMENTS: "--line-length=100"
-          PYTHON_FLAKE8_ARGUMENTS: "--max-line-length=100"
-          DISABLE_LINTERS: bandit, actionlint, jscpd, checkov, kics, cspell
-          MARKDOWN_MARKDOWNLINT_DISABLE_ERRORS: true
-          REPOSITORY_CHECKOV_DISABLE_ERRORS: true
-          REPOSITORY_KICS_DISABLE_ERRORS: true
-          SPELL_CSPELL_DISABLE: true
-          SPELL_MISSPELL_DISABLE: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Changes
         id: get-changes
         if: always() && (steps.megalinter.outcome != 'skipped')
         run: |
-          changes=$(git diff --no-color)
-          echo "changes<<EOF" >> $GITHUB_ENV
-          echo "$changes" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          ls
 
       - name: Create Pull Request
         if: github.event_name == 'push' && always() && (steps.megalinter.outcome != 'skipped')
@@ -74,14 +46,14 @@ jobs:
           token: ${{ secrets.PAT }}
           commit-message: "[MegaLinter] Apply linter fixes"
           title: "MegaLinter fixes"
-          branch: "fix/${{ github.head_ref }}"
-          base: ${{ github.head_ref }}
+          branch: "fix/${{ github.ref_name }}"
+          base: ${{ github.ref_name }}
           body: |
             ## Автоматические исправления от MegaLinter
 
             Этот PR содержит исправления, предложенные MegaLinter.
 
-      - name: Comment PR
+      - name: Upload Reports
         if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
         uses: actions/upload-artifact@v4
         with:
@@ -89,34 +61,29 @@ jobs:
           path: |
             megalinter-reports
             mega-linter.log
-            
 
-  TestOnUbuntu:
-    needs: [megalinter]
+  build-and-test:
+    name: Build and Test on Ubuntu
+    needs: linter
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
 
-      - name: Install cpp + cmake
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Build Tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build g++
+          sudo apt-get install -y cmake ninja-build g++ python3 python3-pip
 
-      - name: Build
+      - name: Build Project
         run: |
-          mkdir build
+          mkdir -p build
           cd build
           cmake -G Ninja ../backend
           ninja
-      - name: Setup Python
-        run: | 
-          sudo apt-get install -y python3 python3-pip
-          mv backend ../tests
-          cd ../tests
 
-      - name: Start Tests
+      - name: Run Tests
         run: |
           cd tests
-          ls
           python3 tester.py
