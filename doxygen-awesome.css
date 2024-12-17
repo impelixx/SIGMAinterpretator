@@ -34,7 +34,7 @@ html {
     --primary-light-color: #70b1e9;
 
     /* page base colors */
-    --page-background-color: #ffffff;
+    --page-background-color: #fff;
     --page-foreground-color: #2f4153;
     --page-secondary-foreground-color: #6f7e8e;
 
@@ -52,16 +52,15 @@ html {
     --spacing-large: 16px;
 
     /* default box shadow used for raising an element above the normal content. Used in dropdowns, search result, ... */
-    --box-shadow: 0 2px 8px 0 rgba(0,0,0,.075);
-
-    --odd-color: rgba(0,0,0,.028);
+    --box-shadow: 0 2px 8px 0 rgb(0 0 0 / 7.5%);
+    --odd-color: rgb(0 0 0 / 2.8%);
 
     /* font-families. will affect all text on the website
      * font-family: the normal font for text, headlines, menus
      * font-family-monospace: used for preformatted text in memtitle, code, fragments
      */
-    --font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
-    --font-family-monospace: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+    --font-family: -apple-system,blinkmacsystemfont,segoe ui,roboto,oxygen,ubuntu,cantarell,fira sans,droid sans,helvetica neue,sans-serif;
+    --font-family-monospace: ui-monospace,sfmono-regular,sf mono,menlo,consolas,liberation mono,monospace;
 
     /* font sizes */
     --page-font-size: 15.6px;
@@ -72,7 +71,8 @@ html {
 
     /* content text properties. These only affect the page content, not the navigation or any other ui elements */
     --content-line-height: 27px;
-    /* The content is centered and constraint in it's width. To make the content fill the whole page, set the variable to auto.*/
+
+    /* The content is centered and constraint in it's width. To make the content fill the whole page, set the variable to auto. */
     --content-maxwidth: 1050px;
     --table-line-height: 24px;
     --toc-sticky-top: var(--spacing-medium);
@@ -112,12 +112,9 @@ html {
      * `GENERATE_TREEVIEW` MUST be enabled!
      */
     --menu-display: block;
-
     --menu-focus-foreground: var(--page-background-color);
     --menu-focus-background: var(--primary-color);
-    --menu-selected-background: rgba(0,0,0,.05);
-
-
+    --menu-selected-background: rgb(0 0 0 / 5%);
     --header-background: var(--page-background-color);
     --header-foreground: var(--page-foreground-color);
 
@@ -156,24 +153,20 @@ html {
     --side-nav-foreground: var(--page-foreground-color);
     --side-nav-arrow-opacity: 0;
     --side-nav-arrow-hover-opacity: 0.9;
-
     --toc-background: var(--side-nav-background);
     --toc-foreground: var(--side-nav-foreground);
 
     /* height of an item in any tree / collapsible table */
     --tree-item-height: 30px;
-
     --memname-font-size: var(--code-font-size);
     --memtitle-font-size: 18px;
-
     --webkit-scrollbar-size: 7px;
     --webkit-scrollbar-padding: 4px;
     --webkit-scrollbar-color: var(--separator-color);
-
     --animation-duration: .12s
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     html {
         --page-font-size: 16px;
         --navigation-font-size: 16px;
@@ -190,26 +183,18 @@ html {
         --primary-color: #1982d2;
         --primary-dark-color: #86a9c4;
         --primary-light-color: #4779ac;
-
-        --box-shadow: 0 2px 8px 0 rgba(0,0,0,.35);
-
-        --odd-color: rgba(100,100,100,.06);
-
-        --menu-selected-background: rgba(0,0,0,.4);
-
+        --box-shadow: 0 2px 8px 0 rgb(0 0 0 / 35%);
+        --odd-color: rgb(100 100 100 / 6%);
+        --menu-selected-background: rgb(0 0 0 / 40%);
         --page-background-color: #1C1D1F;
         --page-foreground-color: #d2dbde;
         --page-secondary-foreground-color: #859399;
         --separator-color: #38393b;
         --side-nav-background: #252628;
-
         --code-background: #2a2c2f;
-
         --tablehead-background: #2a2c2f;
-    
         --blockquote-background: #222325;
         --blockquote-foreground: #7e8c92;
-
         --warning-color: #3b2e04;
         --warning-color-dark: #f1b602;
         --warning-color-darker: #ceb670;
@@ -228,17 +213,16 @@ html {
         --invariant-color: #303a35;
         --invariant-color-dark: #76ce96;
         --invariant-color-darker: #cceed5;
-
         --fragment-background: #282c34;
         --fragment-foreground: #dbe4eb;
         --fragment-keyword: #cc99cd;
         --fragment-keywordtype: #ab99cd;
         --fragment-keywordflow: #e08000;
         --fragment-token: #7ec699;
-        --fragment-comment: #999999;
+        --fragment-comment: #999;
         --fragment-link: #98c0e3;
         --fragment-preprocessor: #65cabe;
-        --fragment-linenumber-color: #cccccc;
+        --fragment-linenumber-color: #ccc;
         --fragment-linenumber-background: #35393c;
         --fragment-linenumber-border: #1f1f1f;
     }
@@ -251,26 +235,18 @@ html.dark-mode {
     --primary-color: #1982d2;
     --primary-dark-color: #86a9c4;
     --primary-light-color: #4779ac;
-
-    --box-shadow: 0 2px 8px 0 rgba(0,0,0,.30);
-
-    --odd-color: rgba(100,100,100,.06);
-
-    --menu-selected-background: rgba(0,0,0,.4);
-
+    --box-shadow: 0 2px 8px 0 rgb(0 0 0 / 30%);
+    --odd-color: rgb(100 100 100 / 6%);
+    --menu-selected-background: rgb(0 0 0 / 40%);
     --page-background-color: #1C1D1F;
     --page-foreground-color: #d2dbde;
     --page-secondary-foreground-color: #859399;
     --separator-color: #38393b;
     --side-nav-background: #252628;
-
     --code-background: #2a2c2f;
-
     --tablehead-background: #2a2c2f;
-
     --blockquote-background: #222325;
     --blockquote-foreground: #7e8c92;
-
     --warning-color: #3b2e04;
     --warning-color-dark: #f1b602;
     --warning-color-darker: #ceb670;
@@ -289,17 +265,16 @@ html.dark-mode {
     --invariant-color: #303a35;
     --invariant-color-dark: #76ce96;
     --invariant-color-darker: #cceed5;
-
     --fragment-background: #282c34;
     --fragment-foreground: #dbe4eb;
     --fragment-keyword: #cc99cd;
     --fragment-keywordtype: #ab99cd;
     --fragment-keywordflow: #e08000;
     --fragment-token: #7ec699;
-    --fragment-comment: #999999;
+    --fragment-comment: #999;
     --fragment-link: #98c0e3;
     --fragment-preprocessor: #65cabe;
-    --fragment-linenumber-color: #cccccc;
+    --fragment-linenumber-color: #ccc;
     --fragment-linenumber-background: #35393c;
     --fragment-linenumber-border: #1f1f1f;
 }
@@ -351,7 +326,7 @@ a.anchor {
     border-bottom: 1px solid var(--separator-color);
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (width >= 768px) {
     #top {
         display: flex;
         flex-wrap: wrap;
@@ -373,7 +348,7 @@ a.anchor {
     border-bottom: none;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     #titlearea {
         padding-bottom: var(--spacing-small);
     }
@@ -417,11 +392,11 @@ a.anchor {
     margin-bottom: -1px;
 }
 
-.main-menu-btn-icon, .main-menu-btn-icon:before, .main-menu-btn-icon:after {
+.main-menu-btn-icon, .main-menu-btn-icon::before, .main-menu-btn-icon::after {
     background: var(--page-secondary-foreground-color);
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     .sm-dox a span.sub-arrow {
         background: var(--code-background);
     }
@@ -436,7 +411,7 @@ a.anchor {
     }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (width >= 768px) {
     .sm-dox li, .tablist li {
         display: var(--menu-display);
     }
@@ -470,12 +445,12 @@ a.anchor {
 @keyframes slideInMenu {
     from {
         opacity: 0;
-        transform: translate(0px, -2px);
+        transform: translate(0, -2px);
     }
 
     to {
         opacity: 1;
-        transform: translate(0px, 0px);
+        transform: translate(0, 0);
     }
 }
 
@@ -485,11 +460,11 @@ a.anchor {
     font-size: var(--navigation-font-size);
 }
 
-.sm-dox>li>ul:after {
+.sm-dox>li>ul::after {
     border-bottom-color: var(--page-background-color) !important;
 }
 
-.sm-dox>li>ul:before {
+.sm-dox>li>ul::before {
     border-bottom-color: var(--separator-color) !important;
 }
 
@@ -587,7 +562,7 @@ a.anchor {
     right: var(--spacing-medium);
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     .tabs #MSearchBox {
         position: relative;
         right: 0;
@@ -609,7 +584,7 @@ a.anchor {
     margin-right: 0;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     #main-menu > li:last-child {
         height: 50px;
     }
@@ -718,7 +693,7 @@ html.dark-mode iframe#MSearchResults {
     color: var(--menu-focus-foreground) !important;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     #MSearchBox {
         margin-top: var(--spacing-medium);
         margin-bottom: var(--spacing-medium);
@@ -783,7 +758,7 @@ html.dark-mode iframe#MSearchResults {
     max-width: 50vw;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     #side-nav {
         display: none;
     }
@@ -892,12 +867,11 @@ div.header {
     background-image: none;
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (width >= 1000px) {
     #doc-content > div > div.contents,
     .PageDoc > div.contents {
         display: flex;
-        flex-direction: row-reverse;
-        flex-wrap: nowrap;
+        flex-flow: row-reverse nowrap;
         align-items: flex-start;
     }
     
@@ -990,7 +964,7 @@ html.dark-mode div.contents .dotgraph iframe
 }
 
 h2.groupheader {
-    border-bottom: 0px;
+    border-bottom: 0;
     color: var(--page-foreground-color);
     box-shadow: 
         100px 0 var(--page-background-color), 
@@ -1021,7 +995,6 @@ blockquote {
     background: var(--blockquote-background);
     color: var(--blockquote-foreground);
     border-left: 0;
-    overflow: visible;
     border-radius: var(--border-radius-medium);
     overflow: visible;
     position: relative;
@@ -1050,6 +1023,7 @@ blockquote::after {
 blockquote p {
     margin: var(--spacing-small) 0 var(--spacing-medium) 0;
 }
+
 .paramname, .paramname em {
     font-weight: 600;
     color: var(--primary-dark-color);
@@ -1144,13 +1118,12 @@ div.toc li a.aboveActive {
 }
 
 
-@media screen and (max-width: 999px) {
+@media screen and (width <= 999px) {
     div.contents .toc {
         max-height: 45vh;
         float: none;
         width: auto;
         margin: 0 0 var(--spacing-medium) 0;
-        position: relative;
         top: 0;
         position: relative;
         border: 1px solid var(--separator-color);
@@ -1233,7 +1206,7 @@ div.fragment, pre.fragment {
     overflow-x: auto;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     div.fragment, pre.fragment {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
@@ -1288,7 +1261,7 @@ code, code a, pre.fragment, div.fragment, div.fragment .line, div.fragment span,
     font-size: var(--code-font-size) !important;
 }
 
-div.line:after {
+div.line::after {
     margin-right: var(--spacing-medium);
 }
 
@@ -1340,7 +1313,7 @@ div.fragment span.lineno a {
 }
 
 div.fragment > .line:first-child .lineno {
-    box-shadow: -999999px 0px 0 999999px var(--fragment-linenumber-background), -999998px 0px 0 999999px var(--fragment-linenumber-border);
+    box-shadow: -999999px 0 0 999999px var(--fragment-linenumber-background), -999998px 0 0 999999px var(--fragment-linenumber-border);
     background-color: var(--fragment-linenumber-background) !important;
 }
 
@@ -1429,7 +1402,7 @@ dl.deprecated dt a {
 }
 
 dl.section dd, dl.bug dd, dl.deprecated dd, dl.todo dd {
-    margin-inline-start: 0px;
+    margin-inline-start: 0;
 }
 
 dl.invariant, dl.pre, dl.post {
@@ -1463,7 +1436,7 @@ h2.memtitle, div.memitem {
 }
 
 h2.memtitle {
-    box-shadow: 0px var(--spacing-medium) 0 -1px var(--fragment-background), var(--box-shadow);
+    box-shadow: 0 var(--spacing-medium) 0 -1px var(--fragment-background), var(--box-shadow);
 }
 
 div.memitem {
@@ -1485,7 +1458,7 @@ h2.memtitle {
     position: relative;
 }
 
-h2.memtitle:after {
+h2.memtitle::after {
     content: "";
     display: block;
     background: var(--fragment-background);
@@ -1621,13 +1594,13 @@ dl.reflist dd {
  Table
  */
 
-.contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname),
-.contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody {
+.contents table:not(.memberdecls, .mlabels, .fieldtable, .memname),
+.contents table:not(.memberdecls, .mlabels, .fieldtable, .memname) tbody {
     display: inline-block;
     max-width: 100%;
 }
 
-.contents > table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname):not(.classindex) {
+.contents > table:not(.memberdecls, .mlabels, .fieldtable, .memname, .classindex) {
     margin-left: calc(0px - var(--spacing-large));
     margin-right: calc(0px - var(--spacing-large));
     max-width: calc(100% + 2 * var(--spacing-large));
@@ -1736,11 +1709,11 @@ table.markdownTable tr:last-child, table.doxtable tr:last-child {
     border-bottom: none;
 }
 
-.full_width_table table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) {
+.full_width_table table:not(.memberdecls, .mlabels, .fieldtable, .memname) {
     display: block;
 }
 
-.full_width_table table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody {
+.full_width_table table:not(.memberdecls, .mlabels, .fieldtable, .memname) tbody {
     display: table;
     width: 100%;
 }
@@ -1902,8 +1875,7 @@ div.dynheader img[src="closed.png"] {
     font-size: var(--code-font-size);
 }
 
-@media screen and (max-width: 767px) {
-
+@media screen and (width <= 767px) {
     table.memberdecls .memItemLeft,
     table.memberdecls .memItemRight,
     table.memberdecls .mdescLeft,
@@ -1914,7 +1886,7 @@ div.dynheader img[src="closed.png"] {
         display: block;
         text-align: left;
         padding-left: var(--spacing-large);
-        margin: 0 calc(0px - var(--spacing-large)) 0 calc(0px - var(--spacing-large));
+        margin: 0 calc(0px - var(--spacing-large));
         border-right: none;
         border-left: none;
         border-radius: 0;
@@ -2009,7 +1981,7 @@ hr {
     overflow: auto;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     .contents .dyncontent > .center, .contents > center {
         margin-left: calc(0px - var(--spacing-large));
         margin-right: calc(0px - var(--spacing-large));
@@ -2094,7 +2066,7 @@ table.directory tr.odd {
     filter: saturate(0.2);
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     div.directory {
         margin-left: calc(0px - var(--spacing-large));
         margin-right: calc(0px - var(--spacing-large));
@@ -2209,11 +2181,11 @@ li.navelem:first-child {
     margin-left: var(--spacing-large);
 }
 
-li.navelem:first-child:before {
+li.navelem:first-child::before {
     display: none;
 }
 
-#nav-path li.navelem:after {
+#nav-path li.navelem::after {
     content: '';
     border: 5px solid var(--page-background-color);
     border-bottom-color: transparent;
@@ -2224,7 +2196,7 @@ li.navelem:first-child:before {
     margin-left: 6px;
 }
 
-#nav-path li.navelem:before {
+#nav-path li.navelem::before {
     content: '';
     border: 5px solid var(--separator-color);
     border-bottom-color: transparent;
@@ -2248,7 +2220,7 @@ pre.fragment::-webkit-scrollbar,
 div.memproto::-webkit-scrollbar,
 .contents center::-webkit-scrollbar,
 .contents .center::-webkit-scrollbar,
-.contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody::-webkit-scrollbar,
+.contents table:not(.memberdecls, .mlabels, .fieldtable, .memname) tbody::-webkit-scrollbar,
 div.contents .toc::-webkit-scrollbar,
 .contents .dotgraph::-webkit-scrollbar,
 .contents .tabs-overview-container::-webkit-scrollbar {
@@ -2263,7 +2235,7 @@ pre.fragment::-webkit-scrollbar-thumb,
 div.memproto::-webkit-scrollbar-thumb,
 .contents center::-webkit-scrollbar-thumb,
 .contents .center::-webkit-scrollbar-thumb,
-.contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody::-webkit-scrollbar-thumb,
+.contents table:not(.memberdecls, .mlabels, .fieldtable, .memname) tbody::-webkit-scrollbar-thumb,
 div.contents .toc::-webkit-scrollbar-thumb,
 .contents .dotgraph::-webkit-scrollbar-thumb,
 .contents .tabs-overview-container::-webkit-scrollbar-thumb {
@@ -2279,7 +2251,7 @@ pre.fragment:hover::-webkit-scrollbar-thumb,
 div.memproto:hover::-webkit-scrollbar-thumb,
 .contents center:hover::-webkit-scrollbar-thumb,
 .contents .center:hover::-webkit-scrollbar-thumb,
-.contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody:hover::-webkit-scrollbar-thumb,
+.contents table:not(.memberdecls, .mlabels, .fieldtable, .memname) tbody:hover::-webkit-scrollbar-thumb,
 div.contents .toc:hover::-webkit-scrollbar-thumb,
 .contents .dotgraph:hover::-webkit-scrollbar-thumb,
 .contents .tabs-overview-container:hover::-webkit-scrollbar-thumb {
@@ -2292,7 +2264,7 @@ pre.fragment::-webkit-scrollbar-track,
 div.memproto::-webkit-scrollbar-track,
 .contents center::-webkit-scrollbar-track,
 .contents .center::-webkit-scrollbar-track,
-.contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody::-webkit-scrollbar-track,
+.contents table:not(.memberdecls, .mlabels, .fieldtable, .memname) tbody::-webkit-scrollbar-track,
 div.contents .toc::-webkit-scrollbar-track,
 .contents .dotgraph::-webkit-scrollbar-track,
 .contents .tabs-overview-container::-webkit-scrollbar-track {
@@ -2309,15 +2281,14 @@ pre.fragment,
 div.memproto,
 .contents center,
 .contents .center,
-.contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody,
+.contents table:not(.memberdecls, .mlabels, .fieldtable, .memname) tbody,
 div.contents .toc {
     overflow-x: auto;
     overflow-x: overlay;
 }
 
 #nav-tree {
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow: auto;
     overflow-y: overlay;
 }
 
@@ -2331,7 +2302,7 @@ pre.fragment,
 div.memproto,
 .contents center,
 .contents .center,
-.contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody,
+.contents table:not(.memberdecls, .mlabels, .fieldtable, .memname) tbody,
 div.contents .toc,
 .contents .dotgraph,
 .contents .tabs-overview-container {
@@ -2343,7 +2314,6 @@ div.contents .toc,
 */
 
 doxygen-awesome-dark-mode-toggle {
-    display: inline-block;
     margin: 0 0 0 var(--spacing-small);
     padding: 0;
     width: var(--searchbar-height);
@@ -2371,11 +2341,11 @@ doxygen-awesome-dark-mode-toggle:active > svg {
 }
 
 doxygen-awesome-dark-mode-toggle:hover {
-    background-color: rgba(0,0,0,.03);
+    background-color: rgb(0 0 0 / 3%);
 }
 
 html.dark-mode doxygen-awesome-dark-mode-toggle:hover {
-    background-color: rgba(0,0,0,.18);
+    background-color: rgb(0 0 0 / 18%);
 }
 
 /*
@@ -2409,7 +2379,7 @@ doxygen-awesome-fragment-copy-button:hover, doxygen-awesome-fragment-copy-button
     opacity: 1 !important;
 }
 
-doxygen-awesome-fragment-copy-button:active:not([class~=success]) svg {
+doxygen-awesome-fragment-copy-button:active:not([class~="success"]) svg {
     transform: scale(.91);
 }
 
@@ -2420,14 +2390,14 @@ doxygen-awesome-fragment-copy-button svg {
 }
 
 doxygen-awesome-fragment-copy-button.success svg {
-    fill: rgb(14, 168, 14);
+    fill: rgb(14 168 14);
 }
 
 doxygen-awesome-fragment-copy-button.success {
-    border-color: rgb(14, 168, 14);
+    border-color: rgb(14 168 14);
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     .textblock > .doxygen-awesome-fragment-wrapper > doxygen-awesome-fragment-copy-button,
     .textblock li > .doxygen-awesome-fragment-wrapper > doxygen-awesome-fragment-copy-button,
     .memdoc li > .doxygen-awesome-fragment-wrapper > doxygen-awesome-fragment-copy-button,
@@ -2473,7 +2443,7 @@ h2:hover a.anchorlink, h1:hover a.anchorlink, h3:hover a.anchorlink, h4:hover a.
 */
 
 .tabbed > ul {
-    padding-inline-start: 0px;
+    padding-inline-start: 0;
     margin: 0;
     padding: var(--spacing-small) 0;
 }
@@ -2487,9 +2457,8 @@ h2:hover a.anchorlink, h1:hover a.anchorlink, h3:hover a.anchorlink, h4:hover a.
 }
 
 .tabs-overview-container {
-    overflow-x: auto;
+    overflow: auto visible;
     display: block;
-    overflow-y: visible;
 }
 
 .tabs-overview {
@@ -2498,10 +2467,11 @@ h2:hover a.anchorlink, h1:hover a.anchorlink, h3:hover a.anchorlink, h4:hover a.
     flex-direction: row;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
     .tabs-overview-container {
         margin: 0 calc(0px - var(--spacing-large));
     }
+
     .tabs-overview {
         padding: 0 var(--spacing-large)
     }
@@ -2518,7 +2488,6 @@ h2:hover a.anchorlink, h1:hover a.anchorlink, h3:hover a.anchorlink, h4:hover a.
     cursor: pointer;
     box-shadow: 0 1px 0 0 var(--separator-color);
     position: relative;
-    
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -2664,7 +2633,7 @@ h2:hover a.anchorlink, h1:hover a.anchorlink, h3:hover a.anchorlink, h4:hover a.
     transform: translateX(3px);
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (width <= 450px) {
     .section_buttons a {
         width: 100%;
         box-sizing: border-box;
