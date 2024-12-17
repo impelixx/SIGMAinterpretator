@@ -2,6 +2,8 @@ name: Update Documentation
 
 on:
   push:
+    branches-ignore:
+      - "fix/**" # Ignore branches starting with fix/
 
 jobs:
   update-wiki:
@@ -22,7 +24,7 @@ jobs:
 
       - name: Build documentation
         run: |
-          sphinx-build -b markdown docs/ docs/_build/markdown
+          sphinx-build -b markdown documentation/ docs/_build/markdown
 
       - name: Checkout Wiki
         uses: actions/checkout@v3
