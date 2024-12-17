@@ -1,39 +1,63 @@
 # Doxyfile 1.9.1
 
-# Project related configuration options
-PROJECT_NAME           = "MAGA language"
-PROJECT_BRIEF          = "Make A Great Application"
+# Название проекта
+PROJECT_NAME           = "SIGMAinterpretator"
+
+# Краткое описание проекта
+PROJECT_BRIEF          = "Документация проекта SIGMAinterpretator"
+
+# Директория для генерируемой документации
 OUTPUT_DIRECTORY       = ./docs
+
+# Рекурсивный поиск в поддиректориях
 RECURSIVE              = YES
+
+# Папки и файлы для документирования
 INPUT                  = backend
 FILE_PATTERNS          = *.cpp *.h *.hpp *.c *.cc
 
-# Build related configuration options
+# Генерация HTML-документации
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
+
+# Отключение ненужных форматов
 GENERATE_LATEX         = NO
 GENERATE_MAN           = NO
 GENERATE_RTF           = NO
 GENERATE_XML           = NO
 GENERATE_DOCBOOK       = NO
 
-# Configuration options related to the output
+# Удаление пути из документации (можно оставить пустым)
 STRIP_FROM_PATH        = 
 STRIP_FROM_INC_PATH    = 
 
-# If the value of EXTRACT_ALL is set to YES, then all entities will be extracted
-# even if no documentation was available.
+# Извлечение всей информации, даже без комментариев
 EXTRACT_ALL            = YES
 
-# If the value of EXTRACT_PRIVATE is set to YES, then all private class members
-# will be included in the documentation.
+# Не извлекать приватные члены
 EXTRACT_PRIVATE        = NO
 
-# If the value of EXTRACT_STATIC is set to YES, then static members of a file
-# will be included in the documentation.
+# Не извлекать статические члены
 EXTRACT_STATIC         = NO
 
-# Set to YES to include the source code in the documentation
+# Включение исходного кода в документацию
 SOURCE_BROWSER         = YES
 INLINE_SOURCES         = YES
 VERBATIM_HEADERS       = YES
+
+# Дополнительные настройки для лучшего отображения
+EXTRACT_BRIEF          = YES
+HAVE_DOT               = YES
+DOT_PATH               = /usr/bin/dot
+CLASS_DIAGRAMS         = YES
+COLLABORATION_GRAPH    = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+
+# Включение предупреждений
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED    = YES
+WARN_IF_DOC_ERROR       = YES
+
+# Генерация дерева навигации
+GENERATE_TREEVIEW      = YES
