@@ -1,0 +1,44 @@
+name: Update Wiki Documentation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-wiki:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install sphinx
+
+      - name: Build documentation
+        run: |
+          sphinx-build -b markdown docs/ docs/_build/markdown
+
+      - name: Checkout Wiki
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}.wiki.git
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: wiki
+
+      - name: Update Wiki
+        run: |
+          cp -r docs/_build/markdown/* wiki/
+          cd wiki
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add .
+          git commit -m "Update documentation"
+          git push
