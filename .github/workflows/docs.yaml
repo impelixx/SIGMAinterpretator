@@ -1,9 +1,11 @@
+```yaml
+// filepath: /Users/antonazykov/sigmaint/SIGMAinterpretator/.github/workflows/docs.yaml
 name: Update Documentation
 
 on:
   push:
     branches-ignore:
-      - "fix/**" # Ignore branches starting with fix/
+      - "fix/**" # Игнорировать ветки, начинающиеся с fix/
 
 jobs:
   update-wiki:
@@ -13,18 +15,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
-      - name: Install dependencies
+      - name: Install Doxygen
         run: |
-          pip install sphinx
+          sudo apt-get update
+          sudo apt-get install -y doxygen
 
-      - name: Build documentation
+      - name: Run Doxygen
         run: |
-          sphinx-build -b markdown documentation/ docs/_build/markdown
+          doxygen Doxyfile
 
       - name: Checkout Wiki
         uses: actions/checkout@v3
@@ -35,7 +33,7 @@ jobs:
 
       - name: Update Wiki
         run: |
-          cp -r docs/_build/markdown/* wiki/
+          cp -r docs/html/* wiki/
           cd wiki
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
