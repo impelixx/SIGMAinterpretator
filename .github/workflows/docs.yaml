@@ -13,50 +13,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Doxygen
+      - name: Install Doxygen and Graphviz
         run: |
           sudo apt-get update
-          sudo apt-get install -y doxygen
+          sudo apt-get install -y doxygen graphviz
 
-      - name: Generate Doxyfile if not present
+      - name: Download Doxygen Awesome CSS
         run: |
-          if [ ! -f Doxyfile ]; then
-            doxygen -g
-          fi
-
-      - name: Configure Doxyfile
-        run: |
-          sed -i 's|OUTPUT_DIRECTORY .*|OUTPUT_DIRECTORY = ./docs|' Doxyfile
-          sed -i 's|GENERATE_HTML .*|GENERATE_HTML = YES|' Doxyfile
-          sed -i 's|HTML_OUTPUT .*|HTML_OUTPUT = html|' Doxyfile
-
-      - name: Show project structure
-        run: |
-          sudo apt-get install -y tree
-          tree .
-
-      - name: Show Doxyfile content
-        run: |
-          cat Doxyfile
+          mkdir -p docs
+          wget -O docs/doxygen-awesome.css https://raw.githubusercontent.com/jothepro/doxygen-awesome-css/master/doxygen-awesome.css
 
       - name: Run Doxygen
-        run: |
-          doxygen Doxyfile
-
-      - name: Verify Generated Documentation
-        run: |
-          if [ ! -d ./docs/html ]; then
-            echo "Directory ./docs/html does not exist!"
-            exit 1
-          fi
-
-      - name: List Generated Files
-        run: |
-          ls -la ./docs/html
+        run: doxygen Doxyfile
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/html
-          publish_branch: gh-pages

@@ -19,7 +19,7 @@ FILE_PATTERNS          = *.cpp *.h *.hpp *.c *.cc
 # Генерация HTML-документации
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
-HTML_EXTRA_STYLESHEET  = style.css
+HTML_EXTRA_STYLESHEET  = doxygen-awesome.css
 
 # Отключение ненужных форматов
 GENERATE_LATEX         = NO
@@ -54,6 +54,7 @@ CLASS_DIAGRAMS         = YES
 COLLABORATION_GRAPH    = YES
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
+DEPENDENCY_GRAPH       = YES
 
 # Включение предупреждений
 WARNINGS               = YES
