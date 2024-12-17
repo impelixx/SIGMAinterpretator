@@ -1,5 +1,3 @@
-```yaml
-// filepath: /Users/antonazykov/sigmaint/SIGMAinterpretator/.github/workflows/docs.yaml
 name: Update Documentation
 
 on:
