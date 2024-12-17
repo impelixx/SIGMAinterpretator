@@ -18,6 +18,7 @@ backend/Testing
 build/
 backend/test/
 backend/cmake-build-debug/
+docs/
 backend/.DS_Store
 .vscode/tasks.json
 .vscode/settings.json

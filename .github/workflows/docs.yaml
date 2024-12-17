@@ -2,6 +2,9 @@ name: Deploy Documentation to GitHub Pages
 
 on:
   push:
+    - branches:
+        - main
+        - master
     branches-ignore:
       - "fix/**" # Игнорировать ветки, начинающиеся с fix/
 

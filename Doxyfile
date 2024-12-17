@@ -19,6 +19,7 @@ FILE_PATTERNS          = *.cpp *.h *.hpp *.c *.cc
 # Генерация HTML-документации
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
+HTML_EXTRA_STYLESHEET  = style.css
 
 # Отключение ненужных форматов
 GENERATE_LATEX         = NO
