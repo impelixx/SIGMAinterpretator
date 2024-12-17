@@ -53,7 +53,6 @@ jobs:
 
             Этот PR содержит исправления, предложенные MegaLinter.
 
-
       - name: Upload Reports
         if: github.event_name == 'pull_request' && always() && (steps.megalinter.outcome != 'skipped')
         uses: actions/upload-artifact@v4
