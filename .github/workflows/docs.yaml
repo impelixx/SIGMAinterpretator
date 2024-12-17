@@ -2,9 +2,6 @@ name: Update Wiki Documentation
 
 on:
   push:
-    branches:
-      - main
-      - AddingAutoDocumentation
 
 jobs:
   update-wiki:
