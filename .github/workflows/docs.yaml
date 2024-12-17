@@ -28,9 +28,13 @@ jobs:
         run: |
           doxygen Doxyfile
 
+      - name: List Generated Files
+        run: |
+          ls -la ./docs/html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/html
           publish_branch: gh-pages
