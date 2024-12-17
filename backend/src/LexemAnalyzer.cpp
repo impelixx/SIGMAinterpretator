@@ -131,33 +131,24 @@ void LexemAnalyzer::AnalyzeStatement() {
         if (isKeyword) {
             lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
             if (word == "int" || word == "float" || word == "bool" || word == "string") {
-                GetNextChar();
                 AnalyzeVariableDeclaration();
             }
             if (word == "def") {
-                //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "def", currentPosition_ - 3, currentPosition_, curLine_));
-                GetNextChar();
                 AnalyzeFunctionDeclaration();
             }
             if (word == "if") {
-                //lexems_.emplace_back(Lexem(LexemType::KEYWORD, "if", currentPosition_ - 2, currentPosition_, curLine_));
-                GetNextChar();
                 AnalyzeIfStatement();
             } 
             if (word == "elif") {
-                GetNextChar();
                 AnalyzeIfStatement();
             }
             if (word == "else") {
-                GetNextChar();
                 AnalyzeElseStatement();
             } 
             if (word == "for") {
-                GetNextChar();
                 AnalyzeForStatement();
             }
             if (word == "while") {
-                GetNextChar();
                 AnalyzeWhileStatement();
             }
             if (word == "print") {
