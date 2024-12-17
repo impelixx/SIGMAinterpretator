@@ -29,3 +29,4 @@ CMakeFiles/clion-Default-log.txt
 .idea
 tests/backend
 megalinter-reports/
+html/
