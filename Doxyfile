@@ -1,10 +1,10 @@
 # Doxyfile 1.9.1
 
 # Название проекта
-PROJECT_NAME           = "SIGMAinterpretator"
+PROJECT_NAME           = "US language"
 
 # Краткое описание проекта
-PROJECT_BRIEF          = "Документация проекта SIGMAinterpretator"
+PROJECT_BRIEF          = "Документация языка useless skills"
 
 # Директория для генерируемой документации
 OUTPUT_DIRECTORY       = ./docs
