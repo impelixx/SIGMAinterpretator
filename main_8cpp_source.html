@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -138,24 +139,25 @@ $(document).ready(function(){initNavTree('main_8cpp_source.html',''); initResiza
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        std::cerr &lt;&lt; <span class="stringliteral">&quot;Semantic analysis error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> 2;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      std::cerr &lt;&lt; <span class="stringliteral">&quot;Lexical analysis error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">return</span> 3;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  }</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      std::cerr &lt;&lt; <span class="stringliteral">&quot;Lexical analysis error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">return</span> 3;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
 <div class="ttc" id="aLexemAnalyzer_8h_html"><div class="ttname"><a href="LexemAnalyzer_8h.html">LexemAnalyzer.h</a></div></div>
 <div class="ttc" id="aSemantic_8h_html"><div class="ttname"><a href="Semantic_8h.html">Semantic.h</a></div></div>
 <div class="ttc" id="aSyntaxAnalyzer_8h_html"><div class="ttname"><a href="SyntaxAnalyzer_8h.html">SyntaxAnalyzer.h</a></div></div>
 <div class="ttc" id="aclassLexemAnalyzer_html"><div class="ttname"><a href="classLexemAnalyzer.html">LexemAnalyzer</a></div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00009">LexemAnalyzer.h:9</a></div></div>
 <div class="ttc" id="aclassLexemAnalyzer_html_a4ae9c730cc2325674eaae4e37434805b"><div class="ttname"><a href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">LexemAnalyzer::GetLexems</a></div><div class="ttdeci">std::vector&lt; Lexem &gt; GetLexems()</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00017">LexemAnalyzer.h:17</a></div></div>
 <div class="ttc" id="aclassLexemAnalyzer_html_a7643f1c7784be67ca63e72714ead3238"><div class="ttname"><a href="classLexemAnalyzer.html#a7643f1c7784be67ca63e72714ead3238">LexemAnalyzer::Analyze</a></div><div class="ttdeci">void Analyze()</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8cpp_source.html#l00109">LexemAnalyzer.cpp:109</a></div></div>
-<div class="ttc" id="aclassLexemAnalyzer_html_ab6f2b10c53b3d403bbf80780dcee0b63"><div class="ttname"><a href="classLexemAnalyzer.html#ab6f2b10c53b3d403bbf80780dcee0b63">LexemAnalyzer::PrintLexems</a></div><div class="ttdeci">void PrintLexems() const</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8cpp_source.html#l00214">LexemAnalyzer.cpp:214</a></div></div>
+<div class="ttc" id="aclassLexemAnalyzer_html_ab6f2b10c53b3d403bbf80780dcee0b63"><div class="ttname"><a href="classLexemAnalyzer.html#ab6f2b10c53b3d403bbf80780dcee0b63">LexemAnalyzer::PrintLexems</a></div><div class="ttdeci">void PrintLexems() const</div></div>
 <div class="ttc" id="aclassSemantic_html"><div class="ttname"><a href="classSemantic.html">Semantic</a></div><div class="ttdef"><b>Definition:</b> <a href="Semantic_8h_source.html#l00006">Semantic.h:6</a></div></div>
 <div class="ttc" id="aclassSemantic_html_aa95c99f62497925cedfba50cfea1a918"><div class="ttname"><a href="classSemantic.html#aa95c99f62497925cedfba50cfea1a918">Semantic::Analyze</a></div><div class="ttdeci">bool Analyze()</div><div class="ttdef"><b>Definition:</b> <a href="Semantic_8cpp_source.html#l00021">Semantic.cpp:21</a></div></div>
 <div class="ttc" id="amain_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdoc">Entry point of the program.</div><div class="ttdef"><b>Definition:</b> <a href="main_8cpp_source.html#l00026">main.cpp:26</a></div></div>
