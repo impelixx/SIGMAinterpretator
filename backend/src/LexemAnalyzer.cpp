@@ -548,6 +548,27 @@ void LexemAnalyzer::AnalyzeParameters() {
  * @note Expects to be called when current position is at the 'if' keyword
  * @throws May throw exceptions if the expression analysis fails
  */
+void LexemAnalyzer::AnalyzeIfStatement() {
+    GetNextChar();
+    SkipWhitespace();
+    if (ch_ == '(') {
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_, currentPosition_ + 1, curLine_));
+        GetNextChar();
+        AnalyzeExpression();
+    }
+}
+
+/**
+ * @brief Analyzes the 'else' statement in the source code.
+ * 
+ * This method processes the syntax following an 'else' keyword. If a colon is encountered,
+ * it creates a colon operator lexem and proceeds to analyze the subsequent statement.
+ * The method advances the character pointer and skips any whitespace before checking for the colon.
+ * 
+ * @note This method assumes it is called when 'else' keyword has already been processed
+ * @note The method internally uses GetNextChar() and SkipWhitespace() for character processing
+ */
+void LexemAnalyzer::AnalyzeElseStatement() {
     GetNextChar();
     SkipWhitespace();
     if (ch_ == ':') {
@@ -556,6 +577,7 @@ void LexemAnalyzer::AnalyzeParameters() {
         AnalyzeStatement();
     }
 }
+
 
 /**
  * @brief Analyzes a 'for' statement in the source code.
