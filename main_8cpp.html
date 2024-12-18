@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SIGMAinterpretator: backend/src/main.cpp File Reference</title>
+<title>US language: backend/src/main.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -17,7 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -26,9 +26,9 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">SIGMAinterpretator
+   <div id="projectname">US language
    </div>
-   <div id="projectbrief">Документация проекта SIGMAinterpretator</div>
+   <div id="projectbrief">Документация языка useless skills</div>
   </td>
  </tr>
  </tbody>
@@ -99,6 +99,20 @@ $(document).ready(function(){initNavTree('main_8cpp.html',''); initResizable(); 
 Include dependency graph for main.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="main_8cpp__incl.png" border="0" usemap="#abackend_2src_2main_8cpp" alt=""/></div>
+<map name="abackend_2src_2main_8cpp" id="abackend_2src_2main_8cpp">
+<area shape="rect" title=" " alt="" coords="230,5,393,32"/>
+<area shape="rect" href="Semantic_8h.html" title=" " alt="" coords="195,80,289,107"/>
+<area shape="rect" title=" " alt="" coords="79,304,159,331"/>
+<area shape="rect" href="SyntaxAnalyzer_8h.html" title=" " alt="" coords="36,80,171,107"/>
+<area shape="rect" title=" " alt="" coords="472,80,545,107"/>
+<area shape="rect" title=" " alt="" coords="570,80,645,107"/>
+<area shape="rect" href="LexemAnalyzer_8h.html" title=" " alt="" coords="314,80,447,107"/>
+<area shape="rect" title=" " alt="" coords="141,155,204,181"/>
+<area shape="rect" href="Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="203,229,281,256"/>
+<area shape="rect" title=" " alt="" coords="394,229,453,256"/>
+<area shape="rect" href="Bor_8h.html" title=" " alt="" coords="331,155,385,181"/>
+<area shape="rect" title=" " alt="" coords="309,229,369,256"/>
+</map>
 </div>
 </div>
 <p><a href="main_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -192,30 +206,29 @@ Functions</h2></td></tr>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      workwords = <span class="stringliteral">&quot;../test/workword&quot;</span>;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="classLexemAnalyzer.html">LexemAnalyzer</a> analyzer(code, workwords);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      analyzer.Analyze();</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      std::vector&lt;Lexem&gt; lexems = analyzer.GetLexems();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="classSemantic.html">Semantic</a> semantic(lexems);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        semantic.Analyze();</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        std::cerr &lt;&lt; <span class="stringliteral">&quot;Semantic analysis error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> 2;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      std::cerr &lt;&lt; <span class="stringliteral">&quot;Lexical analysis error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">return</span> 3;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  }</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}</div>
-<div class="ttc" id="aclassLexemAnalyzer_html"><div class="ttname"><a href="classLexemAnalyzer.html">LexemAnalyzer</a></div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00009">LexemAnalyzer.h:9</a></div></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      analyzer.Analyze();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      std::vector&lt;Lexem&gt; lexems = analyzer.GetLexems();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="classSemantic.html">Semantic</a> semantic(lexems);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        semantic.Analyze();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        std::cerr &lt;&lt; <span class="stringliteral">&quot;Semantic analysis error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">return</span> 2;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      std::cerr &lt;&lt; <span class="stringliteral">&quot;Lexical analysis error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> 3;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
+<div class="ttc" id="aclassLexemAnalyzer_html"><div class="ttname"><a href="classLexemAnalyzer.html">LexemAnalyzer</a></div><div class="ttdoc">A lexical analyzer that breaks source code into lexical tokens (lexemes)</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00029">LexemAnalyzer.h:29</a></div></div>
 <div class="ttc" id="aclassSemantic_html"><div class="ttname"><a href="classSemantic.html">Semantic</a></div><div class="ttdef"><b>Definition:</b> <a href="Semantic_8h_source.html#l00006">Semantic.h:6</a></div></div>
 </div><!-- fragment -->
 </div>

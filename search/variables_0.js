@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['terminal_87',['terminal',['../structvertex.html#a1f7b792d9083263ab7b667c0be1723bf',1,'vertex']]],
-  ['to_88',['to',['../structvertex.html#ac7aff4a271db6537b8ca48bca65709c1',1,'vertex']]]
+  ['else_90',['else',['../LexemAnalyzer_8cpp.html#a0544c3fe466e421738dae463968b70ba',1,'LexemAnalyzer.cpp']]]
 ];

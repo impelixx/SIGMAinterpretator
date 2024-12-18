@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SIGMAinterpretator: backend/include/Bor.h Source File</title>
+<title>US language: backend/include/Bor.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -17,7 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -26,9 +26,9 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">SIGMAinterpretator
+   <div id="projectname">US language
    </div>
-   <div id="projectbrief">Документация проекта SIGMAinterpretator</div>
+   <div id="projectbrief">Документация языка useless skills</div>
   </td>
  </tr>
  </tbody>
@@ -98,75 +98,75 @@ $(document).ready(function(){initNavTree('Bor_8h_source.html',''); initResizable
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classbor.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="classbor.html">bor</a> {</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classbor.html#a1cd51a702d40444e62aa6a644c92e986">   12</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classbor.html#a1cd51a702d40444e62aa6a644c92e986">add</a>(<span class="keyword">const</span> std::string&amp; s) {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <a class="code" href="structvertex.html">vertex</a>* v = v0;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">char</span> c : s) {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> uc = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span><span class="keyword">&gt;</span>(c);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;      <span class="keywordflow">if</span> (!v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc]) {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc] = <span class="keyword">new</span> <a class="code" href="structvertex.html">vertex</a>;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;      }</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;      v = v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc];</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    }</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    v-&gt;<a class="code" href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">terminal</a> = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  }</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classbor.html#a0ece1b521c0e95991116dd4a5d6c743e">   24</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classbor.html#a0ece1b521c0e95991116dd4a5d6c743e">print</a>() { printVertex(v0); }</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classbor.html#a3ac0edab10e358c8714a3b5108d9a999">   26</a></span>&#160;  std::pair&lt;bool, Lexem&gt; <a class="code" href="classbor.html#a3ac0edab10e358c8714a3b5108d9a999">has</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* s, <span class="keywordtype">size_t</span> size, <span class="keywordtype">size_t</span> s_index) {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="structvertex.html">vertex</a>* cur = v0;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    std::string line;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; size; ++i) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span><span class="keyword">&gt;</span>(s[i]);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;      <span class="keywordflow">if</span> (!cur-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[c]) {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordflow">return</span> {<span class="keyword">false</span>,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + i, 0)};</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;      }</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;      cur = cur-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[c];</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;      line.push_back(s[i]);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;      <span class="keywordflow">if</span> (cur-&gt;<a class="code" href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">terminal</a> &amp;&amp; i == size - 1) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> {<span class="keyword">true</span>,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + i + 1, 0)};</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;      }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">return</span> {<span class="keyword">false</span>, <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + size, 0)};</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  }</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classbor.html#a9f80e38e4d64c84b2089dae550647e88">   47</a></span>&#160;  <a class="code" href="classbor.html#a9f80e38e4d64c84b2089dae550647e88">~bor</a>() { deleteVertex(v0); }</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <a class="code" href="structvertex.html">vertex</a>* v0 = <span class="keyword">new</span> <a class="code" href="structvertex.html">vertex</a>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="keywordtype">void</span> printVertex(<a class="code" href="structvertex.html">vertex</a>* v) {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">if</span> (!v)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; next : v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>) {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="keywordflow">if</span> (next) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        printVertex(next);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  }</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keywordtype">void</span> deleteVertex(<a class="code" href="structvertex.html">vertex</a>* v) {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">if</span> (!v)</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; next : v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>) {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      <span class="keywordflow">if</span> (next) {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        deleteVertex(next);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">delete</span> v;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;};</div>
-<div class="ttc" id="aLexem_8h_html"><div class="ttname"><a href="Lexem_8h.html">Lexem.h</a></div></div>
-<div class="ttc" id="aLexem_8h_html_a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d"><div class="ttname"><a href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">KEYWORD</a></div><div class="ttdeci">@ KEYWORD</div><div class="ttdef"><b>Definition:</b> <a href="Lexem_8h_source.html#l00007">Lexem.h:7</a></div></div>
-<div class="ttc" id="aclassLexem_html"><div class="ttname"><a href="classLexem.html">Lexem</a></div><div class="ttdef"><b>Definition:</b> <a href="Lexem_8h_source.html#l00023">Lexem.h:23</a></div></div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classbor.html#a1cd51a702d40444e62aa6a644c92e986">   23</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classbor.html#a1cd51a702d40444e62aa6a644c92e986">add</a>(<span class="keyword">const</span> std::string&amp; s) {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="structvertex.html">vertex</a>* v = v0;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">char</span> c : s) {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> uc = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span><span class="keyword">&gt;</span>(c);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;      <span class="keywordflow">if</span> (!v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc]) {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc] = <span class="keyword">new</span> <a class="code" href="structvertex.html">vertex</a>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;      }</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;      v = v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc];</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    }</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    v-&gt;<a class="code" href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">terminal</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classbor.html#a0ece1b521c0e95991116dd4a5d6c743e">   35</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classbor.html#a0ece1b521c0e95991116dd4a5d6c743e">print</a>() { printVertex(v0); }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classbor.html#a3ac0edab10e358c8714a3b5108d9a999">   51</a></span>&#160;  std::pair&lt;bool, Lexem&gt; <a class="code" href="classbor.html#a3ac0edab10e358c8714a3b5108d9a999">has</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* s, <span class="keywordtype">size_t</span> size, <span class="keywordtype">size_t</span> s_index) {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="structvertex.html">vertex</a>* cur = v0;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    std::string line;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; size; ++i) {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span><span class="keyword">&gt;</span>(s[i]);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      <span class="keywordflow">if</span> (!cur-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[c]) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">return</span> {<span class="keyword">false</span>,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + i, 0)};</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      cur = cur-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[c];</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      line.push_back(s[i]);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <span class="keywordflow">if</span> (cur-&gt;<a class="code" href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">terminal</a> &amp;&amp; i == size - 1) {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">return</span> {<span class="keyword">true</span>,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + i + 1, 0)};</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> {<span class="keyword">false</span>, <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + size, 0)};</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  }</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classbor.html#a9f80e38e4d64c84b2089dae550647e88">   72</a></span>&#160;  <a class="code" href="classbor.html#a9f80e38e4d64c84b2089dae550647e88">~bor</a>() { deleteVertex(v0); }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <a class="code" href="structvertex.html">vertex</a>* v0 = <span class="keyword">new</span> <a class="code" href="structvertex.html">vertex</a>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  <span class="keywordtype">void</span> printVertex(<a class="code" href="structvertex.html">vertex</a>* v) {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">if</span> (!v)</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; next : v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>) {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keywordflow">if</span> (next) {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        printVertex(next);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  <span class="keywordtype">void</span> deleteVertex(<a class="code" href="structvertex.html">vertex</a>* v) {</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">if</span> (!v)</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; next : v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>) {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keywordflow">if</span> (next) {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        deleteVertex(next);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">delete</span> v;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;};</div>
+<div class="ttc" id="aLexem_8h_html"><div class="ttname"><a href="Lexem_8h.html">Lexem.h</a></div><div class="ttdoc">Defines the Lexem class and LexemType enum for lexical analysis.</div></div>
+<div class="ttc" id="aLexem_8h_html_a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d"><div class="ttname"><a href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">KEYWORD</a></div><div class="ttdeci">@ KEYWORD</div><div class="ttdef"><b>Definition:</b> <a href="Lexem_8h_source.html#l00073">Lexem.h:73</a></div></div>
+<div class="ttc" id="aclassLexem_html"><div class="ttname"><a href="classLexem.html">Lexem</a></div><div class="ttdoc">Represents a lexical token with its properties.</div><div class="ttdef"><b>Definition:</b> <a href="Lexem_8h_source.html#l00089">Lexem.h:89</a></div></div>
 <div class="ttc" id="aclassbor_html"><div class="ttname"><a href="classbor.html">bor</a></div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00010">Bor.h:10</a></div></div>
-<div class="ttc" id="aclassbor_html_a0ece1b521c0e95991116dd4a5d6c743e"><div class="ttname"><a href="classbor.html#a0ece1b521c0e95991116dd4a5d6c743e">bor::print</a></div><div class="ttdeci">void print()</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00024">Bor.h:24</a></div></div>
-<div class="ttc" id="aclassbor_html_a1cd51a702d40444e62aa6a644c92e986"><div class="ttname"><a href="classbor.html#a1cd51a702d40444e62aa6a644c92e986">bor::add</a></div><div class="ttdeci">void add(const std::string &amp;s)</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00012">Bor.h:12</a></div></div>
-<div class="ttc" id="aclassbor_html_a3ac0edab10e358c8714a3b5108d9a999"><div class="ttname"><a href="classbor.html#a3ac0edab10e358c8714a3b5108d9a999">bor::has</a></div><div class="ttdeci">std::pair&lt; bool, Lexem &gt; has(const char *s, size_t size, size_t s_index)</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00026">Bor.h:26</a></div></div>
-<div class="ttc" id="aclassbor_html_a9f80e38e4d64c84b2089dae550647e88"><div class="ttname"><a href="classbor.html#a9f80e38e4d64c84b2089dae550647e88">bor::~bor</a></div><div class="ttdeci">~bor()</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00047">Bor.h:47</a></div></div>
+<div class="ttc" id="aclassbor_html_a0ece1b521c0e95991116dd4a5d6c743e"><div class="ttname"><a href="classbor.html#a0ece1b521c0e95991116dd4a5d6c743e">bor::print</a></div><div class="ttdeci">void print()</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00035">Bor.h:35</a></div></div>
+<div class="ttc" id="aclassbor_html_a1cd51a702d40444e62aa6a644c92e986"><div class="ttname"><a href="classbor.html#a1cd51a702d40444e62aa6a644c92e986">bor::add</a></div><div class="ttdeci">void add(const std::string &amp;s)</div><div class="ttdoc">Adds a string to the trie data structure.</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00023">Bor.h:23</a></div></div>
+<div class="ttc" id="aclassbor_html_a3ac0edab10e358c8714a3b5108d9a999"><div class="ttname"><a href="classbor.html#a3ac0edab10e358c8714a3b5108d9a999">bor::has</a></div><div class="ttdeci">std::pair&lt; bool, Lexem &gt; has(const char *s, size_t size, size_t s_index)</div><div class="ttdoc">Checks if a given string exists in the trie and returns the corresponding lexeme.</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00051">Bor.h:51</a></div></div>
+<div class="ttc" id="aclassbor_html_a9f80e38e4d64c84b2089dae550647e88"><div class="ttname"><a href="classbor.html#a9f80e38e4d64c84b2089dae550647e88">bor::~bor</a></div><div class="ttdeci">~bor()</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00072">Bor.h:72</a></div></div>
 <div class="ttc" id="astructvertex_html"><div class="ttname"><a href="structvertex.html">vertex</a></div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00005">Bor.h:5</a></div></div>
 <div class="ttc" id="astructvertex_html_a1f7b792d9083263ab7b667c0be1723bf"><div class="ttname"><a href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">vertex::terminal</a></div><div class="ttdeci">bool terminal</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00007">Bor.h:7</a></div></div>
 <div class="ttc" id="astructvertex_html_ac7aff4a271db6537b8ca48bca65709c1"><div class="ttname"><a href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">vertex::to</a></div><div class="ttdeci">vertex * to[256]</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00006">Bor.h:6</a></div></div>

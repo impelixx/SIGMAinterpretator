@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SIGMAinterpretator: bor Class Reference</title>
+<title>US language: bor Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -17,7 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -26,9 +26,9 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">SIGMAinterpretator
+   <div id="projectname">US language
    </div>
-   <div id="projectbrief">Документация проекта SIGMAinterpretator</div>
+   <div id="projectbrief">Документация языка useless skills</div>
   </td>
  </tr>
  </tbody>
@@ -96,10 +96,12 @@ $(document).ready(function(){initNavTree('classbor.html',''); initResizable(); }
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1cd51a702d40444e62aa6a644c92e986"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbor.html#a1cd51a702d40444e62aa6a644c92e986">add</a> (const std::string &amp;s)</td></tr>
+<tr class="memdesc:a1cd51a702d40444e62aa6a644c92e986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a string to the trie data structure.  <a href="classbor.html#a1cd51a702d40444e62aa6a644c92e986">More...</a><br /></td></tr>
 <tr class="separator:a1cd51a702d40444e62aa6a644c92e986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ece1b521c0e95991116dd4a5d6c743e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbor.html#a0ece1b521c0e95991116dd4a5d6c743e">print</a> ()</td></tr>
 <tr class="separator:a0ece1b521c0e95991116dd4a5d6c743e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ac0edab10e358c8714a3b5108d9a999"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classLexem.html">Lexem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbor.html#a3ac0edab10e358c8714a3b5108d9a999">has</a> (const char *s, size_t size, size_t s_index)</td></tr>
+<tr class="memdesc:a3ac0edab10e358c8714a3b5108d9a999"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a given string exists in the trie and returns the corresponding lexeme.  <a href="classbor.html#a3ac0edab10e358c8714a3b5108d9a999">More...</a><br /></td></tr>
 <tr class="separator:a3ac0edab10e358c8714a3b5108d9a999"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f80e38e4d64c84b2089dae550647e88"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbor.html#a9f80e38e4d64c84b2089dae550647e88">~bor</a> ()</td></tr>
 <tr class="separator:a9f80e38e4d64c84b2089dae550647e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,8 +133,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00047">47</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{ deleteVertex(v0); }</div>
+<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00072">72</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;{ deleteVertex(v0); }</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -161,18 +163,28 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00012">12</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                               {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <a class="code" href="structvertex.html">vertex</a>* v = v0;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">char</span> c : s) {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> uc = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span><span class="keyword">&gt;</span>(c);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;      <span class="keywordflow">if</span> (!v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc]) {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc] = <span class="keyword">new</span> <a class="code" href="structvertex.html">vertex</a>;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;      }</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;      v = v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc];</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    }</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    v-&gt;<a class="code" href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">terminal</a> = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  }</div>
+<p>Adds a string to the trie data structure. </p>
+<p>This function traverses the trie character by character, creating new vertices as needed, and marks the last vertex as terminal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>The string to be added to the trie</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Time Complexity: O(|s|) where |s| is the length of the input string Space Complexity: O(|s|) in worst case when creating new vertices </p>
+
+<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00023">23</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                               {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="structvertex.html">vertex</a>* v = v0;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">char</span> c : s) {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> uc = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span><span class="keyword">&gt;</span>(c);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;      <span class="keywordflow">if</span> (!v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc]) {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc] = <span class="keyword">new</span> <a class="code" href="structvertex.html">vertex</a>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;      }</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;      v = v-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[uc];</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    }</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    v-&gt;<a class="code" href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">terminal</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  }</div>
 <div class="ttc" id="astructvertex_html"><div class="ttname"><a href="structvertex.html">vertex</a></div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00005">Bor.h:5</a></div></div>
 <div class="ttc" id="astructvertex_html_a1f7b792d9083263ab7b667c0be1723bf"><div class="ttname"><a href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">vertex::terminal</a></div><div class="ttdeci">bool terminal</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00007">Bor.h:7</a></div></div>
 <div class="ttc" id="astructvertex_html_ac7aff4a271db6537b8ca48bca65709c1"><div class="ttname"><a href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">vertex::to</a></div><div class="ttdeci">vertex * to[256]</div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00006">Bor.h:6</a></div></div>
@@ -219,29 +231,41 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00026">26</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                                                                       {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="structvertex.html">vertex</a>* cur = v0;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    std::string line;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; size; ++i) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span><span class="keyword">&gt;</span>(s[i]);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;      <span class="keywordflow">if</span> (!cur-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[c]) {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordflow">return</span> {<span class="keyword">false</span>,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + i, 0)};</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;      }</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;      cur = cur-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[c];</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;      line.push_back(s[i]);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;      <span class="keywordflow">if</span> (cur-&gt;<a class="code" href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">terminal</a> &amp;&amp; i == size - 1) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> {<span class="keyword">true</span>,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + i + 1, 0)};</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;      }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">return</span> {<span class="keyword">false</span>, <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + size, 0)};</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  }</div>
-<div class="ttc" id="aLexem_8h_html_a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d"><div class="ttname"><a href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">KEYWORD</a></div><div class="ttdeci">@ KEYWORD</div><div class="ttdef"><b>Definition:</b> <a href="Lexem_8h_source.html#l00007">Lexem.h:7</a></div></div>
-<div class="ttc" id="aclassLexem_html"><div class="ttname"><a href="classLexem.html">Lexem</a></div><div class="ttdef"><b>Definition:</b> <a href="Lexem_8h_source.html#l00023">Lexem.h:23</a></div></div>
+<p>Checks if a given string exists in the trie and returns the corresponding lexeme. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Pointer to the character array to check </td></tr>
+    <tr><td class="paramname">size</td><td>Length of the string to check </td></tr>
+    <tr><td class="paramname">s_index</td><td>Starting index of the string in the source code </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::pair&lt;bool, Lexem&gt; First element indicates if string was found, second element contains the constructed <a class="el" href="classLexem.html" title="Represents a lexical token with its properties.">Lexem</a> regardless of whether string was found</dd></dl>
+<p>The function traverses the trie character by character checking if the given string exists. If at any point a character is not found in the trie, returns false with a partial lexeme. If the entire string is found and ends at a terminal node, returns true with the complete lexeme. Otherwise returns false with the complete but non-terminal lexeme. </p>
+
+<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00051">51</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                                                                       {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="structvertex.html">vertex</a>* cur = v0;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    std::string line;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; size; ++i) {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span><span class="keyword">&gt;</span>(s[i]);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      <span class="keywordflow">if</span> (!cur-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[c]) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">return</span> {<span class="keyword">false</span>,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + i, 0)};</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      cur = cur-&gt;<a class="code" href="structvertex.html#ac7aff4a271db6537b8ca48bca65709c1">to</a>[c];</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      line.push_back(s[i]);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <span class="keywordflow">if</span> (cur-&gt;<a class="code" href="structvertex.html#a1f7b792d9083263ab7b667c0be1723bf">terminal</a> &amp;&amp; i == size - 1) {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">return</span> {<span class="keyword">true</span>,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + i + 1, 0)};</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> {<span class="keyword">false</span>, <a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">LexemType::KEYWORD</a>, line, s_index, s_index + size, 0)};</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  }</div>
+<div class="ttc" id="aLexem_8h_html_a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d"><div class="ttname"><a href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea129281444e94f5f509cba213d51a814d">KEYWORD</a></div><div class="ttdeci">@ KEYWORD</div><div class="ttdef"><b>Definition:</b> <a href="Lexem_8h_source.html#l00073">Lexem.h:73</a></div></div>
+<div class="ttc" id="aclassLexem_html"><div class="ttname"><a href="classLexem.html">Lexem</a></div><div class="ttdoc">Represents a lexical token with its properties.</div><div class="ttdef"><b>Definition:</b> <a href="Lexem_8h_source.html#l00089">Lexem.h:89</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -268,8 +292,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00024">24</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;{ printVertex(v0); }</div>
+<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00035">35</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{ printVertex(v0); }</div>
 </div><!-- fragment -->
 </div>
 </div>
