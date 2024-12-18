@@ -6,6 +6,26 @@
 #include "Bor.h"
 #include "Lexem.h"
 
+/**
+ * @class LexemAnalyzer
+ * @brief A lexical analyzer that breaks source code into lexical tokens (lexemes)
+ *
+ * The LexemAnalyzer class is responsible for performing lexical analysis on source code,
+ * breaking it down into meaningful tokens called lexemes. It handles various language
+ * constructs including variables, functions, control structures, and expressions.
+ *
+ * @details The analyzer supports:
+ * - Variable and function declarations
+ * - Control structures (if, for, while)
+ * - Expressions and assignments
+ * - Print and return statements
+ * - Array declarations
+ * - String and number literals
+ * - Indentation-based scope management
+ *
+ * @param code The source code to be analyzed
+ * @param pathToKeywords Path to the file containing language keywords
+ */
 class LexemAnalyzer {
  public:
   LexemAnalyzer(const std::string& code, const std::string& pathToKeywords);
