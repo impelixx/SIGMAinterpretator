@@ -91,6 +91,9 @@ $(document).ready(function(){initNavTree('classSyntaxAnalyzer.html',''); initRes
 </div><!--header-->
 <div class="contents">
 
+<p>A syntax analyzer for parsing and validating program syntax.  
+ <a href="classSyntaxAnalyzer.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="SyntaxAnalyzer_8h_source.html">SyntaxAnalyzer.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -98,13 +101,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7c711481b859c4305e86f7a6b7cb8cc1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSyntaxAnalyzer.html#a7c711481b859c4305e86f7a6b7cb8cc1">SyntaxAnalyzer</a> (std::vector&lt; <a class="el" href="classLexem.html">Lexem</a> &gt; lexems)</td></tr>
 <tr class="separator:a7c711481b859c4305e86f7a6b7cb8cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47aa3bf4ca46eb5cb3ded85870ca4013"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSyntaxAnalyzer.html#a47aa3bf4ca46eb5cb3ded85870ca4013">NumLine</a> ()</td></tr>
+<tr class="memdesc:a47aa3bf4ca46eb5cb3ded85870ca4013"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the current line number in the source code based on newline lexemes.  <a href="classSyntaxAnalyzer.html#a47aa3bf4ca46eb5cb3ded85870ca4013">More...</a><br /></td></tr>
 <tr class="separator:a47aa3bf4ca46eb5cb3ded85870ca4013"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad584613cd7efb4b6d785a049ecbdacc6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSyntaxAnalyzer.html#ad584613cd7efb4b6d785a049ecbdacc6">Analyze</a> ()</td></tr>
+<tr class="memdesc:ad584613cd7efb4b6d785a049ecbdacc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs syntax analysis of the program.  <a href="classSyntaxAnalyzer.html#ad584613cd7efb4b6d785a049ecbdacc6">More...</a><br /></td></tr>
 <tr class="separator:ad584613cd7efb4b6d785a049ecbdacc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SyntaxAnalyzer_8h_source.html#l00006">6</a> of file <a class="el" href="SyntaxAnalyzer_8h_source.html">SyntaxAnalyzer.h</a>.</p>
+<div class="textblock"><p>A syntax analyzer for parsing and validating program syntax. </p>
+<p>This class implements a recursive descent parser that analyzes a sequence of lexemes to verify syntactic correctness according to the language grammar rules.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lexems</td><td>Vector of lexemes to be analyzed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="SyntaxAnalyzer_8h_source.html#l00014">14</a> of file <a class="el" href="SyntaxAnalyzer_8h_source.html">SyntaxAnalyzer.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7c711481b859c4305e86f7a6b7cb8cc1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7c711481b859c4305e86f7a6b7cb8cc1">&#9670;&nbsp;</a></span>SyntaxAnalyzer()</h2>
@@ -130,8 +143,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SyntaxAnalyzer_8h_source.html#l00008">8</a> of file <a class="el" href="SyntaxAnalyzer_8h_source.html">SyntaxAnalyzer.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{ lex = lexems; };</div>
+<p class="definition">Definition at line <a class="el" href="SyntaxAnalyzer_8h_source.html#l00016">16</a> of file <a class="el" href="SyntaxAnalyzer_8h_source.html">SyntaxAnalyzer.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;{ lex = lexems; };</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -151,11 +164,15 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SyntaxAnalyzer_8cpp_source.html#l00016">16</a> of file <a class="el" href="SyntaxAnalyzer_8cpp_source.html">SyntaxAnalyzer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                             {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  AnalyzeProgram();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}</div>
+<p>Performs syntax analysis of the program. </p>
+<p>This method initiates the syntax analysis process by calling AnalyzeProgram(). Currently always returns true regardless of analysis result.</p>
+<dl class="section return"><dt>Returns</dt><dd>Boolean value indicating whether analysis was completed (always true) </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="SyntaxAnalyzer_8cpp_source.html#l00034">34</a> of file <a class="el" href="SyntaxAnalyzer_8cpp_source.html">SyntaxAnalyzer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                             {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  AnalyzeProgram();</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -174,18 +191,23 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SyntaxAnalyzer_8cpp_source.html#l00004">4</a> of file <a class="el" href="SyntaxAnalyzer_8cpp_source.html">SyntaxAnalyzer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;                                  {</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;  <span class="keywordtype">int</span> index = LexemIndex;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;  <span class="keywordtype">int</span> s = 1;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; index; ++i) {</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keywordflow">if</span> (lex[i].get_type() == <span class="stringliteral">&quot;NEWLINE&quot;</span>) {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;      ++s;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    }</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  }</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="keywordflow">return</span> std::to_string(s);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;}</div>
+<p>Calculates the current line number in the source code based on newline lexemes. </p>
+<p>Iterates through lexemes from the beginning up to the current lexeme index, counting the number of newline characters to determine the current line number.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::string The current line number converted to string</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Line counting starts from 1 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="SyntaxAnalyzer_8cpp_source.html#l00014">14</a> of file <a class="el" href="SyntaxAnalyzer_8cpp_source.html">SyntaxAnalyzer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                                  {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <span class="keywordtype">int</span> index = LexemIndex;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keywordtype">int</span> s = 1;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; index; ++i) {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keywordflow">if</span> (lex[i].get_type() == <span class="stringliteral">&quot;NEWLINE&quot;</span>) {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;      ++s;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    }</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  }</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keywordflow">return</span> std::to_string(s);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
