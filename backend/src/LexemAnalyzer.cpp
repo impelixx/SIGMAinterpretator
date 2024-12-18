@@ -153,11 +153,6 @@ void LexemAnalyzer::HandleIndentation(int currentIndent) {
       }
       previousIndent = indentStack_.back();
     }
-    if (currentIndent != previousIndent) {
-      throw std::runtime_error(
-          "Indentation error: Inconsistent indentation.\n On line: " +
-          std::to_string(curLine_));
-    }
   }
 }
 
@@ -337,21 +332,24 @@ void LexemAnalyzer::PrintLexems() const {
 /**
  * @brief Analyzes variable declarations in the source code.
  * 
- * This method processes variable declarations following this pattern:
- * identifier [= expression];
+ * This method handles the analysis of variable declarations, including:
+ * - Simple variable declarations
+ * - Variable declarations with initialization
+ * - Array declarations
  * 
- * The method:
- * 1. Skips leading whitespace
- * 2. Processes an identifier if it starts with a letter
- * 3. Handles optional assignment (=) followed by an expression
- * 4. Processes semicolon terminator
- * 5. Continues analyzing the next statement
+ * The method processes identifiers followed by optional initialization ('=')
+ * or array size specifications ('[]'). It generates appropriate lexems for:
+ * - Variable identifiers
+ * - Assignment operators
+ * - Array brackets
+ * - Semicolons
  * 
- * Adds corresponding lexems to the lexems_ collection:
- * - Identifiers
- * - Assignment operator (=) if present
- * - Expression components if assignment exists
- * - Semicolon operator (;)
+ * The analysis follows this pattern:
+ * 1. Identifier
+ * 2. Optional assignment or array declaration
+ * 3. Expression or array initialization
+ * 
+ * @note Assumes the current character position is at the start of a variable declaration
  */
 void LexemAnalyzer::AnalyzeVariableDeclaration() {
   SkipWhitespace();
@@ -370,6 +368,24 @@ void LexemAnalyzer::AnalyzeVariableDeclaration() {
                                  currentPosition_ + 1, curLine_));
       GetNextChar();
       AnalyzeStatement();
+    }
+    if (ch_ == '[') {
+      lexems_.emplace_back(Lexem(LexemType::BRACKET, "[", currentPosition_,
+                                 currentPosition_ + 1, curLine_));
+      GetNextChar();
+      AnalyzeExpression();
+      if (ch_ == ']') {
+        lexems_.emplace_back(Lexem(LexemType::BRACKET, "]", currentPosition_,
+                                   currentPosition_ + 1, curLine_));
+        GetNextChar();
+      }
+      SkipWhitespace();
+      if (ch_ == '=') {
+        lexems_.emplace_back(Lexem(LexemType::OPERATOR, "=", currentPosition_,
+                                   currentPosition_ + 1, curLine_));
+        GetNextChar();
+        AnalyzeArrayDeclaration();
+      }
     }
   }
 }
