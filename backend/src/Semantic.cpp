@@ -6,6 +6,15 @@
 #include <utility>
 #include <vector>
 
+/**
+ * @brief Determines the line number for a given lexeme index in the source code
+ * 
+ * This function counts the number of newline characters encountered up to the specified index
+ * in the lexeme array to determine the line number where the lexeme appears.
+ * 
+ * @param index The index of the lexeme in the lexeme array for which to find the line number
+ * @return The line number where the lexeme at the specified index appears (1-based)
+ */
 int Semantic::GetLine(int index) {
   int NumLine = 1;
 
@@ -18,6 +27,29 @@ int Semantic::GetLine(int index) {
   return NumLine;
 }
 
+/**
+ * @brief Performs semantic analysis of the code
+ * 
+ * This method analyzes the code for semantic correctness by checking:
+ * 1. INDENT-DEDENT balance and correctness
+ * - Verifies indentation levels match block structures
+ * - Checks for proper indentation after control statements (if/for/while/def/else)
+ * - Validates no sharp increases in indentation
+ * 
+ * 2. Variable scoping and declarations
+ * - Tracks variable declarations and usage across different scopes
+ * - Ensures variables are declared before use
+ * - Prevents variable redeclaration in same scope
+ * - Validates variable names against reserved keywords
+ * 
+ * 3. Function declarations
+ * - Prevents function names from being used as variables
+ * - Checks for invalid function value assignments
+ *
+ * @return true if semantic analysis passes successfully
+ * @return false if any semantic errors are found
+ * @throws std::runtime_error with detailed error message when semantic violations are found
+ */
 bool Semantic::Analyze() {
   std::vector<std::string> WorkWords = {
       "bool",  "int",      "float", "char", "void",  "return", "for", "while",

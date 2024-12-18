@@ -1,6 +1,16 @@
 #include "SyntaxAnalyzer.h"
 #include <string>
 
+/**
+ * @brief Calculates the current line number in the source code based on newline lexemes
+ * 
+ * Iterates through lexemes from the beginning up to the current lexeme index,
+ * counting the number of newline characters to determine the current line number.
+ * 
+ * @return std::string The current line number converted to string
+ * 
+ * @note Line counting starts from 1
+ */
 std::string SyntaxAnalyzer::NumLine() {
   int index = LexemIndex;
   int s = 1;
@@ -13,6 +23,14 @@ std::string SyntaxAnalyzer::NumLine() {
   return std::to_string(s);
 }
 
+/**
+ * @brief Performs syntax analysis of the program
+ * 
+ * This method initiates the syntax analysis process by calling AnalyzeProgram().
+ * Currently always returns true regardless of analysis result.
+ * 
+ * @return Boolean value indicating whether analysis was completed (always true)
+ */
 bool SyntaxAnalyzer::Analyze() {
   AnalyzeProgram();
   return true;
