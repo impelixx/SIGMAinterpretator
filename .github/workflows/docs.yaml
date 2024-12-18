@@ -26,6 +26,10 @@ jobs:
       - name: Run Doxygen
         run: doxygen Doxyfile
 
+      - name: Create CNAME file
+        run: |
+          echo "docs.impelixdev.tech" > docs/html/CNAME
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
