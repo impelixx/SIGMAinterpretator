@@ -32,6 +32,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           DISABLE_ERRORS: true
           DISABLE_LINTERS: "SPELL_CSPELL,MARKDOWN_MARKDOWNLINT, CSS_STYLELINT"
+          
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Changes
