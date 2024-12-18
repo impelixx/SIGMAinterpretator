@@ -83,31 +83,30 @@ $(document).ready(function(){initNavTree('LexemAnalyzer_8cpp.html',''); initResi
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">LexemAnalyzer.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="LexemAnalyzer_8h_source.html">../include/LexemAnalyzer.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="Lexem_8h_source.html">../include/Lexem.h</a>&quot;</code><br />
 <code>#include &lt;cctype&gt;</code><br />
-<code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;stack&gt;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &quot;<a class="el" href="Lexem_8h_source.html">../include/Lexem.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for LexemAnalyzer.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="LexemAnalyzer_8cpp__incl.png" border="0" usemap="#abackend_2src_2LexemAnalyzer_8cpp" alt=""/></div>
 <map name="abackend_2src_2LexemAnalyzer_8cpp" id="abackend_2src_2LexemAnalyzer_8cpp">
-<area shape="rect" title=" " alt="" coords="240,5,469,32"/>
+<area shape="rect" title=" " alt="" coords="276,5,505,32"/>
 <area shape="rect" href="LexemAnalyzer_8h.html" title=" " alt="" coords="35,80,231,107"/>
 <area shape="rect" href="Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="205,229,283,256"/>
 <area shape="rect" title=" " alt="" coords="241,304,321,331"/>
 <area shape="rect" title=" " alt="" coords="358,80,423,107"/>
-<area shape="rect" title=" " alt="" coords="447,80,534,107"/>
-<area shape="rect" title=" " alt="" coords="558,80,615,107"/>
+<area shape="rect" title=" " alt="" coords="447,80,521,107"/>
+<area shape="rect" title=" " alt="" coords="545,80,602,107"/>
+<area shape="rect" title=" " alt="" coords="626,80,713,107"/>
 <area shape="rect" title=" " alt="" coords="5,229,64,256"/>
 <area shape="rect" title=" " alt="" coords="39,155,102,181"/>
 <area shape="rect" href="Bor_8h.html" title=" " alt="" coords="126,155,181,181"/>
@@ -116,62 +115,6 @@ Include dependency graph for LexemAnalyzer.cpp:</div>
 </div>
 </div>
 <p><a href="LexemAnalyzer_8cpp_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:abf8db5e23111eaecdd040bf92256871c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="LexemAnalyzer_8cpp.html#abf8db5e23111eaecdd040bf92256871c">if</a> (ch_=='/' &amp;&amp;index_&lt; code_.length() &amp;&amp;code_[index_]=='/')</td></tr>
-<tr class="separator:abf8db5e23111eaecdd040bf92256871c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a0544c3fe466e421738dae463968b70ba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="LexemAnalyzer_8cpp.html#a0544c3fe466e421738dae463968b70ba">else</a></td></tr>
-<tr class="separator:a0544c3fe466e421738dae463968b70ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="abf8db5e23111eaecdd040bf92256871c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf8db5e23111eaecdd040bf92256871c">&#9670;&nbsp;</a></span>if()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">if </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="LexemAnalyzer_8cpp_source.html#l00103">103</a> of file <a class="el" href="LexemAnalyzer_8cpp_source.html">LexemAnalyzer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                                                                       {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordflow">while</span> (ch_ != <span class="charliteral">&#39;\n&#39;</span> &amp;&amp; ch_ != <span class="charliteral">&#39;\0&#39;</span>) {</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        GetNextChar();</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
-</div><!-- fragment -->
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="a0544c3fe466e421738dae463968b70ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0544c3fe466e421738dae463968b70ba">&#9670;&nbsp;</a></span>else</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">else</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{</div>
-<div class="line">    AnalyzeExpression()</div>
-</div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="LexemAnalyzer_8cpp_source.html#l00290">290</a> of file <a class="el" href="LexemAnalyzer_8cpp_source.html">LexemAnalyzer.cpp</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
