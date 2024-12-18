@@ -3,7 +3,8 @@ name: MegaLinter Workflow
 on:
   push:
     branches-ignore:
-      - "fix/**" # Ignore branches starting with fix/
+      - "fix/**"
+      - "main"
 
 env:
   MEGALINTER_CONFIG_FILE: .github/.mega-linter.yml
