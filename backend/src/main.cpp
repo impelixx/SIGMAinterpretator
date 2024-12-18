@@ -60,7 +60,6 @@ int main(int argc, char* argv[]) {
     try {
       analyzer.Analyze();
       std::vector<Lexem> lexems = analyzer.GetLexems();
-      analyzer.PrintLexems();
       try {
         Semantic semantic(lexems);
         semantic.Analyze();
