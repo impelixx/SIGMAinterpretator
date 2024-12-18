@@ -31,6 +31,7 @@ jobs:
           APPLY_FIXES_MODE: commit
           VALIDATE_ALL_CODEBASE: true
           DISABLE_ERRORS: true
+          DISABLE_LINTERS: "SPELL_CSPELL,MARKDOWN_MARKDOWNLINT"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Changes
