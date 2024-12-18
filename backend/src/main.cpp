@@ -6,75 +6,55 @@
 #include "LexemAnalyzer.h"
 
 /**
- * @brief Entry point of the program.
+ * @brief Main entry point of the SIGMA interpreter program
+ * @param argc Number of command line arguments
+ * @param argv Array of command line argument strings
+ * @return 0 on successful execution, 1 on error
  *
- * This function handles command-line arguments to determine the paths to the code file and the workwords file.
- * If no arguments are provided, it uses default test files. It then reads the code file, performs lexical analysis,
- * and then semantic analysis on the code. Errors encountered during these processes are caught and reported.
+ * The program expects two optional command line arguments:
+ * 1. Path to the code file (defaults to "../test/code.us")
+ * 2. Path to the workwords file (defaults to "../test/workword")
  *
- * @param argc The number of command-line arguments.
- * @param argv An array of command-line arguments.
- *             - `argv[0]` is the program name.
- *             - `argv[1]` (optional) is the path to the code file.
- *             - `argv[2]` (optional) is the path to the workwords file.
- * @return An integer exit code:
- *         - `0` on successful execution.
- *         - `1` on usage error or lexical analysis error.
- *         - `2` on semantic analysis error.
- *         - `3` on other errors.
+ * Program flow:
+ * 1. Validates command line arguments
+ * 2. Opens and reads the code file
+ * 3. Performs lexical analysis using LexemAnalyzer
+ * 4. Performs semantic analysis using Semantic analyzer
+ *
+ * @throws std::runtime_error if code file cannot be opened
+ * @throws Any exceptions from LexemAnalyzer or Semantic analysis
  */
 int main(int argc, char* argv[]) {
-  if (argc < 3) {
-    if (argc != 1) {
-      std::cerr << "Usage: " << argv[0]
-                << " <path to code file> <path to workwords file>" << std::endl;
-      return 1;
-    }
+  if (argc > 1 && argc < 3) {
+    std::cerr << "Use: " << argv[0]
+              << " <path to code file> <path to workwords file>" << std::endl;
+    return 1;
   }
 
-  std::string code = "";
-  std::string workwords = "";
+  std::string codePath = (argc != 1) ? argv[1] : "../test/code.us";
+  std::string workwordsPath = (argc != 1) ? argv[2] : "../test/workword";
 
   try {
-    std::ifstream codeFile;
-    if (argc != 1) {
-      codeFile = std::ifstream(std::string(argv[1]));
-    } else {
-      codeFile = std::ifstream("../test/code.us");
-    }
+    std::ifstream codeFile(codePath);
     if (!codeFile.is_open()) {
-      throw std::runtime_error(std::string("Failed to open code file '") +
-                               argv[1] + "'");
+      throw std::runtime_error("Failed to open code file '" + codePath + "'");
     }
+
     std::stringstream codeBuffer;
     codeBuffer << codeFile.rdbuf();
-    code = codeBuffer.str();
-    std::ifstream workwordFile;
-    if (argc != 1) {
-      workwords = std::string(argv[2]);
-    } else {
-      workwords = "../test/workword";
-    }
-    LexemAnalyzer analyzer(code, workwords);
-    try {
-      analyzer.Analyze();
-      std::vector<Lexem> lexems = analyzer.GetLexems();
-      try {
-        Semantic semantic(lexems);
-        semantic.Analyze();
-      } catch (const std::exception& e) {
-        std::cerr << "Semantic analysis error: " << e.what() << std::endl;
-        return 2;
-      }
+    std::string code = codeBuffer.str();
 
-    } catch (const std::exception& e) {
-      std::cerr << "Lexical analysis error: " << e.what() << std::endl;
-      return 1;
-    }
+    LexemAnalyzer analyzer(code, workwordsPath);
+    analyzer.Analyze();
+    std::vector<Lexem> lexems = analyzer.GetLexems();
+
+    Semantic semantic(lexems);
+    semantic.Analyze();
+
+    return 0;
+
   } catch (const std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;
-    return 3;
+    return 1;
   }
-
-  return 0;
 }
