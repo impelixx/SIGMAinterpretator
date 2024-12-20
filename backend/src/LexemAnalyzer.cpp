@@ -1,9 +1,9 @@
 #include "../include/LexemAnalyzer.h"
 #include <cctype>
-#include <fstream>
 #include <iostream>
 #include <stack>
 #include <stdexcept>
+#include "../include/Lexem.h"  // Include the header for Lexem
 #include "../include/Lexem.h"
 
 /**
@@ -218,68 +218,63 @@ void LexemAnalyzer::AnalyzeStatement() {
   if (ch_ == '\0') {
     return;
   }
-  size_t startPos = currentPosition_;
-  std::string word;
-  if (isalpha(ch_)) {
-    while (isalnum(ch_) || ch_ == '_') {
-      word += ch_;
+  auto [isKeyword, lexem] =
+      keywords_.has(word.c_str(), word.length(), startPos);
+  if (isKeyword) {
+    lexems_.emplace_back(
+        Lexem(LexemType::KEYWORD, word, startPos, currentPosition_, curLine_));
+    if (word == "int" || word == "float" || word == "bool" ||
+        word == "string") {
       GetNextChar();
+      AnalyzeVariableDeclaration();
     }
-    auto [isKeyword, lexem] =
-        keywords_.has(word.c_str(), word.length(), startPos);
-    if (isKeyword) {
-      lexems_.emplace_back(Lexem(LexemType::KEYWORD, word, startPos,
-                                 currentPosition_, curLine_));
-      if (word == "int" || word == "float" || word == "bool" ||
-          word == "string") {
-        AnalyzeVariableDeclaration();
-      }
-      if (word == "def") {
-        AnalyzeFunctionDeclaration();
-      }
-      if (word == "if") {
-        AnalyzeIfStatement();
-      }
-      if (word == "elif") {
-        AnalyzeIfStatement();
-      }
-      if (word == "else") {
-        AnalyzeElseStatement();
-      }
-      if (word == "for") {
-        AnalyzeForStatement();
-      }
-      if (word == "while") {
-        AnalyzeWhileStatement();
-      }
-      if (word == "print") {
-        AnalyzePrintStatement();
-      }
-      if (word == "return") {
-        AnalyzeReturnStatement();
-      }
+    if (word == "def") {
+      GetNextChar();
+      AnalyzeFunctionDeclaration();
+    }
+    if (word == "if") {
+      GetNextChar();
+      AnalyzeIfStatement();
+    }
+    if (word == "elif") {
+      GetNextChar();
+      AnalyzeIfStatement();
+    }
+    if (word == "else") {
+      GetNextChar();
+      AnalyzeElseStatement();
+    }
+    if (word == "for") {
+      GetNextChar();
+      AnalyzeForStatement();
+    }
+    if (word == "while") {
+      GetNextChar();
+      AnalyzeWhileStatement();
+    }
+    if (word == "print") {
+      AnalyzePrintStatement();
+    }
+    if (word == "return") {
+      AnalyzeReturnStatement();
+    }
 
-    } else {
-      if (word.empty()) {
-        GetNextChar();
-        SkipWhitespace();
-        return;
-      }
-      lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, startPos,
-                                 currentPosition_, curLine_));
-      SkipWhitespace();
-      if (ch_ == '(') {
-        lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_,
-                                   currentPosition_ + 1, curLine_));
-        AnalyzeFunctionDeclaration();
-      } else if (ch_ == '=') {
-        AnalyzeAssignment();
-      }
-      AnalyzeExpression();
-    }
   } else {
+    lexems_.emplace_back(Lexem(LexemType::IDENTIFIER, word, startPos,
+                               currentPosition_, curLine_));
+    SkipWhitespace();
+    if (ch_ == '(') {
+      AnalyzeFunctionDeclaration();
+    } else if (ch_ == '=') {
+      AnalyzeAssignment();
+    }
     AnalyzeExpression();
   }
+}
+
+else {
+  AnalyzeExpression();
+}
 }
 
 /**
@@ -321,16 +316,21 @@ void LexemAnalyzer::PrintLexems() const {
 /**
  * @brief Analyzes variable declaration statements in the source code
  * 
- * This method handles the parsing of variable declarations, which can include:
- * - Variable identifier
- * - Optional assignment operation
- * - Expression following the assignment
- * - Statement termination with semicolon
+ * This method processes variable declarations following this pattern:
+ * identifier [= expression];
  * 
- * The method processes the following grammar:
- * variable_declaration ::= identifier ['=' expression] ';'
+ * The method:
+ * 1. Skips leading whitespace
+ * 2. Processes an identifier if it starts with a letter
+ * 3. Handles optional assignment (=) followed by an expression
+ * 4. Processes semicolon terminator
+ * 5. Continues analyzing the next statement
  * 
- * @throws May throw exceptions if invalid syntax is encountered
+ * Adds corresponding lexems to the lexems_ collection:
+ * - Identifiers
+ * - Assignment operator (=) if present
+ * - Expression components if assignment exists
+ * - Semicolon operator (;)
  */
 void LexemAnalyzer::AnalyzeVariableDeclaration() {
   SkipWhitespace();
@@ -561,18 +561,9 @@ void LexemAnalyzer::AnalyzeParameters() {
       return;
     }
   }
-  if (ch_ == ')') {
-    lexems_.emplace_back(Lexem(LexemType::BRACKET, ")", currentPosition_,
-                               currentPosition_ + 1, curLine_));
-    GetNextChar();
-  } else {
-    GetNextChar();
-    return;
-  }
-}
 
-/**
- * @brief Analyzes an 'if' statement in the source code.
+  /**
+ * @brief Analyzes an 'if' statement in the source code and generates corresponding lexems
  * 
  * This method handles the parsing of if statements by:
  * 1. Moving to the next character after 'if'
@@ -583,19 +574,19 @@ void LexemAnalyzer::AnalyzeParameters() {
  * @note Expects to be called when current position is at the 'if' keyword
  * @throws May throw exceptions if the expression analysis fails
  */
-void LexemAnalyzer::AnalyzeIfStatement() {
-  GetNextChar();
-  SkipWhitespace();
-  if (ch_ == '(') {
-    lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_,
-                               currentPosition_ + 1, curLine_));
+  void LexemAnalyzer::AnalyzeIfStatement() {
     GetNextChar();
-    AnalyzeExpression();
+    SkipWhitespace();
+    if (ch_ == '(') {
+      lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_,
+                                 currentPosition_ + 1, curLine_));
+      GetNextChar();
+      AnalyzeExpression();
+    }
   }
-}
 
-/**
- * @brief Analyzes the 'else' statement in the source code.
+  /**
+ * @brief Analyzes an else statement in the source code.
  * 
  * This method processes the syntax following an 'else' keyword. If a colon is encountered,
  * it creates a colon operator lexem and proceeds to analyze the subsequent statement.
@@ -604,18 +595,18 @@ void LexemAnalyzer::AnalyzeIfStatement() {
  * @note This method assumes it is called when 'else' keyword has already been processed
  * @note The method internally uses GetNextChar() and SkipWhitespace() for character processing
  */
-void LexemAnalyzer::AnalyzeElseStatement() {
-  GetNextChar();
-  SkipWhitespace();
-  if (ch_ == ':') {
-    lexems_.emplace_back(Lexem(LexemType::OPERATOR, ":", currentPosition_,
-                               currentPosition_ + 1, curLine_));
+  void LexemAnalyzer::AnalyzeElseStatement() {
     GetNextChar();
-    AnalyzeStatement();
+    SkipWhitespace();
+    if (ch_ == ':') {
+      lexems_.emplace_back(Lexem(LexemType::OPERATOR, ":", currentPosition_,
+                                 currentPosition_ + 1, curLine_));
+      GetNextChar();
+      AnalyzeStatement();
+    }
   }
-}
 
-/**
+  /**
  * @brief Analyzes a 'for' statement in the source code.
  * 
  * This method processes a for loop construct by:
@@ -630,25 +621,25 @@ void LexemAnalyzer::AnalyzeElseStatement() {
  * 
  * @throws May throw exceptions from AnalyzeIdentifier() or AnalyzeArrayDeclaration()
  */
-void LexemAnalyzer::AnalyzeForStatement() {
-  SkipWhitespace();
-  AnalyzeIdentifier();
-  SkipWhitespace();
-  auto temp = "";
-  for (int i = 0; i < 2; i++) {
-    temp += ch_;
-    GetNextChar();
+  void LexemAnalyzer::AnalyzeForStatement() {
+    SkipWhitespace();
+    AnalyzeIdentifier();
+    SkipWhitespace();
+    std::string temp = "";
+    for (int i = 0; i < 2; i++) {
+      temp += ch_;
+      GetNextChar();
+    }
+    if (temp.compare("in") == 0) {
+      lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", currentPosition_ - 2,
+                                 currentPosition_, curLine_));
+      GetNextChar();
+      AnalyzeArrayDeclaration();
+    }
   }
-  if (temp == "in") {
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", currentPosition_ - 2,
-                               currentPosition_, curLine_));
-    GetNextChar();
-    AnalyzeArrayDeclaration();
-  }
-}
 
-/**
- * @brief Analyzes a while statement in the source code.
+  /**
+ * @brief Analyzes a 'while' statement in the source code
  * 
  * This method handles the parsing of while statement syntax. It processes:
  * 1. Any leading whitespace
@@ -659,18 +650,18 @@ void LexemAnalyzer::AnalyzeForStatement() {
  * After finding the opening bracket, it delegates to AnalyzeExpression() for
  * parsing the condition.
  */
-void LexemAnalyzer::AnalyzeWhileStatement() {
-  SkipWhitespace();
-  if (ch_ == '(') {
-    lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_,
-                               currentPosition_ + 1, curLine_));
-    GetNextChar();
-    AnalyzeExpression();
+  void LexemAnalyzer::AnalyzeWhileStatement() {
+    SkipWhitespace();
+    if (ch_ == '(') {
+      lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_,
+                                 currentPosition_ + 1, curLine_));
+      GetNextChar();
+      AnalyzeExpression();
+    }
   }
-}
 
-/**
- * @brief Analyzes print statement syntax in the input stream
+  /**
+ * @brief Analyzes a print statement in the source code.
  * 
  * This method processes print statement by analyzing its components:
  * - Skips any leading whitespace
@@ -681,18 +672,18 @@ void LexemAnalyzer::AnalyzeWhileStatement() {
  * 
  * @note Assumes print keyword has already been processed before this method is called
  */
-void LexemAnalyzer::AnalyzePrintStatement() {
-  SkipWhitespace();
-  if (ch_ == '(') {
-    lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_,
-                               currentPosition_ + 1, curLine_));
-    GetNextChar();
-    AnalyzeExpression();
+  void LexemAnalyzer::AnalyzePrintStatement() {
+    SkipWhitespace();
+    if (ch_ == '(') {
+      lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_,
+                                 currentPosition_ + 1, curLine_));
+      GetNextChar();
+      AnalyzeExpression();
+    }
   }
-}
 
-/**
- * @brief Analyzes a return statement in the source code
+  /**
+ * @brief Analyzes a return statement in the source code.
  * 
  * Processes a return statement by checking for semicolon and creating
  * corresponding lexem. After semicolon is processed, continues analysis
@@ -701,12 +692,12 @@ void LexemAnalyzer::AnalyzePrintStatement() {
  * The method skips any whitespace before processing the return statement
  * and expects a semicolon as the terminating character.
  */
-void LexemAnalyzer::AnalyzeReturnStatement() {
-  SkipWhitespace();
-  if (ch_ == ';') {
-    lexems_.emplace_back(Lexem(LexemType::OPERATOR, ";", currentPosition_,
-                               currentPosition_ + 1, curLine_));
-    GetNextChar();
-    AnalyzeStatement();
+  void LexemAnalyzer::AnalyzeReturnStatement() {
+    SkipWhitespace();
+    if (ch_ == ';') {
+      lexems_.emplace_back(Lexem(LexemType::OPERATOR, ";", currentPosition_,
+                                 currentPosition_ + 1, curLine_));
+      GetNextChar();
+      AnalyzeStatement();
+    }
   }
-}
