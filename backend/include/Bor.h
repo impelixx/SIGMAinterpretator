@@ -2,11 +2,71 @@
 #include <utility>
 #include "Lexem.h"
 
+/**
+ * @brief A structure representing a vertex in a trie (prefix tree) data structure
+ * 
+ * Each vertex contains:
+ * - An array of 256 pointers to other vertices, representing transitions for each possible byte value
+ * - A boolean flag indicating whether this vertex represents the end of a pattern
+ */
 struct vertex {
   vertex* to[256] = {nullptr};
   bool terminal = false;
 };
 
+/**
+ * @brief A trie (prefix tree) data structure implementation for string storage and retrieval
+ * 
+ * The bor class implements a trie data structure that efficiently stores and retrieves
+ * strings. It supports operations such as adding new strings, checking for string
+ * existence, and automatic memory management.
+ * 
+ * Key Features:
+ * - Efficient string insertion and lookup
+ * - Memory-safe implementation with proper cleanup
+ * - Support for lexeme generation during string matching
+ * 
+ * Memory Management:
+ * The class automatically manages memory for all vertices in the trie,
+ * cleaning up allocated memory in its destructor.
+ * 
+ * Usage:
+ * - Use add() to insert new strings into the trie
+ * - Use has() to check if a string exists and get corresponding lexeme
+ * - Use print() to traverse and display the trie structure
+ * 
+ * Time Complexity:
+ * - Insertion: O(m) where m is the length of the string
+ * - Lookup: O(m) where m is the length of the string
+ * - Space Complexity: O(ALPHABET_SIZE * n) where n is the total length of all strings
+ */
+/**
+ * @file Bor.h
+ * @brief Implementation of a Trie (prefix tree) data structure
+ * 
+ * This file contains the implementation of a Trie data structure, also known as a prefix tree,
+ * which is used for efficient storage and retrieval of strings. The name 'bor' comes from the
+ * Russian transliteration of the word 'bore' (forest/tree).
+ * 
+ * The Trie structure supports:
+ * - Adding strings
+ * - Checking for string existence
+ * - Printing the tree structure
+ * 
+ * Key Features:
+ * - Efficient prefix-based string search
+ * - Memory-efficient storage of strings with common prefixes
+ * - Support for lexeme creation during string matching
+ * 
+ * Time Complexities:
+ * - Insertion: O(m) where m is the length of the string
+ * - Search: O(m) where m is the length of the string
+ * 
+ * Space Complexity:
+ * - O(ALPHABET_SIZE * n) where n is the total length of all strings
+ * 
+ * @note This implementation uses dynamic memory allocation and requires proper cleanup
+ */
 class bor {
  public:
   /**

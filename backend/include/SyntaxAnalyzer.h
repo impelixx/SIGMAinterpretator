@@ -19,31 +19,22 @@ class SyntaxAnalyzer {
   bool Analyze();
 
  private:
-  bool AnalyzeProgram();
-  bool AnalyzeStatementList();
-  bool AnalyzeStatement();
-  bool AnalyzeEmptyStatement();
-  bool AnalyzeFunctionDeclaration();
-  bool AnalyzeParameterList();
-  bool AnalyzeVariableDeclaration();
-  bool AnalyzeInitianalizerList();
-  bool AnalyzeAssignment();
-  bool AnalyzeIfStatement();
-  bool AnalyzeWhileStatement();
-  bool AnalyzeDoWhileStatement();
-  bool AnalyzeFieldView();
-  bool AnalyzeForStatement();
-  bool AnalyzePrintStatement();
-  bool AnalyzeReturnStatement();
-  bool AnalyzeCaseExpression();
-  bool AnalyzeExpression();
-  bool AnalyzeTerm();
-  bool AnalyzeFactor();
-  bool AnalyzeType();
-  bool AnalyzeIdentifier();
-  bool AnalyzeNumber();
-  bool AnalyzeStatementTerminator();
-  int LexemIndex = 0;
+  void AnalyzeProgram();
+  void AnalyzeStatement();
+  void AnalyzeVariableDeclaration();
+  void AnalyzeFunctionDeclaration();
+  void AnalyzeParameters();
+  void AnalyzeElseStatement();
+  void AnalyzeAssignment();
+  void AnalyzeIfStatement();
+  void AnalyzeForStatement();
+  void AnalyzeWhileStatement();
+  void AnalyzePrintStatement();
+  void AnalyzeReturnStatement();
+  void AnalyzeArrayDeclaration();
+  void AnalyzeExpression();
+
+  void GetLexem();
   std::vector<Lexem> lex;
 };
 
