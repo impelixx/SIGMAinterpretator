@@ -26,6 +26,23 @@
  * @param code The source code to be analyzed
  * @param pathToKeywords Path to the file containing language keywords
  */
+/**
+ * @file LexemAnalyzer.h
+ * @brief Header file containing the LexemAnalyzer class for lexical analysis of code
+ *
+ * The LexemAnalyzer class provides functionality to break down source code into lexical tokens (lexemes).
+ * It performs lexical analysis on input code by identifying and categorizing different programming language 
+ * constructs like keywords, identifiers, literals, operators etc.
+ *
+ * Key features:
+ * - Analyzes program structure and statements
+ * - Handles variable and function declarations
+ * - Processes control flow statements (if, for, while)
+ * - Manages expressions and basic operations
+ * - Tracks code indentation
+ *
+ * @author Anton Zykov
+ */
 class LexemAnalyzer {
  public:
   LexemAnalyzer(const std::string& code, const std::string& pathToKeywords);
