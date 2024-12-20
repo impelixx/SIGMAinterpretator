@@ -3,6 +3,12 @@
 #include <vector>
 #include "Lexem.h"
 
+/**
+ * @brief Class responsible for performing semantic analysis on lexems
+ * 
+ * The Semantic class takes a vector of lexems and provides functionality
+ * to analyze them for semantic correctness according to the language rules.
+ */
 class Semantic {
  public:
   explicit Semantic(std::vector<Lexem> lexems) { lex_ = lexems; };
