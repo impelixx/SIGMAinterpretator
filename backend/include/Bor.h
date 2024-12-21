@@ -2,11 +2,37 @@
 #include <utility>
 #include "Lexem.h"
 
+/**
+ * @brief Represents a vertex (node) in a trie data structure
+ * 
+ * A vertex in the trie contains:
+ * - An array of pointers to child vertices (256 possible children for each ASCII character)
+ * - A boolean flag indicating whether this vertex represents the end of a word
+ */
 struct vertex {
   vertex* to[256] = {nullptr};
   bool terminal = false;
 };
 
+/**
+ * @file Bor.h
+ * @brief Implementation of a trie (prefix tree) data structure for string matching
+ * 
+ * This file contains the implementation of a trie data structure used for efficient
+ * string matching and storage. The trie enables quick insertion and lookup of strings,
+ * making it particularly useful for keyword recognition in lexical analysis.
+ * 
+ * The trie supports:
+ * - Adding new strings (O(m) time complexity, where m is string length)
+ * - Checking for string existence (O(m) time complexity)
+ * - String matching with lexeme generation
+ * 
+ * The implementation uses dynamic memory allocation for vertices and includes proper
+ * cleanup through a destructor.
+ * 
+ * @note The implementation assumes ASCII character set (256 possible characters)
+ * @see vertex class for the node structure used in the trie
+ */
 class bor {
  public:
   /**
