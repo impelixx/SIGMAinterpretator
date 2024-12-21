@@ -1,6 +1,6 @@
 <map id="backend/include/Bor.h" name="backend/include/Bor.h">
-<area shape="rect" id="node1" title=" " alt="" coords="147,5,311,32"/>
-<area shape="rect" id="node2" href="$LexemAnalyzer_8h.html" title=" " alt="" coords="108,80,351,107"/>
+<area shape="rect" id="node1" title="Implementation of a trie (prefix tree) data structure for string matching." alt="" coords="147,5,311,32"/>
+<area shape="rect" id="node2" href="$LexemAnalyzer_8h.html" title="Header file containing the LexemAnalyzer class for lexical analysis of code." alt="" coords="108,80,351,107"/>
 <area shape="rect" id="node3" href="$LexemAnalyzer_8cpp.html" title=" " alt="" coords="5,155,235,181"/>
 <area shape="rect" id="node4" href="$main_8cpp.html" title=" " alt="" coords="259,155,421,181"/>
 </map>

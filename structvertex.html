@@ -91,13 +91,16 @@ $(document).ready(function(){initNavTree('structvertex.html',''); initResizable(
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a vertex (node) in a trie data structure.  
+ <a href="structvertex.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="Bor_8h_source.html">Bor.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for vertex:</div>
 <div class="dyncontent">
 <div class="center"><img src="structvertex__coll__graph.png" border="0" usemap="#avertex_coll__map" alt="Collaboration graph"/></div>
 <map name="avertex_coll__map" id="avertex_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,69,32"/>
+<area shape="rect" title="Represents a vertex (node) in a trie data structure." alt="" coords="5,5,69,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -109,8 +112,13 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a1f7b792d9083263ab7b667c0be1723bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00005">5</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
+<div class="textblock"><p>Represents a vertex (node) in a trie data structure. </p>
+<p>A vertex in the trie contains:</p><ul>
+<li>An array of pointers to child vertices (256 possible children for each ASCII character)</li>
+<li>A boolean flag indicating whether this vertex represents the end of a word </li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00012">12</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a1f7b792d9083263ab7b667c0be1723bf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1f7b792d9083263ab7b667c0be1723bf">&#9670;&nbsp;</a></span>terminal</h2>
@@ -124,7 +132,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00007">7</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00014">14</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
 
 </div>
 </div>
@@ -140,7 +148,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00006">6</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Bor_8h_source.html#l00013">13</a> of file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,5 @@
 <map id="backend/include/Bor.h" name="backend/include/Bor.h">
-<area shape="rect" id="node1" title=" " alt="" coords="37,5,201,32"/>
+<area shape="rect" id="node1" title="Implementation of a trie (prefix tree) data structure for string matching." alt="" coords="37,5,201,32"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,80,64,107"/>
 <area shape="rect" id="node3" title=" " alt="" coords="89,80,149,107"/>
 <area shape="rect" id="node4" href="$Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="173,80,251,107"/>

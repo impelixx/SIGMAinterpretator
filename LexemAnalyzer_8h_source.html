@@ -95,64 +95,64 @@ $(document).ready(function(){initNavTree('LexemAnalyzer_8h_source.html',''); ini
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Bor_8h.html">Bor.h</a>&quot;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Lexem_8h.html">Lexem.h</a>&quot;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classLexemAnalyzer.html">   29</a></span>&#160;<span class="keyword">class </span><a class="code" href="classLexemAnalyzer.html">LexemAnalyzer</a> {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <a class="code" href="classLexemAnalyzer.html#aee33ef96cd4d2f2d713a17d323d39805">LexemAnalyzer</a>(<span class="keyword">const</span> std::string&amp; code, <span class="keyword">const</span> std::string&amp; pathToKeywords);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classLexemAnalyzer.html#a7643f1c7784be67ca63e72714ead3238">Analyze</a>();</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classLexemAnalyzer.html#ab6f2b10c53b3d403bbf80780dcee0b63">PrintLexems</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classLexemAnalyzer.html#abf47482494fcf938689e5fa41ec41250">   35</a></span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="classLexemAnalyzer.html#abf47482494fcf938689e5fa41ec41250">GetCurrentPosition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> currentPosition_; }</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">   37</a></span>&#160;  std::vector&lt;Lexem&gt; <a class="code" href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">GetLexems</a>() { <span class="keywordflow">return</span> lexems_; }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="comment">// Parsing func</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keywordtype">void</span> AnalyzeProgram();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keywordtype">void</span> AnalyzeStatement();</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keywordtype">void</span> AnalyzeVariableDeclaration();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keywordtype">void</span> AnalyzeFunctionDeclaration();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keywordtype">void</span> AnalyzeParameters();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keywordtype">void</span> AnalyzeElseStatement();</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keywordtype">void</span> AnalyzeAssignment();</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <span class="keywordtype">void</span> AnalyzeIfStatement();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keywordtype">void</span> AnalyzeForStatement();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="keywordtype">void</span> AnalyzeWhileStatement();</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keywordtype">void</span> AnalyzePrintStatement();</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="keywordtype">void</span> AnalyzeReturnStatement();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="keywordtype">void</span> AnalyzeArrayDeclaration();</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <span class="keywordtype">void</span> AnalyzeExpression();</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <span class="keywordtype">void</span> AnalyzeIdentifier();</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  <span class="keywordtype">void</span> AnalyzeNumber();</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  <span class="keywordtype">void</span> AnalyzeString();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="keywordtype">void</span> AnalyzeTerm();</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keywordtype">void</span> AnalyzeFactor();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="comment">// Util</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keywordtype">void</span> GetNextChar();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  <span class="keywordtype">void</span> SkipWhitespace();</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <span class="keywordtype">void</span> HandleIndentation(<span class="keywordtype">int</span> previousIndentation);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <span class="comment">// var</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  <span class="keywordtype">char</span> ch_;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  std::string code_;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  std::vector&lt;Lexem&gt; lexems_;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  std::vector&lt;int&gt; indentStack_;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  <span class="keywordtype">size_t</span> index_;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keywordtype">size_t</span> currentPosition_;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <a class="code" href="classbor.html">bor</a> keywords_;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="keywordtype">size_t</span> curLine_ = 0;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;};</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#endif  </span><span class="comment">// LEXEM_ANALYZER_H</span></div>
-<div class="ttc" id="aBor_8h_html"><div class="ttname"><a href="Bor_8h.html">Bor.h</a></div></div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classLexemAnalyzer.html">   46</a></span>&#160;<span class="keyword">class </span><a class="code" href="classLexemAnalyzer.html">LexemAnalyzer</a> {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <a class="code" href="classLexemAnalyzer.html#aee33ef96cd4d2f2d713a17d323d39805">LexemAnalyzer</a>(<span class="keyword">const</span> std::string&amp; code, <span class="keyword">const</span> std::string&amp; pathToKeywords);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classLexemAnalyzer.html#a7643f1c7784be67ca63e72714ead3238">Analyze</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classLexemAnalyzer.html#ab6f2b10c53b3d403bbf80780dcee0b63">PrintLexems</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classLexemAnalyzer.html#abf47482494fcf938689e5fa41ec41250">   52</a></span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="classLexemAnalyzer.html#abf47482494fcf938689e5fa41ec41250">GetCurrentPosition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> currentPosition_; }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">   54</a></span>&#160;  std::vector&lt;Lexem&gt; <a class="code" href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">GetLexems</a>() { <span class="keywordflow">return</span> lexems_; }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  <span class="comment">// Parsing func</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="keywordtype">void</span> AnalyzeProgram();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keywordtype">void</span> AnalyzeStatement();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  <span class="keywordtype">void</span> AnalyzeVariableDeclaration();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keywordtype">void</span> AnalyzeFunctionDeclaration();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keywordtype">void</span> AnalyzeParameters();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  <span class="keywordtype">void</span> AnalyzeElseStatement();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <span class="keywordtype">void</span> AnalyzeAssignment();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <span class="keywordtype">void</span> AnalyzeIfStatement();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <span class="keywordtype">void</span> AnalyzeForStatement();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  <span class="keywordtype">void</span> AnalyzeWhileStatement();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  <span class="keywordtype">void</span> AnalyzePrintStatement();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keywordtype">void</span> AnalyzeReturnStatement();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keywordtype">void</span> AnalyzeArrayDeclaration();</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  <span class="keywordtype">void</span> AnalyzeExpression();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keywordtype">void</span> AnalyzeIdentifier();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <span class="keywordtype">void</span> AnalyzeNumber();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="keywordtype">void</span> AnalyzeString();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keywordtype">void</span> AnalyzeTerm();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keywordtype">void</span> AnalyzeFactor();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="comment">// Util</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keywordtype">void</span> GetNextChar();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="keywordtype">void</span> SkipWhitespace();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keywordtype">void</span> HandleIndentation(<span class="keywordtype">int</span> previousIndentation);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <span class="comment">// var</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keywordtype">char</span> ch_;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  std::string code_;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  std::vector&lt;Lexem&gt; lexems_;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  std::vector&lt;int&gt; indentStack_;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <span class="keywordtype">size_t</span> index_;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  <span class="keywordtype">size_t</span> currentPosition_;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <a class="code" href="classbor.html">bor</a> keywords_;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <span class="keywordtype">size_t</span> curLine_ = 0;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;};</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#endif  </span><span class="comment">// LEXEM_ANALYZER_H</span></div>
+<div class="ttc" id="aBor_8h_html"><div class="ttname"><a href="Bor_8h.html">Bor.h</a></div><div class="ttdoc">Implementation of a trie (prefix tree) data structure for string matching.</div></div>
 <div class="ttc" id="aLexem_8h_html"><div class="ttname"><a href="Lexem_8h.html">Lexem.h</a></div><div class="ttdoc">Defines the Lexem class and LexemType enum for lexical analysis.</div></div>
-<div class="ttc" id="aclassLexemAnalyzer_html"><div class="ttname"><a href="classLexemAnalyzer.html">LexemAnalyzer</a></div><div class="ttdoc">A lexical analyzer that breaks source code into lexical tokens (lexemes)</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00029">LexemAnalyzer.h:29</a></div></div>
-<div class="ttc" id="aclassLexemAnalyzer_html_a4ae9c730cc2325674eaae4e37434805b"><div class="ttname"><a href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">LexemAnalyzer::GetLexems</a></div><div class="ttdeci">std::vector&lt; Lexem &gt; GetLexems()</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00037">LexemAnalyzer.h:37</a></div></div>
+<div class="ttc" id="aclassLexemAnalyzer_html"><div class="ttname"><a href="classLexemAnalyzer.html">LexemAnalyzer</a></div><div class="ttdoc">A lexical analyzer that breaks source code into lexical tokens (lexemes)</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00046">LexemAnalyzer.h:46</a></div></div>
+<div class="ttc" id="aclassLexemAnalyzer_html_a4ae9c730cc2325674eaae4e37434805b"><div class="ttname"><a href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">LexemAnalyzer::GetLexems</a></div><div class="ttdeci">std::vector&lt; Lexem &gt; GetLexems()</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00054">LexemAnalyzer.h:54</a></div></div>
 <div class="ttc" id="aclassLexemAnalyzer_html_a7643f1c7784be67ca63e72714ead3238"><div class="ttname"><a href="classLexemAnalyzer.html#a7643f1c7784be67ca63e72714ead3238">LexemAnalyzer::Analyze</a></div><div class="ttdeci">void Analyze()</div><div class="ttdoc">Performs lexical analysis of the source code.</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8cpp_source.html#l00170">LexemAnalyzer.cpp:170</a></div></div>
 <div class="ttc" id="aclassLexemAnalyzer_html_ab6f2b10c53b3d403bbf80780dcee0b63"><div class="ttname"><a href="classLexemAnalyzer.html#ab6f2b10c53b3d403bbf80780dcee0b63">LexemAnalyzer::PrintLexems</a></div><div class="ttdeci">void PrintLexems() const</div><div class="ttdoc">Prints all lexems stored in the analyzer to standard output.</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8cpp_source.html#l00314">LexemAnalyzer.cpp:314</a></div></div>
-<div class="ttc" id="aclassLexemAnalyzer_html_abf47482494fcf938689e5fa41ec41250"><div class="ttname"><a href="classLexemAnalyzer.html#abf47482494fcf938689e5fa41ec41250">LexemAnalyzer::GetCurrentPosition</a></div><div class="ttdeci">size_t GetCurrentPosition() const</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00035">LexemAnalyzer.h:35</a></div></div>
+<div class="ttc" id="aclassLexemAnalyzer_html_abf47482494fcf938689e5fa41ec41250"><div class="ttname"><a href="classLexemAnalyzer.html#abf47482494fcf938689e5fa41ec41250">LexemAnalyzer::GetCurrentPosition</a></div><div class="ttdeci">size_t GetCurrentPosition() const</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00052">LexemAnalyzer.h:52</a></div></div>
 <div class="ttc" id="aclassLexemAnalyzer_html_aee33ef96cd4d2f2d713a17d323d39805"><div class="ttname"><a href="classLexemAnalyzer.html#aee33ef96cd4d2f2d713a17d323d39805">LexemAnalyzer::LexemAnalyzer</a></div><div class="ttdeci">LexemAnalyzer(const std::string &amp;code, const std::string &amp;pathToKeywords)</div><div class="ttdoc">Constructor for the LexemAnalyzer class.</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8cpp_source.html#l00024">LexemAnalyzer.cpp:24</a></div></div>
-<div class="ttc" id="aclassbor_html"><div class="ttname"><a href="classbor.html">bor</a></div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00010">Bor.h:10</a></div></div>
+<div class="ttc" id="aclassbor_html"><div class="ttname"><a href="classbor.html">bor</a></div><div class="ttdef"><b>Definition:</b> <a href="Bor_8h_source.html#l00036">Bor.h:36</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

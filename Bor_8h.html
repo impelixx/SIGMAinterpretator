@@ -89,6 +89,9 @@ $(document).ready(function(){initNavTree('Bor_8h.html',''); initResizable(); });
 <div class="title">Bor.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implementation of a trie (prefix tree) data structure for string matching.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;string&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
 <code>#include &quot;<a class="el" href="Lexem_8h_source.html">Lexem.h</a>&quot;</code><br />
@@ -97,7 +100,7 @@ Include dependency graph for Bor.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="Bor_8h__incl.png" border="0" usemap="#abackend_2include_2Bor_8h" alt=""/></div>
 <map name="abackend_2include_2Bor_8h" id="abackend_2include_2Bor_8h">
-<area shape="rect" title=" " alt="" coords="37,5,201,32"/>
+<area shape="rect" title="Implementation of a trie (prefix tree) data structure for string matching." alt="" coords="37,5,201,32"/>
 <area shape="rect" title=" " alt="" coords="5,80,64,107"/>
 <area shape="rect" title=" " alt="" coords="89,80,149,107"/>
 <area shape="rect" href="Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="173,80,251,107"/>
@@ -109,8 +112,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="Bor_8h__dep__incl.png" border="0" usemap="#abackend_2include_2Bor_8hdep" alt=""/></div>
 <map name="abackend_2include_2Bor_8hdep" id="abackend_2include_2Bor_8hdep">
-<area shape="rect" title=" " alt="" coords="147,5,311,32"/>
-<area shape="rect" href="LexemAnalyzer_8h.html" title=" " alt="" coords="108,80,351,107"/>
+<area shape="rect" title="Implementation of a trie (prefix tree) data structure for string matching." alt="" coords="147,5,311,32"/>
+<area shape="rect" href="LexemAnalyzer_8h.html" title="Header file containing the LexemAnalyzer class for lexical analysis of code." alt="" coords="108,80,351,107"/>
 <area shape="rect" href="LexemAnalyzer_8cpp.html" title=" " alt="" coords="5,155,235,181"/>
 <area shape="rect" href="main_8cpp.html" title=" " alt="" coords="259,155,421,181"/>
 </map>
@@ -121,11 +124,25 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvertex.html">vertex</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a vertex (node) in a trie data structure.  <a href="structvertex.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbor.html">bor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implementation of a trie (prefix tree) data structure for string matching. </p>
+<p>This file contains the implementation of a trie data structure used for efficient string matching and storage. The trie enables quick insertion and lookup of strings, making it particularly useful for keyword recognition in lexical analysis.</p>
+<p>The trie supports:</p><ul>
+<li>Adding new strings (O(m) time complexity, where m is string length)</li>
+<li>Checking for string existence (O(m) time complexity)</li>
+<li>String matching with lexeme generation</li>
+</ul>
+<p>The implementation uses dynamic memory allocation for vertices and includes proper cleanup through a destructor.</p>
+<dl class="section note"><dt>Note</dt><dd>The implementation assumes ASCII character set (256 possible characters) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structvertex.html" title="Represents a vertex (node) in a trie data structure.">vertex</a> class for the node structure used in the trie </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="Bor_8h_source.html">Bor.h</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
