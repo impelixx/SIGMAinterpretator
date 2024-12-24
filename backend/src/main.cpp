@@ -44,10 +44,11 @@ int main(int argc, char* argv[]) {
     codeBuffer << codeFile.rdbuf();
     std::string code = codeBuffer.str();
 
-    LexemAnalyzer analyzer(code, workwordsPath);
-    analyzer.Analyze();
-    std::vector<Lexem> lexems = analyzer.GetLexems();
-
+    LexemAnalyzer lexer(code, workwordsPath);
+    lexer.Analyze();
+    std::vector<Lexem> lexems = lexer.GetLexems();
+    SyntaxAnalyzer syntaxer(lexems);
+    syntaxer.Analyze();
     Semantic semantic(lexems);
     semantic.Analyze();
 

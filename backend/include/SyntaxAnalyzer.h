@@ -11,40 +11,33 @@
  * 
  * @param lexems Vector of lexemes to be analyzed
  */
-class SyntaxAnalyzer {
- public:
-  SyntaxAnalyzer(std::vector<Lexem> lexems) { lex = lexems; };
+class SyntaxAnalyzer {   
+public:
+    SyntaxAnalyzer(std::vector<Lexem>& lexems) : lex(lexems), curLex_(lexems[0]) {}
+    void Analyze();
 
-  std::string NumLine();
-  bool Analyze();
+private:
+    std::vector<Lexem> lex;
+    Lexem curLex_;
+    int index = 0;
 
- private:
-  bool AnalyzeProgram();
-  bool AnalyzeStatementList();
-  bool AnalyzeStatement();
-  bool AnalyzeEmptyStatement();
-  bool AnalyzeFunctionDeclaration();
-  bool AnalyzeParameterList();
-  bool AnalyzeVariableDeclaration();
-  bool AnalyzeInitianalizerList();
-  bool AnalyzeAssignment();
-  bool AnalyzeIfStatement();
-  bool AnalyzeWhileStatement();
-  bool AnalyzeDoWhileStatement();
-  bool AnalyzeFieldView();
-  bool AnalyzeForStatement();
-  bool AnalyzePrintStatement();
-  bool AnalyzeReturnStatement();
-  bool AnalyzeCaseExpression();
-  bool AnalyzeExpression();
-  bool AnalyzeTerm();
-  bool AnalyzeFactor();
-  bool AnalyzeType();
-  bool AnalyzeIdentifier();
-  bool AnalyzeNumber();
-  bool AnalyzeStatementTerminator();
-  int LexemIndex = 0;
-  std::vector<Lexem> lex;
+    void GetLexem();
+    void AnalyzeProgram();
+    void AnalyzeStatement();
+    void AnalyzeVariableDeclaration();
+    void AnalyzeFunctionDeclaration();
+    void AnalyzeParameterList();
+    void AnalyzeIfStatement();
+    void AnalyzeWhileStatement();
+    void AnalyzeForStatement();
+    void AnalyzePrintStatement();
+    void AnalyzeElseStatement();
+    void AnalyzeReturnStatement();
+    bool IsType(const std::string& word);
+    void AnalyzeAssignment();
+    void AnalyzeExpression();
+    void AnalyzeStatementTerminator();
+    void AnalyzeBlock();
 };
 
 #endif  //BACKEND_SYNTAXANALYZER_H
