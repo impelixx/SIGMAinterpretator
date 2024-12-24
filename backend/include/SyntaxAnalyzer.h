@@ -11,6 +11,29 @@
  * 
  * @param lexems Vector of lexemes to be analyzed
  */
+/**
+ * @brief A class responsible for performing syntax analysis on a sequence of lexemes
+ * 
+ * The SyntaxAnalyzer class takes a vector of lexemes as input and performs recursive descent parsing
+ * to validate the syntactic structure of the program according to the language grammar rules.
+ * 
+ * @class SyntaxAnalyzer
+ * 
+ * @details The analyzer includes methods for parsing different language constructs including:
+ * - Program structure
+ * - Variable declarations
+ * - Function declarations
+ * - Control flow statements (if, while, for)
+ * - Print statements
+ * - Return statements
+ * - Expressions and assignments
+ * 
+ * The class maintains internal state tracking current lexeme position during analysis.
+ * 
+ * @param lexems Vector of lexemes to be analyzed, passed to constructor
+ * 
+ * @throws May throw syntax errors if invalid program structure is detected
+ */
 class SyntaxAnalyzer {   
 public:
     SyntaxAnalyzer(std::vector<Lexem>& lexems) : lex(lexems), curLex_(lexems[0]) {}
