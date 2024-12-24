@@ -387,8 +387,6 @@ void SyntaxAnalyzer::AnalyzeIfStatement() {
     }
 }
 
-
-
 /**
  * @brief Analyzes the syntax of a while statement in the source code.
  * 
@@ -407,3 +405,161 @@ void SyntaxAnalyzer::AnalyzeIfStatement() {
  *         - Missing colon after condition
  *         - Missing indentation for the loop body
  */
+void SyntaxAnalyzer::AnalyzeWhileStatement() {
+    GetLexem(); // Skip 'while'
+    
+    if (curLex_.get_text() != "(") {
+        throw std::runtime_error("Expected '(' after 'while' at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    AnalyzeExpression();
+    
+    if (curLex_.get_text() != ":") {
+        throw std::runtime_error("Expected ':' after while condition at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    if (curLex_.get_type() == "NEWLINE") {
+        GetLexem();
+    }
+    
+    if (curLex_.get_type() != "INDENT") {
+        throw std::runtime_error("Expected indented block in while statement at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+        AnalyzeStatement();
+    }
+    
+    if (curLex_.get_type() == "DEDENT") {
+        GetLexem();
+    }
+}
+
+/**
+ * @brief Analyzes the syntax of a 'for' loop statement in the source code.
+ * 
+ * This method handles the parsing of Python-style for loops with the following structure:
+ * for identifier in expression:
+ *     indented_block
+ *
+ * The method verifies:
+ * - Presence of an identifier after 'for' keyword
+ * - Presence of 'in' keyword after identifier
+ * - Valid expression after 'in'
+ * - Proper colon after the expression
+ * - Proper indentation of the loop body
+ * - Valid statements within the loop body
+ * - Proper dedentation after the loop body
+ *
+ * @throws std::runtime_error if any syntax rules are violated, with detailed error message
+ *         including the line number where the error occurred
+ */
+void SyntaxAnalyzer::AnalyzeForStatement() {
+    GetLexem();
+    
+    if (curLex_.get_type() != "IDENTIFIER") {
+        throw std::runtime_error("Expected identifier after 'for' at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    if (curLex_.get_text() != "in") {
+        throw std::runtime_error("Expected 'in' after identifier in for loop at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    AnalyzeExpression();
+    
+    if (curLex_.get_text() != ":") {
+        throw std::runtime_error("Expected ':' after for expression at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    if (curLex_.get_type() == "NEWLINE") {
+        GetLexem();
+    }
+    
+    if (curLex_.get_type() != "INDENT") {
+        throw std::runtime_error("Expected indented block in for statement at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+        AnalyzeStatement();
+    }
+    
+    if (curLex_.get_type() == "DEDENT") {
+        GetLexem();
+    }
+}
+
+/**
+ * @brief Analyzes the syntax of a print statement in the source code.
+ * 
+ * @details The method expects the following syntax structure:
+ *          print(expression);
+ *          
+ * The method validates:
+ * - Opening parenthesis after 'print' keyword
+ * - Expression to be printed
+ * - Closing parenthesis
+ * - Statement terminator (semicolon)
+ * 
+ * @throws std::runtime_error if the syntax is invalid:
+ *         - Missing opening parenthesis after 'print'
+ *         - Missing closing parenthesis after the expression
+ *         - Missing or invalid statement terminator
+ */
+void SyntaxAnalyzer::AnalyzePrintStatement() {
+    GetLexem();
+    
+    if (curLex_.get_text() != "(") {
+        throw std::runtime_error("Expected '(' after 'print' at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    AnalyzeExpression();
+    
+    if (curLex_.get_text() != ")") {
+        throw std::runtime_error("Expected ')' after print expression at line " + 
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    AnalyzeStatementTerminator();
+}
+
+/**
+ * @brief Analyzes a return statement in the source code.
+ * 
+ * This method processes return statements in the following format:
+ * return [expression] NEWLINE
+ * 
+ * The method first gets the next lexeme after 'return'.
+ * If the next lexeme is not a newline, it analyzes the expression following 'return'.
+ * Finally, it processes the statement terminator (typically a newline).
+ * 
+ * Usage example:
+ * - return       // empty return
+ * - return x     // return with expression
+ * - return 1 + 2 // return with complex expression
+ */
+void SyntaxAnalyzer::AnalyzeReturnStatement() {
+    GetLexem();
+    
+    if (curLex_.get_type() != "NEWLINE") {
+        AnalyzeExpression();
+    }
+    
+    AnalyzeStatementTerminator();
+}
