@@ -1,7 +1,7 @@
 #include "Semantic.h"
-#include "Lexem.h"
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
+#include "Lexem.h"
 
 /**
  * @brief Constructs a SemanticAnalyzer object.
@@ -13,8 +13,8 @@
  * @param lexems A reference to a vector of Lexem objects to be analyzed.
  */
 SemanticAnalyzer::SemanticAnalyzer(std::vector<Lexem>& lexems)
-  : lexems_(lexems), curLex_(lexems[0]) {
-    scopeStack_.push_back({});
+    : lexems_(lexems), curLex_(lexems[0]) {
+  scopeStack_.push_back({});
 }
 
 /**
@@ -25,9 +25,9 @@ SemanticAnalyzer::SemanticAnalyzer(std::vector<Lexem>& lexems)
  * retrieving the next lexeme using the GetLexem function.
  */
 void SemanticAnalyzer::Analyze() {
-    index = 0;
-    AnalyzeProgram();
-    GetLexem();
+  index = 0;
+  AnalyzeProgram();
+  GetLexem();
 }
 
 /**
@@ -38,9 +38,9 @@ void SemanticAnalyzer::Analyze() {
  * The index is then incremented to point to the next lexeme for future calls.
  */
 void SemanticAnalyzer::GetLexem() {
-    if (index < lexems_.size()) {
-        curLex_ = lexems_[index++];
-    }
+  if (index < lexems_.size()) {
+    curLex_ = lexems_[index++];
+  }
 }
 
 /**
@@ -51,7 +51,7 @@ void SemanticAnalyzer::GetLexem() {
  * for the tracking of variables and other symbols within nested scopes.
  */
 void SemanticAnalyzer::EnterScope() {
-    scopeStack_.push_back({});
+  scopeStack_.push_back({});
 }
 
 /**
@@ -61,9 +61,9 @@ void SemanticAnalyzer::EnterScope() {
  * top element, effectively exiting the current scope.
  */
 void SemanticAnalyzer::ExitScope() {
-    if (!scopeStack_.empty()) {
-        scopeStack_.pop_back();
-    }
+  if (!scopeStack_.empty()) {
+    scopeStack_.pop_back();
+  }
 }
 
 /**
@@ -75,13 +75,13 @@ void SemanticAnalyzer::ExitScope() {
  * @param var The name of the variable to check.
  * @return true if the variable is defined in any scope; false otherwise.
  */
-bool SemanticAnalyzer::IsVarDefined(const std::string &var) {
-    for (int i = static_cast<int>(scopeStack_.size()) - 1; i >= 0; --i) {
-        if (scopeStack_[i].find(var) != scopeStack_[i].end()) {
-            return true;
-        }
+bool SemanticAnalyzer::IsVarDefined(const std::string& var) {
+  for (int i = static_cast<int>(scopeStack_.size()) - 1; i >= 0; --i) {
+    if (scopeStack_[i].find(var) != scopeStack_[i].end()) {
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
 /**
@@ -96,13 +96,13 @@ bool SemanticAnalyzer::IsVarDefined(const std::string &var) {
  * @return The type of the variable as a string, or an empty string if the
  *         variable is not found in any scope.
  */
-std::string SemanticAnalyzer::GetVarType(const std::string &var) {
-    for (int i = static_cast<int>(scopeStack_.size()) - 1; i >= 0; --i) {
-        if (scopeStack_[i].find(var) != scopeStack_[i].end()) {
-            return scopeStack_[i][var];
-        }
+std::string SemanticAnalyzer::GetVarType(const std::string& var) {
+  for (int i = static_cast<int>(scopeStack_.size()) - 1; i >= 0; --i) {
+    if (scopeStack_[i].find(var) != scopeStack_[i].end()) {
+      return scopeStack_[i][var];
     }
-    return "";
+  }
+  return "";
 }
 
 /**
@@ -114,8 +114,9 @@ std::string SemanticAnalyzer::GetVarType(const std::string &var) {
  * @param var The name of the variable to be added.
  * @param type The type of the variable to be added.
  */
-void SemanticAnalyzer::AddVariable(const std::string &var, const std::string &type) {
-    scopeStack_.back()[var] = type;
+void SemanticAnalyzer::AddVariable(const std::string& var,
+                                   const std::string& type) {
+  scopeStack_.back()[var] = type;
 }
 
 /**
@@ -126,9 +127,9 @@ void SemanticAnalyzer::AddVariable(const std::string &var, const std::string &ty
  * function to process each individual statement.
  */
 void SemanticAnalyzer::AnalyzeProgram() {
-    while (curLex_.get_type() != "EOC") {
-        AnalyzeStatement();
-    }
+  while (curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
+  }
 }
 
 /**
@@ -140,17 +141,17 @@ void SemanticAnalyzer::AnalyzeProgram() {
  * functionName(type1, type2, ..., typeN)
  */
 void SemanticAnalyzer::PrintFunction() {
-        std::cout << "Semantic function signatures:" << std::endl;
-        for (const auto& [name, types] : functionSignatures_) {
-            std::cout << name << "(";
-            for (size_t i = 0; i < types.size(); i++) {
-                std::cout << types[i];
-                if (i < types.size() - 1) {
-                    std::cout << ", ";
-                }
-            }
-            std::cout << ")" << std::endl;
-        }
+  std::cout << "Semantic function signatures:" << std::endl;
+  for (const auto& [name, types] : functionSignatures_) {
+    std::cout << name << "(";
+    for (size_t i = 0; i < types.size(); i++) {
+      std::cout << types[i];
+      if (i < types.size() - 1) {
+        std::cout << ", ";
+      }
+    }
+    std::cout << ")" << std::endl;
+  }
 }
 
 /**
@@ -175,57 +176,66 @@ void SemanticAnalyzer::PrintFunction() {
  * @note This function assumes that `curLex_` is properly initialized and points to the current lexical token.
  */
 void SemanticAnalyzer::AnalyzeStatement() {
-    if (curLex_.get_type() == "KEYWORD") {
-        auto keyword = curLex_.get_text();
-        if (keyword == "def") {
-          GetLexem();
-          AnalyzeFunction();
-        } else if (keyword == "int" || keyword == "float" || keyword == "string") {
-          AnalyzeVariableDeclaration();
-        } else if (keyword == "print") {
-          AnalyzePrint();
-        } else if (keyword == "return") {
-          GetLexem();
-          AnalyzeExpression();
-        } else if (keyword == "while") {
-          AnalyzeWhile();
-        } else if (keyword == "if") {
-          AnalyzeIf();
-        } else if (keyword == "for") {
-          AnalyzeFor();
-        } else {
-            throw std::runtime_error("Invalid keyword: " + keyword + "\nOn line: " + std::to_string(curLex_.get_line()));
-        }
-    } if (curLex_.get_type() == "IDENTIFIER") {
-        auto name = curLex_.get_text();
-        GetLexem();
-        if (curLex_.get_text() == "(") {
-            if (functionSignatures_.find(name) == functionSignatures_.end()) {
-                throw std::runtime_error("Undefined function: " + name + "\nOn line: " + std::to_string(curLex_.get_line()));
-            }
-            auto argTypes = functionSignatures_[name];
-            CheckFunctionCall(name);
-        } else if (curLex_.get_text() == "=") {
-            GetLexem();
-            if (!IsVarDefined(name)) {
-                throw std::runtime_error("Undefined variable: " + name + "\nOn line: " + std::to_string(curLex_.get_line()));
-            }
-            if (GetVarType(name) == "int" || GetVarType(name) == "float") {
-                if (curLex_.get_type() == "STRING") {
-                    throw std::runtime_error("Cannot assign string to " + GetVarType(name) + " variable: " + name + "\nOn line: " + std::to_string(curLex_.get_line()));
-                }
-            } 
-            if (GetVarType(name) == "string") {
-                if (curLex_.get_type() == "NUMBER") {
-                    throw std::runtime_error("Cannot assign number to string variable: " + name + "\nOn line: " + std::to_string(curLex_.get_line()));
-                }
-            }
-            AnalyzeExpression();
-        } else {
-            throw std::runtime_error("Invalid statement: " + name + "\nOn line: " + std::to_string(curLex_.get_line()));
-        }
+  if (curLex_.get_type() == "KEYWORD") {
+    auto keyword = curLex_.get_text();
+    if (keyword == "def") {
+      GetLexem();
+      AnalyzeFunction();
+    } else if (keyword == "int" || keyword == "float" || keyword == "string") {
+      AnalyzeVariableDeclaration();
+    } else if (keyword == "print") {
+      AnalyzePrint();
+    } else if (keyword == "return") {
+      GetLexem();
+      AnalyzeExpression();
+    } else if (keyword == "while") {
+      AnalyzeWhile();
+    } else if (keyword == "if") {
+      AnalyzeIf();
+    } else if (keyword == "for") {
+      AnalyzeFor();
+    } else {
+      throw std::runtime_error("Invalid keyword: " + keyword + "\nOn line: " +
+                               std::to_string(curLex_.get_line()));
     }
+  }
+  if (curLex_.get_type() == "IDENTIFIER") {
+    auto name = curLex_.get_text();
     GetLexem();
+    if (curLex_.get_text() == "(") {
+      if (functionSignatures_.find(name) == functionSignatures_.end()) {
+        throw std::runtime_error("Undefined function: " + name + "\nOn line: " +
+                                 std::to_string(curLex_.get_line()));
+      }
+      auto argTypes = functionSignatures_[name];
+      CheckFunctionCall(name);
+    } else if (curLex_.get_text() == "=") {
+      GetLexem();
+      if (!IsVarDefined(name)) {
+        throw std::runtime_error("Undefined variable: " + name + "\nOn line: " +
+                                 std::to_string(curLex_.get_line()));
+      }
+      if (GetVarType(name) == "int" || GetVarType(name) == "float") {
+        if (curLex_.get_type() == "STRING") {
+          throw std::runtime_error(
+              "Cannot assign string to " + GetVarType(name) + " variable: " +
+              name + "\nOn line: " + std::to_string(curLex_.get_line()));
+        }
+      }
+      if (GetVarType(name) == "string") {
+        if (curLex_.get_type() == "NUMBER") {
+          throw std::runtime_error(
+              "Cannot assign number to string variable: " + name +
+              "\nOn line: " + std::to_string(curLex_.get_line()));
+        }
+      }
+      AnalyzeExpression();
+    } else {
+      throw std::runtime_error("Invalid statement: " + name + "\nOn line: " +
+                               std::to_string(curLex_.get_line()));
+    }
+  }
+  GetLexem();
 }
 
 /**
@@ -247,35 +257,50 @@ void SemanticAnalyzer::CheckFunctionCall(const std::string& funcName) {
     throw std::runtime_error("Undefined function: " + funcName);
   }
   if (curLex_.get_text() != "(") {
-    throw std::runtime_error("Expected '(' after function name: " + funcName + "\nOn line: " + std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Expected '(' after function name: " + funcName +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
   }
   GetLexem();
   std::vector<std::string> argTypes;
   while (curLex_.get_text() != ")") {
     if (curLex_.get_type() == "NUMBER") {
-      argTypes.push_back((curLex_.get_text().find('.') != std::string::npos) ? "float" : "int");
+      argTypes.push_back((curLex_.get_text().find('.') != std::string::npos)
+                             ? "float"
+                             : "int");
     } else if (curLex_.get_type() == "STRING") {
       argTypes.push_back("string");
     } else if (curLex_.get_type() == "IDENTIFIER") {
       if (!IsVarDefined(curLex_.get_text())) {
-        throw std::runtime_error("Undefined variable: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
+        throw std::runtime_error(
+            "Undefined variable: " + curLex_.get_text() +
+            "\nOn line: " + std::to_string(curLex_.get_line()));
       }
       argTypes.push_back(GetVarType(curLex_.get_text()));
     }
     AnalyzeExpression();
     if (curLex_.get_text() != "," && curLex_.get_text() != ")") {
-      throw std::runtime_error("Expected ',' or ')' after argument \nOn line: " + std::to_string(curLex_.get_line()));
+      throw std::runtime_error(
+          "Expected ',' or ')' after argument \nOn line: " +
+          std::to_string(curLex_.get_line()));
     }
     if (curLex_.get_text() == ",") {
       GetLexem();
     }
   }
   if (argTypes.size() != functionSignatures_[funcName].size()) {
-    throw std::runtime_error("Invalid number of arguments for function: " + funcName + "\nOn line: " + std::to_string(curLex_.get_line()) + "\nExpected: " + std::to_string(functionSignatures_[funcName].size()) + "\nGot: " + std::to_string(argTypes.size()));
+    throw std::runtime_error(
+        "Invalid number of arguments for function: " + funcName +
+        "\nOn line: " + std::to_string(curLex_.get_line()) +
+        "\nExpected: " + std::to_string(functionSignatures_[funcName].size()) +
+        "\nGot: " + std::to_string(argTypes.size()));
   }
   for (int i = 0; i < (int)argTypes.size(); i++) {
     if (argTypes[i] != functionSignatures_[funcName][i]) {
-      throw std::runtime_error("Invalid argument type for function: " + funcName + "\nOn line: " + std::to_string(curLex_.get_line()) + "\nExpected: " + functionSignatures_[funcName][i] + "\nGot: " + argTypes[i]);
+      throw std::runtime_error(
+          "Invalid argument type for function: " + funcName +
+          "\nOn line: " + std::to_string(curLex_.get_line()) + "\nExpected: " +
+          functionSignatures_[funcName][i] + "\nGot: " + argTypes[i]);
     }
   }
   GetLexem();
@@ -308,55 +333,65 @@ void SemanticAnalyzer::AnalyzeFunction() {
   while (curLex_.get_type() == "KEYWORD") {
     GetLexem();
   }
-    if (curLex_.get_type() != "IDENTIFIER") {
+  if (curLex_.get_type() != "IDENTIFIER") {
+    throw std::runtime_error(
+        "Invalid function name: " + curLex_.get_text() +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
+  }
+  std::string funcName = curLex_.get_text();
+  GetLexem();
+  if (curLex_.get_text() != "(") {
+    throw std::runtime_error(
+        "Expected '(' after function name, got: " + curLex_.get_text() +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+  std::vector<std::string> argTypes;
+  while (curLex_.get_text() != ")") {
+    if (curLex_.get_type() != "KEYWORD") {
       throw std::runtime_error(
-          "Invalid function name: " + curLex_.get_text() +
+          "Invalid argument type: " + curLex_.get_text() +
           "\nOn line: " + std::to_string(curLex_.get_line()));
     }
-    std::string funcName = curLex_.get_text();
-    GetLexem();
-    if (curLex_.get_text() != "(") {
-        throw std::runtime_error("Expected '(' after function name, got: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
-    }
-    GetLexem();
-    std::vector<std::string> argTypes;
-    while (curLex_.get_text() != ")") {
-        if (curLex_.get_type() != "KEYWORD") {
-            throw std::runtime_error("Invalid argument type: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
-        }
-        argTypes.push_back(curLex_.get_text());
-        GetLexem();
-        GetLexem();
-        if (curLex_.get_text() != "," && curLex_.get_text() != ")") {
-            throw std::runtime_error("Expected ',' or ')' after argument type. \nOn line: " + std::to_string(curLex_.get_line()));
-        }
-        if (curLex_.get_text() == ",") {
-            GetLexem();
-        }
-    }
-    GetLexem();
-    functionSignatures_[funcName] = argTypes;
-    if (curLex_.get_text() != ":") {
-        throw std::runtime_error("Expected ':' after function signature \n On line: " + std::to_string(curLex_.get_line()));
-    }
+    argTypes.push_back(curLex_.get_text());
     GetLexem();
     GetLexem();
-    if (curLex_.get_type() != "INDENT") {
-        throw std::runtime_error("Expected indented block after function declaration \nOn line: " + std::to_string(curLex_.get_line()));
+    if (curLex_.get_text() != "," && curLex_.get_text() != ")") {
+      throw std::runtime_error(
+          "Expected ',' or ')' after argument type. \nOn line: " +
+          std::to_string(curLex_.get_line()));
     }
-    EnterScope();
-    for (int i = 0; i < (int)argTypes.size(); i++) {
-      std::string paramName = "param" + std::to_string(i + 1);
-      AddVariable(paramName, argTypes[i]);
+    if (curLex_.get_text() == ",") {
+      GetLexem();
     }
+  }
+  GetLexem();
+  functionSignatures_[funcName] = argTypes;
+  if (curLex_.get_text() != ":") {
+    throw std::runtime_error(
+        "Expected ':' after function signature \n On line: " +
+        std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+  GetLexem();
+  if (curLex_.get_type() != "INDENT") {
+    throw std::runtime_error(
+        "Expected indented block after function declaration \nOn line: " +
+        std::to_string(curLex_.get_line()));
+  }
+  EnterScope();
+  for (int i = 0; i < (int)argTypes.size(); i++) {
+    std::string paramName = "param" + std::to_string(i + 1);
+    AddVariable(paramName, argTypes[i]);
+  }
+  GetLexem();
+  while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
+  }
+  if (curLex_.get_type() == "DEDENT") {
     GetLexem();
-    while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
-        AnalyzeStatement();
-    }
-    if (curLex_.get_type() == "DEDENT") {
-        GetLexem();
-    }
-    ExitScope();
+  }
+  ExitScope();
 }
 
 /**
@@ -375,13 +410,15 @@ void SemanticAnalyzer::AnalyzeVariableDeclaration() {
   auto type = curLex_.get_text();
   GetLexem();
   if (curLex_.get_type() != "IDENTIFIER") {
-    throw std::runtime_error("Invalid variable name: " + curLex_.get_text() + 
-                             "\nOn line: " + std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Invalid variable name: " + curLex_.get_text() +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
   }
   std::string varName = curLex_.get_text();
   if (IsVarDefined(varName)) {
-    throw std::runtime_error("Variable redefinition: " + varName + 
-                             "\nOn line: " + std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Variable redefinition: " + varName +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
   }
   GetLexem();
   if (curLex_.get_text() == "[") {
@@ -396,8 +433,9 @@ void SemanticAnalyzer::AnalyzeVariableDeclaration() {
   if (curLex_.get_text() == "=") {
     GetLexem();
     if ((type == "int" || type == "float") && curLex_.get_type() == "STRING") {
-      throw std::runtime_error("Cannot assign string to " + type + " variable: " +
-                               varName + "\nOn line: " + std::to_string(curLex_.get_line()));
+      throw std::runtime_error(
+          "Cannot assign string to " + type + " variable: " + varName +
+          "\nOn line: " + std::to_string(curLex_.get_line()));
     }
     AnalyzeExpression();
   }
@@ -423,16 +461,17 @@ void SemanticAnalyzer::AnalyzeExpression() {
   while (curLex_.get_type() != "NEWLINE" && curLex_.get_text() != ";" &&
          curLex_.get_text() != ")" && curLex_.get_text() != "," &&
          curLex_.get_text() != "]" && curLex_.get_type() != "EOC" &&
-         curLex_.get_text() != "}") 
-  {
+         curLex_.get_text() != "}") {
     if (curLex_.get_type() == "IDENTIFIER") {
       if (!IsVarDefined(curLex_.get_text())) {
-        throw std::runtime_error("Undefined variable: " + curLex_.get_text() +
-                                 "\nOn line: " + std::to_string(curLex_.get_line()));
+        throw std::runtime_error(
+            "Undefined variable: " + curLex_.get_text() +
+            "\nOn line: " + std::to_string(curLex_.get_line()));
       }
       leftType = GetVarType(curLex_.get_text());
     } else if (curLex_.get_type() == "NUMBER") {
-      leftType = (curLex_.get_text().find('.') != std::string::npos) ? "float" : "int";
+      leftType =
+          (curLex_.get_text().find('.') != std::string::npos) ? "float" : "int";
     } else if (curLex_.get_type() == "STRING") {
       leftType = "string";
     }
@@ -443,21 +482,24 @@ void SemanticAnalyzer::AnalyzeExpression() {
       std::string rightType;
       if (curLex_.get_type() == "IDENTIFIER") {
         if (!IsVarDefined(curLex_.get_text())) {
-          throw std::runtime_error("Undefined variable: " + curLex_.get_text() +
-                                   "\nOn line: " + std::to_string(curLex_.get_line()));
+          throw std::runtime_error(
+              "Undefined variable: " + curLex_.get_text() +
+              "\nOn line: " + std::to_string(curLex_.get_line()));
         }
         rightType = GetVarType(curLex_.get_text());
       } else if (curLex_.get_type() == "NUMBER") {
-        rightType = (curLex_.get_text().find('.') != std::string::npos) ? "float" : "int";
+        rightType = (curLex_.get_text().find('.') != std::string::npos)
+                        ? "float"
+                        : "int";
       } else if (curLex_.get_type() == "STRING") {
         rightType = "string";
       }
       if (leftType != rightType &&
           !(leftType == "float" && rightType == "int") &&
           !(leftType == "int" && rightType == "float")) {
-        throw std::runtime_error("Type mismatch in addition: cannot add " + 
-                                 leftType + " and " + rightType + "\nOn line: " +
-                                 std::to_string(curLex_.get_line()));
+        throw std::runtime_error(
+            "Type mismatch in addition: cannot add " + leftType + " and " +
+            rightType + "\nOn line: " + std::to_string(curLex_.get_line()));
       }
     }
   }
@@ -475,26 +517,32 @@ void SemanticAnalyzer::AnalyzeExpression() {
  * argument type is encountered.
  */
 void SemanticAnalyzer::AnalyzePrint() {
-    GetLexem();
-    if (curLex_.get_text() != "(") {
-        throw std::runtime_error("Expected '(' after print \n On line: " + std::to_string(curLex_.get_line()));
+  GetLexem();
+  if (curLex_.get_text() != "(") {
+    throw std::runtime_error("Expected '(' after print \n On line: " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+  std::vector<std::string> argTypes;
+  while (curLex_.get_text() != ")") {
+    if (curLex_.get_type() != "IDENTIFIER" && curLex_.get_type() != "NUMBER" &&
+        curLex_.get_type() != "STRING") {
+      throw std::runtime_error(
+          "Invalid argument for print: " + curLex_.get_text() +
+          "\nOn line: " + std::to_string(curLex_.get_line()));
     }
+    argTypes.push_back(curLex_.get_type());
     GetLexem();
-    std::vector<std::string> argTypes;
-    while (curLex_.get_text() != ")") {
-        if (curLex_.get_type() != "IDENTIFIER" && curLex_.get_type() != "NUMBER" && curLex_.get_type() != "STRING") {
-            throw std::runtime_error("Invalid argument for print: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
-        }
-        argTypes.push_back(curLex_.get_type());
-        GetLexem();
-        if (curLex_.get_text() != "," && curLex_.get_text() != ")") {
-            throw std::runtime_error("Expected ',' or ')' after argument \n On line: " + std::to_string(curLex_.get_line()));
-        }
-        if (curLex_.get_text() == ",") {
-            GetLexem();
-        }
+    if (curLex_.get_text() != "," && curLex_.get_text() != ")") {
+      throw std::runtime_error(
+          "Expected ',' or ')' after argument \n On line: " +
+          std::to_string(curLex_.get_line()));
     }
-    GetLexem();
+    if (curLex_.get_text() == ",") {
+      GetLexem();
+    }
+  }
+  GetLexem();
 }
 
 /**
@@ -513,28 +561,29 @@ void SemanticAnalyzer::AnalyzePrint() {
  * @throws std::runtime_error If the expected indented block is not found after the 'while' statement.
  */
 void SemanticAnalyzer::AnalyzeWhile() {
+  GetLexem();
+  AnalyzeExpression();
+  GetLexem();
+  if (curLex_.get_text() != ":") {
+    throw std::runtime_error(
+        "Expected ':' after while expression \n On line: " +
+        std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+  GetLexem();
+  if (curLex_.get_type() != "INDENT") {
+    throw std::runtime_error("Expected indented block after while \nOn line: " +
+                             std::to_string(curLex_.get_line()));
+  }
+  EnterScope();
+  GetLexem();
+  while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
+  }
+  if (curLex_.get_type() == "DEDENT") {
     GetLexem();
-    AnalyzeExpression();
-    GetLexem();
-    if (curLex_.get_text() != ":") {
-        throw std::runtime_error("Expected ':' after while expression \n On line: " + std::to_string(curLex_.get_line()));
-    }
-    GetLexem();
-    GetLexem();
-    if (curLex_.get_type() != "INDENT") {
-      throw std::runtime_error(
-          "Expected indented block after while \nOn line: " +
-          std::to_string(curLex_.get_line()));
-    }
-    EnterScope();
-    GetLexem();
-    while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
-        AnalyzeStatement();
-    }
-    if (curLex_.get_type() == "DEDENT") {
-        GetLexem();
-    }
-    ExitScope();
+  }
+  ExitScope();
 }
 
 /**
@@ -553,14 +602,14 @@ void SemanticAnalyzer::AnalyzeIf() {
   AnalyzeExpression();
   GetLexem();
   if (curLex_.get_text() != ":") {
-    throw std::runtime_error("Expected ':' after if expression \n On line: " + std::to_string(curLex_.get_line()));
+    throw std::runtime_error("Expected ':' after if expression \n On line: " +
+                             std::to_string(curLex_.get_line()));
   }
   GetLexem();
   GetLexem();
   if (curLex_.get_type() != "INDENT") {
-    throw std::runtime_error(
-      "Expected indented block after if \nOn line: " +
-      std::to_string(curLex_.get_line()));
+    throw std::runtime_error("Expected indented block after if \nOn line: " +
+                             std::to_string(curLex_.get_line()));
   }
   EnterScope();
   GetLexem();
@@ -577,12 +626,15 @@ void SemanticAnalyzer::AnalyzeIf() {
   if (curLex_.get_text() == "else") {
     GetLexem();
     if (curLex_.get_text() != ":") {
-      throw std::runtime_error("Expected ':' after else \n On line: " + std::to_string(curLex_.get_line()));
+      throw std::runtime_error("Expected ':' after else \n On line: " +
+                               std::to_string(curLex_.get_line()));
     }
     GetLexem();
     GetLexem();
     if (curLex_.get_type() != "INDENT") {
-      throw std::runtime_error("Expected indented block after else \nOn line: " + std::to_string(curLex_.get_line()));
+      throw std::runtime_error(
+          "Expected indented block after else \nOn line: " +
+          std::to_string(curLex_.get_line()));
     }
     EnterScope();
     GetLexem();
@@ -627,33 +679,36 @@ void SemanticAnalyzer::AnalyzeIf() {
 void SemanticAnalyzer::AnalyzeFor() {
   GetLexem();
   if (curLex_.get_type() != "IDENTIFIER") {
-    throw std::runtime_error("Invalid variable name: " + curLex_.get_text() + 
-                             "\nOn line: " + std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Invalid variable name: " + curLex_.get_text() +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
   }
   std::string varName = curLex_.get_text();
 
   GetLexem();
   if (curLex_.get_text() != "in") {
-    throw std::runtime_error("Expected 'in' after variable name, got: " + 
-                             curLex_.get_text() + "\nOn line: " +
-                             std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Expected 'in' after variable name, got: " + curLex_.get_text() +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
   }
   GetLexem();
   if (curLex_.get_text() != "range") {
-    throw std::runtime_error("Expected 'range', got: " + curLex_.get_text() +
-                             "\nOn line: " + std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Expected 'range', got: " + curLex_.get_text() +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
   }
   GetLexem();
   if (curLex_.get_text() != "(") {
-    throw std::runtime_error("Expected '(' after range, got: " + curLex_.get_text() +
-                             "\nOn line: " + std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Expected '(' after range, got: " + curLex_.get_text() +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
   }
   GetLexem();
   AnalyzeExpression();
   if (curLex_.get_text() != ")") {
-    throw std::runtime_error("Expected ')' after range value, got: " +
-                             curLex_.get_text() + "\nOn line: " +
-                             std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Expected ')' after range value, got: " + curLex_.get_text() +
+        "\nOn line: " + std::to_string(curLex_.get_line()));
   }
   GetLexem();
   if (curLex_.get_text() != ":") {
@@ -663,8 +718,9 @@ void SemanticAnalyzer::AnalyzeFor() {
   GetLexem();
   GetLexem();
   if (curLex_.get_type() != "INDENT") {
-    throw std::runtime_error("Expected indented block after for loop \nOn line: " +
-                             std::to_string(curLex_.get_line()));
+    throw std::runtime_error(
+        "Expected indented block after for loop \nOn line: " +
+        std::to_string(curLex_.get_line()));
   }
   EnterScope();
   AddVariable(varName, "int");

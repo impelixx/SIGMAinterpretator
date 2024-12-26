@@ -1,9 +1,9 @@
-#include "Semantic.h"
 #include <SyntaxAnalyzer.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include "LexemAnalyzer.h"
+#include "Semantic.h"
 
 /**
  * @brief Main entry point of the SIGMA interpreter program
