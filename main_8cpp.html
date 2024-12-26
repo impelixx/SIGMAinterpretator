@@ -198,22 +198,24 @@ Functions</h2></td></tr>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    codeBuffer &lt;&lt; codeFile.rdbuf();</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    std::string code = codeBuffer.str();</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="classLexemAnalyzer.html">LexemAnalyzer</a> analyzer(code, workwordsPath);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    analyzer.Analyze();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;Lexem&gt; lexems = analyzer.GetLexems();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="classSemantic.html">Semantic</a> semantic(lexems);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    semantic.Analyze();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="classLexemAnalyzer.html">LexemAnalyzer</a> lexer(code, workwordsPath);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    lexer.Analyze();</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;Lexem&gt; lexems = lexer.GetLexems();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classSyntaxAnalyzer.html">SyntaxAnalyzer</a> syntaxer(lexems);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    syntaxer.Analyze();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classSemantic.html">Semantic</a> semantic(lexems);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    semantic.Analyze();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
 <div class="ttc" id="aclassLexemAnalyzer_html"><div class="ttname"><a href="classLexemAnalyzer.html">LexemAnalyzer</a></div><div class="ttdoc">A lexical analyzer that breaks source code into lexical tokens (lexemes)</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00046">LexemAnalyzer.h:46</a></div></div>
 <div class="ttc" id="aclassSemantic_html"><div class="ttname"><a href="classSemantic.html">Semantic</a></div><div class="ttdoc">Class responsible for performing semantic analysis on lexems.</div><div class="ttdef"><b>Definition:</b> <a href="Semantic_8h_source.html#l00012">Semantic.h:12</a></div></div>
+<div class="ttc" id="aclassSyntaxAnalyzer_html"><div class="ttname"><a href="classSyntaxAnalyzer.html">SyntaxAnalyzer</a></div><div class="ttdoc">A syntax analyzer for parsing and validating program syntax.</div><div class="ttdef"><b>Definition:</b> <a href="SyntaxAnalyzer_8h_source.html#l00037">SyntaxAnalyzer.h:37</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>

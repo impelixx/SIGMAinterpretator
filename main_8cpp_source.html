@@ -114,20 +114,21 @@ $(document).ready(function(){initNavTree('main_8cpp_source.html',''); initResiza
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    codeBuffer &lt;&lt; codeFile.rdbuf();</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    std::string code = codeBuffer.str();</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="classLexemAnalyzer.html">LexemAnalyzer</a> analyzer(code, workwordsPath);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    analyzer.<a class="code" href="classLexemAnalyzer.html#a7643f1c7784be67ca63e72714ead3238">Analyze</a>();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;Lexem&gt; lexems = analyzer.<a class="code" href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">GetLexems</a>();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="classSemantic.html">Semantic</a> semantic(lexems);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    semantic.<a class="code" href="classSemantic.html#aa95c99f62497925cedfba50cfea1a918">Analyze</a>();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="classLexemAnalyzer.html">LexemAnalyzer</a> lexer(code, workwordsPath);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    lexer.<a class="code" href="classLexemAnalyzer.html#a7643f1c7784be67ca63e72714ead3238">Analyze</a>();</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;Lexem&gt; lexems = lexer.<a class="code" href="classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b">GetLexems</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classSyntaxAnalyzer.html">SyntaxAnalyzer</a> syntaxer(lexems);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    syntaxer.<a class="code" href="classSyntaxAnalyzer.html#a616726fb1ab1356665c1ecd0249d640f">Analyze</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classSemantic.html">Semantic</a> semantic(lexems);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    semantic.<a class="code" href="classSemantic.html#aa95c99f62497925cedfba50cfea1a918">Analyze</a>();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
 <div class="ttc" id="aLexemAnalyzer_8h_html"><div class="ttname"><a href="LexemAnalyzer_8h.html">LexemAnalyzer.h</a></div><div class="ttdoc">Header file containing the LexemAnalyzer class for lexical analysis of code.</div></div>
 <div class="ttc" id="aSemantic_8h_html"><div class="ttname"><a href="Semantic_8h.html">Semantic.h</a></div></div>
 <div class="ttc" id="aSyntaxAnalyzer_8h_html"><div class="ttname"><a href="SyntaxAnalyzer_8h.html">SyntaxAnalyzer.h</a></div></div>
@@ -136,6 +137,8 @@ $(document).ready(function(){initNavTree('main_8cpp_source.html',''); initResiza
 <div class="ttc" id="aclassLexemAnalyzer_html_a7643f1c7784be67ca63e72714ead3238"><div class="ttname"><a href="classLexemAnalyzer.html#a7643f1c7784be67ca63e72714ead3238">LexemAnalyzer::Analyze</a></div><div class="ttdeci">void Analyze()</div><div class="ttdoc">Performs lexical analysis of the source code.</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8cpp_source.html#l00170">LexemAnalyzer.cpp:170</a></div></div>
 <div class="ttc" id="aclassSemantic_html"><div class="ttname"><a href="classSemantic.html">Semantic</a></div><div class="ttdoc">Class responsible for performing semantic analysis on lexems.</div><div class="ttdef"><b>Definition:</b> <a href="Semantic_8h_source.html#l00012">Semantic.h:12</a></div></div>
 <div class="ttc" id="aclassSemantic_html_aa95c99f62497925cedfba50cfea1a918"><div class="ttname"><a href="classSemantic.html#aa95c99f62497925cedfba50cfea1a918">Semantic::Analyze</a></div><div class="ttdeci">bool Analyze()</div><div class="ttdoc">Performs semantic analysis of the code.</div><div class="ttdef"><b>Definition:</b> <a href="Semantic_8cpp_source.html#l00053">Semantic.cpp:53</a></div></div>
+<div class="ttc" id="aclassSyntaxAnalyzer_html"><div class="ttname"><a href="classSyntaxAnalyzer.html">SyntaxAnalyzer</a></div><div class="ttdoc">A syntax analyzer for parsing and validating program syntax.</div><div class="ttdef"><b>Definition:</b> <a href="SyntaxAnalyzer_8h_source.html#l00037">SyntaxAnalyzer.h:37</a></div></div>
+<div class="ttc" id="aclassSyntaxAnalyzer_html_a616726fb1ab1356665c1ecd0249d640f"><div class="ttname"><a href="classSyntaxAnalyzer.html#a616726fb1ab1356665c1ecd0249d640f">SyntaxAnalyzer::Analyze</a></div><div class="ttdeci">void Analyze()</div><div class="ttdoc">Initiates the syntax analysis process for the program.</div><div class="ttdef"><b>Definition:</b> <a href="SyntaxAnalyzer_8cpp_source.html#l00025">SyntaxAnalyzer.cpp:25</a></div></div>
 <div class="ttc" id="amain_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdoc">Main entry point of the SIGMA interpreter program.</div><div class="ttdef"><b>Definition:</b> <a href="main_8cpp_source.html#l00027">main.cpp:27</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['numline_80',['NumLine',['../classSyntaxAnalyzer.html#a47aa3bf4ca46eb5cb3ded85870ca4013',1,'SyntaxAnalyzer']]]
+  ['print_79',['print',['../classbor.html#a0ece1b521c0e95991116dd4a5d6c743e',1,'bor']]],
+  ['printlexems_80',['PrintLexems',['../classLexemAnalyzer.html#ab6f2b10c53b3d403bbf80780dcee0b63',1,'LexemAnalyzer']]]
 ];

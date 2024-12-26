@@ -483,7 +483,7 @@ $(document).ready(function(){initNavTree('LexemAnalyzer_8cpp_source.html',''); i
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;}</div>
 <div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160; </div>
 <div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;<span class="keywordtype">void</span> LexemAnalyzer::AnalyzeElseStatement() {</div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;  GetNextChar();</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;  <span class="comment">//GetNextChar();</span></div>
 <div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;  SkipWhitespace();</div>
 <div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;  <span class="keywordflow">if</span> (ch_ == <span class="charliteral">&#39;:&#39;</span>) {</div>
 <div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;    lexems_.emplace_back(<a class="code" href="classLexem.html">Lexem</a>(<a class="code" href="Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea6411d9d6073252e4d316493506bbb979">LexemType::OPERATOR</a>, <span class="stringliteral">&quot;:&quot;</span>, currentPosition_,</div>

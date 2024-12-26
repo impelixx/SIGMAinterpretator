@@ -1,6 +1,5 @@
 var classSyntaxAnalyzer =
 [
-    [ "SyntaxAnalyzer", "classSyntaxAnalyzer.html#a7c711481b859c4305e86f7a6b7cb8cc1", null ],
-    [ "Analyze", "classSyntaxAnalyzer.html#ad584613cd7efb4b6d785a049ecbdacc6", null ],
-    [ "NumLine", "classSyntaxAnalyzer.html#a47aa3bf4ca46eb5cb3ded85870ca4013", null ]
+    [ "SyntaxAnalyzer", "classSyntaxAnalyzer.html#aac71f0d0c75b526926d66ff9c2a2caca", null ],
+    [ "Analyze", "classSyntaxAnalyzer.html#a616726fb1ab1356665c1ecd0249d640f", null ]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['print_81',['print',['../classbor.html#a0ece1b521c0e95991116dd4a5d6c743e',1,'bor']]],
-  ['printlexems_82',['PrintLexems',['../classLexemAnalyzer.html#ab6f2b10c53b3d403bbf80780dcee0b63',1,'LexemAnalyzer']]]
+  ['semantic_81',['Semantic',['../classSemantic.html#aea1dd317c015f0d5e91917b1f62627cd',1,'Semantic']]],
+  ['set_5ftext_82',['set_text',['../classLexem.html#a730c9118d77f1a624b5a342481c43bb2',1,'Lexem']]],
+  ['syntaxanalyzer_83',['SyntaxAnalyzer',['../classSyntaxAnalyzer.html#aac71f0d0c75b526926d66ff9c2a2caca',1,'SyntaxAnalyzer']]]
 ];
