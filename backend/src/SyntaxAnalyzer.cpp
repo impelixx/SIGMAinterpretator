@@ -164,11 +164,7 @@ void SyntaxAnalyzer::AnalyzeVariableDeclaration() {
   GetLexem();
 
   if (curLex_.get_text() == "[") {
-    std::cout << "Array declaration" << std::endl;
     GetLexem();
-
-    std::cout << "Array size expression starts with: " << curLex_.get_text()
-              << std::endl;
     AnalyzeExpression();
 
     if (curLex_.get_text() != "]") {
@@ -332,16 +328,11 @@ void SyntaxAnalyzer::AnalyzeAssignment() {
 }
 
 void SyntaxAnalyzer::AnalyzeExpression() {
-  std::cout << "Expression token: " << curLex_.get_text()
-            << " type: " << curLex_.get_type() << std::endl;
-
   while (curLex_.get_type() != "NEWLINE" && curLex_.get_text() != ";" &&
          curLex_.get_text() != ")" && curLex_.get_text() != "," &&
          curLex_.get_text() != "]" && curLex_.get_type() != "EOC" &&
          curLex_.get_text() != "}") {
     GetLexem();
-    std::cout << "Next token: " << curLex_.get_text()
-              << " type: " << curLex_.get_type() << std::endl;
   }
 }
 
@@ -420,6 +411,7 @@ void SyntaxAnalyzer::AnalyzeWhileStatement() {
 
   AnalyzeExpression();
 
+  GetLexem();
   if (curLex_.get_text() != ":") {
     throw std::runtime_error("Expected ':' after while condition at line " +
                              std::to_string(curLex_.get_line()));

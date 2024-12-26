@@ -1,4 +1,4 @@
-#include <Semantic.h>
+#include "Semantic.h"
 #include <SyntaxAnalyzer.h>
 #include <fstream>
 #include <iostream>
@@ -49,9 +49,10 @@ int main(int argc, char* argv[]) {
     std::vector<Lexem> lexems = lexer.GetLexems();
     SyntaxAnalyzer syntaxer(lexems);
     syntaxer.Analyze();
-    Semantic semantic(lexems);
+    SemanticAnalyzer semantic(lexems);
     semantic.Analyze();
-
+    semantic.PrintFunction();
+    std::cout << "Code analysis completed successfully!" << std::endl;
     return 0;
 
   } catch (const std::exception& e) {

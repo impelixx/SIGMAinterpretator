@@ -1,303 +1,206 @@
 #include "Semantic.h"
+#include "Lexem.h"
+#include <stdexcept>
 #include <iostream>
-#include <map>
-#include <string>
-#include <tuple>
-#include <utility>
-#include <vector>
 
-/**
- * @brief Determines the line number for a given lexeme index in the source code
- * 
- * This function counts the number of newline characters encountered up to the specified index
- * in the lexeme array to determine the line number where the lexeme appears.
- * 
- * @param index The index of the lexeme in the lexeme array for which to find the line number
- * @return The line number where the lexeme at the specified index appears (1-based)
- */
-int Semantic::GetLine(int index) {
-  int NumLine = 1;
-
-  for (int i = 0; i <= index; ++i) {
-    if (lex_[i].get_type() == "NEWLINE") {
-      ++NumLine;
-    }
-  }
-
-  return NumLine;
+SemanticAnalyzer::SemanticAnalyzer(std::vector<Lexem>& lexems)
+  : lexems_(lexems), curLex_(lexems[0]) {
 }
 
-/**
- * @brief Performs semantic analysis of the code
- * 
- * This method analyzes the code for semantic correctness by checking:
- * 1. INDENT-DEDENT balance and correctness
- * - Verifies indentation levels match block structures
- * - Checks for proper indentation after control statements (if/for/while/def/else)
- * - Validates no sharp increases in indentation
- * 
- * 2. Variable scoping and declarations
- * - Tracks variable declarations and usage across different scopes
- * - Ensures variables are declared before use
- * - Prevents variable redeclaration in same scope
- * - Validates variable names against reserved keywords
- * 
- * 3. Function declarations
- * - Prevents function names from being used as variables
- * - Checks for invalid function value assignments
- *
- * @return true if semantic analysis passes successfully
- * @return false if any semantic errors are found
- * @throws std::runtime_error with detailed error message when semantic violations are found
- */
-bool Semantic::Analyze() {
-  std::vector<std::string> WorkWords = {
-      "bool",  "int",      "float", "char", "void",  "return", "for", "while",
-      "break", "continue", "if",    "else", "print", "array",  "def"};
+void SemanticAnalyzer::Analyze() {
+    index = 0;
+    GetLexem();
+    AnalyzeProgram();
+}
 
-  // Analyzing INDENT-DEDENT
-  {
-    int k1 = 0;
-    int k2 = 0;
-
-    bool WasNewFieldOfViewInThisLine = false;
-    bool WasNewFieldOfViewInLastLine = false;
-
-    for (int i = 0; i < lex_.size(); ++i) {
-      if (i < lex_.size() - 1) {
-        if (lex_[i].get_type() == "INDENT" &&
-            lex_[i + 1].get_type() == "INDENT") {
-          throw std::runtime_error(
-              "A sharp increase in the number of INDENTS\nAt line: " +
-              std::to_string(GetLine(i)));
-          return false;
-        }
-      }
-
-      if (WasNewFieldOfViewInLastLine) {
-        if (lex_[i].get_type() == "INDENT") {
-          // wait
-          WasNewFieldOfViewInLastLine = false;
-        } else {
-          // std::cout << lex_[i].get_type() << std::endl;
-          // throw std::runtime_error("Have no INDENT after special keyword");
-          // return false;
-        }
-      } else if (lex_[i].get_type() == "INDENT") {
-        throw std::runtime_error(
-            "Have INDENT after line without special keyword\nAt line: " +
-            std::to_string(GetLine(i)));
-        return false;
-      }
-
-      if (lex_[i].get_type() == "DEDENT") {
-        // std::cout << "-tab" << std::endl;
-        --k1;
-        --k2;
-      } else if (lex_[i].get_type() == "NEWLINE") {
-        if (WasNewFieldOfViewInThisLine == true) {
-          WasNewFieldOfViewInThisLine = false;
-          WasNewFieldOfViewInLastLine = true;
-        } else {
-          WasNewFieldOfViewInLastLine = false;
-        }
-      } else if (lex_[i].get_type() == "KEYWORD" &&
-                 (lex_[i].get_text() == "if" || lex_[i].get_text() == "for" ||
-                  lex_[i].get_text() == "while" ||
-                  lex_[i].get_text() == "def" ||
-                  lex_[i].get_text() == "else")) {
-        WasNewFieldOfViewInThisLine = true;
-        ++k2;
-        ++k1;
-      }
-
-      if (k1 < 0 || k2 < 0) {
-        throw std::runtime_error(
-            "Different amount of INDENT and DEDENT\nAt line: " +
-            std::to_string(GetLine(i)));
-        return false;
-      }
+void SemanticAnalyzer::GetLexem() {
+    if (index < lexems_.size()) {
+        curLex_ = lexems_[index++];
+    } else {
+        throw std::runtime_error("Unexpected end of code");
     }
-  }
+}
 
-  // Analyzing variables (field of view)
-  {
-    std::vector<std::tuple<int, std::string, std::string>>
-        variables;  // <field of view, type of the variable, name of the variable>
+void SemanticAnalyzer::AnalyzeProgram() {
+    while (curLex_.get_type() != "EOC") {
+        AnalyzeStatement();
+    }
+}
 
-    int WordInLine = 1;
-    int FieldOfViewNow = 0;
-
-    std::string VariableType = "";
-
-    bool was_pushed = false;
-
-    for (int i = 0; i < lex_.size(); ++i) {
-      if (lex_[i].get_type() == "DEDENT") {
-        --FieldOfViewNow;
-      }
-
-      if (lex_[i].get_text() == "def" || lex_[i].get_text() == "if" ||
-          lex_[i].get_text() == "for" || lex_[i].get_text() == "while" ||
-          lex_[i].get_text() == "else") {
-        ++FieldOfViewNow;
-      }
-
-      if ((was_pushed && lex_[i].get_text() == "=" ||
-           lex_[i].get_text() == "==") &&
-          get<1>(variables[variables.size() - 1]) == "USING") {
-        variables[variables.size() - 1] = {
-            get<0>(variables[variables.size() - 1]), "ASSIGNMENT",
-            get<2>(variables[variables.size() - 1])};
-      }
-
-      was_pushed = false;
-
-      bool MeetIf = false;
-
-      if (lex_[i].get_text() == "bool" || lex_[i].get_text() == "char" ||
-          lex_[i].get_text() == "string" || lex_[i].get_text() == "int" ||
-          lex_[i].get_text() == "float" || lex_[i].get_text() == "def" ||
-          lex_[i].get_text() == "for" || lex_[i].get_text() == "string") {
-        WordInLine = 2;
-        MeetIf = true;
-        VariableType = lex_[i].get_text();
-      } else if (WordInLine == 2) {
-        if ((lex_[i].get_type() == "IDENTIFIER" ||
-             lex_[i].get_type() == "KEYWORD") &&
-            VariableType != "") {
-          MeetIf = true;
-          std::string WhatType = VariableType;
-          if (VariableType == "for") {
-            WhatType = "int";
-          }
-
-          if (VariableType == "def") {
-            variables.push_back(
-                {FieldOfViewNow - 1, WhatType, lex_[i].get_text()});
-            was_pushed = true;
-          } else {
-            variables.push_back({FieldOfViewNow, WhatType, lex_[i].get_text()});
-            was_pushed = true;
-          }
-        }
-        WordInLine = 0;
-      }
-
-      if (!MeetIf) {
-        if (lex_[i].get_type() == "IDENTIFIER" && !lex_[i].get_text().empty()) {
-          // std::cout << "USING-1- " << lex_[i].get_text() << "\n";
-          variables.push_back({FieldOfViewNow, "USING", lex_[i].get_text()});
-          was_pushed = true;
-        }
-      }
-
-      if (lex_[i].get_type() == "DEDENT") {
-        variables.push_back({-1000000, "NONE_TYPE", "NONE"});
-        was_pushed = true;
-      }
-
-      /*
-            if (lex_[i].get_type() == "IDENTIFIER" && !lex_[i].get_text().empty()) {
-                bool WasDeclared = false;
-                for (int j = 0; j < variables.size(); ++j) {
-                    if (get<2>(variables[j]) == lex_[i].get_text()) {
-                        WasDeclared = true;
-                        break;
-                    } else {
-                        // std::cout << get<2>(variables[j]) << "!=" << lex_[i].get_text() << "\n";
-                    }
-                }
-                if (!WasDeclared) {
-                    throw std::runtime_error("Using undeclared variable " + lex_[i].get_text());
+void SemanticAnalyzer::PrintFunction() {
+        std::cout << "End of code reached" << std::endl;
+        std::cout << "Semantic function signatures:" << std::endl;
+        for (const auto& [name, types] : functionSignatures_) {
+            std::cout << name << "(";
+            for (size_t i = 0; i < types.size(); i++) {
+                std::cout << types[i];
+                if (i < types.size() - 1) {
+                    std::cout << ", ";
                 }
             }
-            */
-    }
-
-    for (int i = 0; i < variables.size(); ++i) {
-      while (get<2>(variables[i]) == "true" ||
-             get<2>(variables[i]) == "false") {
-        variables.erase(variables.begin() + i);
-      }
-    }
-
-    for (int i = 0; i < variables.size(); ++i) {
-      // std::cout << get<0>(variables[i]) << " " << get<1>(variables[i]) << " " << get<2>(variables[i]) << std::endl;
-      for (int j = 0; j < WorkWords.size(); ++j) {
-        if (get<2>(variables[i]) == WorkWords[j]) {
-          throw std::runtime_error("Impossible variable name (KEYWORD): " +
-                                   get<2>(variables[i]));
-          return false;
+            std::cout << ")" << std::endl;
         }
-      }
-    }
+}
 
-    std::map<std::string, bool> vised;
-
-    for (int i = 0; i < variables.size(); ++i) {
-      if (get<1>(variables[i]) == "USING" ||
-          get<1>(variables[i]) == "ASSIGNMENT") {
-        // std::cout << get<1>(variables[i]) << " " << get<2>(variables[i]) << "\n";
-        if (!vised[get<2>(variables[i])]) {
-          // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
-          throw std::runtime_error("Using undeclared variable: " +
-                                   get<2>(variables[i]));
-        }
-      } else {
-        if (i > 0) {
-          if (get<0>(variables[i]) < get<0>(variables[i - 1])) {
-            for (int j = i - 1;
-                 j >= 0 && get<0>(variables[j]) == get<0>(variables[i - 1]);
-                 --j) {
-              if (get<1>(variables[j]) != "ASSIGNMENT" &&
-                  get<1>(variables[j]) != "USING" &&
-                  get<1>(variables[j]) != "NONE_TYPE") {
-                vised[get<2>(variables[j])] = false;
-              }
-            }
-          }
-        }
-        if (vised[get<2>(variables[i])]) {
-          // std::cout << "err " << vised[get<2>(variables[i])] << std::endl;
-          throw std::runtime_error("Redeclaring an existing variable: " +
-                                   get<2>(variables[i]));
+void SemanticAnalyzer::AnalyzeStatement() {
+    if (curLex_.get_type() == "KEYWORD") {
+        auto keyword = curLex_.get_text();
+        if (keyword == "def") {
+            AnalyzeFunction();
+        } else if (keyword == "int" || keyword == "float" || keyword == "string") {
+            AnalyzeVariableDeclaration();
+        } else if (keyword == "print") {
+            AnalyzePrint();
+        } else if (keyword == "return") {
+            GetLexem();
+            AnalyzeExpression();
         } else {
-          // std::cout << "not vised " << get<2>(variables[i]) << std::endl;
+            throw std::runtime_error("Invalid keyword: " + keyword + "\nOn line: " + std::to_string(curLex_.get_line()));
         }
-        if (get<0>(variables[i]) > -1000000) {
-          vised[get<2>(variables[i])] = true;
+    }
+    GetLexem();
+}
+
+void SemanticAnalyzer::AnalyzeFunction() {
+    GetLexem();
+    if (curLex_.get_type() != "IDENTIFIER") {
+        throw std::runtime_error("Invalid function name: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
+    }
+    std::string funcName = curLex_.get_text();
+    GetLexem();
+    if (curLex_.get_text() != "(") {
+        throw std::runtime_error("Expected '(' after function name, got: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    std::vector<std::string> argTypes;
+    while (curLex_.get_text() != ")") {
+        if (curLex_.get_type() != "KEYWORD") {
+            throw std::runtime_error("Invalid argument type: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
         }
+        argTypes.push_back(curLex_.get_text());
+        GetLexem();
+        GetLexem();
+        if (curLex_.get_text() != "," && curLex_.get_text() != ")") {
+            throw std::runtime_error("Expected ',' or ')' after argument type. \nOn line: " + std::to_string(curLex_.get_line()));
+        }
+        if (curLex_.get_text() == ",") {
+            GetLexem();
+        }
+    }
+    GetLexem();
+    functionSignatures_[funcName] = argTypes;
+    if (curLex_.get_text() != ":") {
+        throw std::runtime_error("Expected ':' after function signature \n On line: " + std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    GetLexem();
+    if (curLex_.get_type() != "INDENT") {
+        throw std::runtime_error("Expected indented block after function declaration \nOn line: " + std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+    
+    while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+        AnalyzeStatement();
+    }
+    
+    if (curLex_.get_type() == "DEDENT") {
+        GetLexem();
+    }
+}
+
+void SemanticAnalyzer::AnalyzeVariableDeclaration() {
+  auto type = curLex_.get_text();
+  GetLexem();
+  if (curLex_.get_type() != "IDENTIFIER") {
+    throw std::runtime_error("Invalid variable name: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
+  }
+  if (variables_.find(curLex_.get_text()) != variables_.end()) {
+    throw std::runtime_error("Variable redefinition: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
+  }
+  std::string varName = curLex_.get_text();
+  GetLexem();
+  if (curLex_.get_text() == "[") {
+    GetLexem();
+    AnalyzeExpression();
+    if (curLex_.get_text() != "]") {
+      throw std::runtime_error("Expected ']' after array size \n On line: " + std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+  }
+  if (curLex_.get_text() == "=") {
+    GetLexem();
+    if ((type == "int" || type == "float") && curLex_.get_type() == "STRING") {
+      throw std::runtime_error("Cannot assign string to " + type + " variable: " + varName + "\nOn line: " + std::to_string(curLex_.get_line()));
+    }
+    AnalyzeExpression();
+  }
+  variables_[varName] = type;
+  GetLexem();
+}
+
+void SemanticAnalyzer::AnalyzeExpression() {
+  std::string leftType;
+  while (curLex_.get_type() != "NEWLINE" && curLex_.get_text() != ";" &&
+       curLex_.get_text() != ")" && curLex_.get_text() != "," &&
+       curLex_.get_text() != "]" && curLex_.get_type() != "EOC" &&
+       curLex_.get_text() != "}") {
+    
+    if (curLex_.get_type() == "IDENTIFIER") {
+      if (variables_.find(curLex_.get_text()) == variables_.end()) {
+        throw std::runtime_error("Undefined variable: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
       }
+      leftType = variables_[curLex_.get_text()];
+    } else if (curLex_.get_type() == "NUMBER") {
+      leftType = curLex_.get_text().find('.') != std::string::npos ? "float" : "int";
+    } else if (curLex_.get_type() == "STRING") {
+      leftType = "string";
     }
 
-    for (int i = 0; i < variables.size(); ++i) {
-      if (get<1>(variables[i]) == "ASSIGNMENT") {
-        for (int j = 0; j < i; ++j) {
-          if (get<2>(variables[i]) == get<2>(variables[j]) &&
-              get<1>(variables[j]) == "def") {
-            throw std::runtime_error(
-                "You cannot equate the value of the function " +
-                get<2>(variables[i]) + " to anything");
-          }
+    GetLexem();
+    
+    if (curLex_.get_text() == "+") {
+      GetLexem();
+      std::string rightType;
+      
+      if (curLex_.get_type() == "IDENTIFIER") {
+        if (variables_.find(curLex_.get_text()) == variables_.end()) {
+          throw std::runtime_error("Undefined variable: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
         }
+        rightType = variables_[curLex_.get_text()];
+      } else if (curLex_.get_type() == "NUMBER") {
+        rightType = curLex_.get_text().find('.') != std::string::npos ? "float" : "int";
+      } else if (curLex_.get_type() == "STRING") {
+        rightType = "string";
+      }
+
+      if (leftType != rightType && !(leftType == "float" && rightType == "int") && 
+        !(leftType == "int" && rightType == "float")) {
+        throw std::runtime_error("Type mismatch in addition: cannot add " + 
+                     leftType + " and " + rightType + "\nOn line: " + std::to_string(curLex_.get_line()));
       }
     }
   }
+}
 
-  // Analyzing variables (connecting types)
-  {
-    std::vector<std::vector<Lexem>> LinesLexems = {{}};
-    int LineNum = 0;
-    for (int i = 0; i < lex_.size(); ++i) {
-      if (lex_[i].get_type() == "NEWLINE") {
-        LinesLexems.push_back({});
-      } else {
-        LinesLexems[LineNum].push_back(lex_[i]);
-      }
-      // LinesLexems.push_back();
+void SemanticAnalyzer::AnalyzePrint() {
+    GetLexem();
+    if (curLex_.get_text() != "(") {
+        throw std::runtime_error("Expected '(' after print \n On line: " + std::to_string(curLex_.get_line()));
     }
-  }
-
-  return true;
+    GetLexem();
+    std::vector<std::string> argTypes;
+    while (curLex_.get_text() != ")") {
+        if (curLex_.get_type() != "IDENTIFIER" && curLex_.get_type() != "NUMBER" && curLex_.get_type() != "STRING") {
+            throw std::runtime_error("Invalid argument for print: " + curLex_.get_text() + "\nOn line: " + std::to_string(curLex_.get_line()));
+        }
+        argTypes.push_back(curLex_.get_type());
+        GetLexem();
+        if (curLex_.get_text() != "," && curLex_.get_text() != ")") {
+            throw std::runtime_error("Expected ',' or ')' after argument \n On line: " + std::to_string(curLex_.get_line()));
+        }
+        if (curLex_.get_text() == ",") {
+            GetLexem();
+        }
+    }
+    GetLexem();
 }

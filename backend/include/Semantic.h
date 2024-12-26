@@ -1,23 +1,30 @@
-#ifndef BACKEND_SEMANTIC_H
-#define BACKEND_SEMANTIC_H
 #include <vector>
+#include <string>
+#include <map>
+#include <stdexcept>
 #include "Lexem.h"
 
-/**
- * @brief Class responsible for performing semantic analysis on lexems
- * 
- * The Semantic class takes a vector of lexems and provides functionality
- * to analyze them for semantic correctness according to the language rules.
- */
-class Semantic {
- public:
-  explicit Semantic(std::vector<Lexem> lexems) { lex_ = lexems; };
+class SemanticAnalyzer {
+public:
+    SemanticAnalyzer(std::vector<Lexem>& lexems);
 
-  bool Analyze();
-  int GetLine(int index);
+    void Analyze();    
+    void PrintFunction();
 
- private:
-  std::vector<Lexem> lex_;
+private:
+    Lexem curLex_;
+    void GetLexem();
+    size_t index = 0;
+    std::vector<Lexem> lexems_;
+    std::map <std::string, std::string> variables_;
+    std::map<std::string, std::vector<std::string>> functionSignatures_;
+    void CheckFunctionCall(const std::string& funcName,
+                           const std::vector<std::string>& argTypes);
+    void CheckIndentation(const std::vector<std::string>& lines);
+    void AnalyzeProgram();
+    void AnalyzeStatement();
+    void AnalyzeFunction();
+    void AnalyzeVariableDeclaration();
+    void AnalyzeExpression();
+    void AnalyzePrint();
 };
-
-#endif  //BACKEND_SEMANTIC_H

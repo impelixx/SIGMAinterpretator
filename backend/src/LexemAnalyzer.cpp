@@ -25,6 +25,7 @@ LexemAnalyzer::LexemAnalyzer(const std::string& code,
                              const std::string& pathToKeywords)
     : code_(code), ch_('\0'), index_(0), currentPosition_(0) {
   indentStack_.push_back(0);
+  curLine_ = 1;
   std::ifstream keywords(pathToKeywords);
   if (!keywords.is_open()) {
     throw std::runtime_error("Failed to open file '../test/workword.txt'");
@@ -82,7 +83,6 @@ void LexemAnalyzer::SkipWhitespace() {
       if (ch_ == '\n') {
         lexems_.emplace_back(
             Lexem(LexemType::NEWLINE, "\\n", index_ - 1, index_, curLine_));
-        curLine_++;
         GetNextChar();
         int indent = 0;
         while (ch_ == ' ') {
