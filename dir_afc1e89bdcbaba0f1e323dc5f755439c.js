@@ -9,7 +9,7 @@ var dir_afc1e89bdcbaba0f1e323dc5f755439c =
       [ "LexemAnalyzer", "classLexemAnalyzer.html", "classLexemAnalyzer" ]
     ] ],
     [ "Semantic.h", "Semantic_8h.html", [
-      [ "Semantic", "classSemantic.html", "classSemantic" ]
+      [ "SemanticAnalyzer", "classSemanticAnalyzer.html", "classSemanticAnalyzer" ]
     ] ],
     [ "SyntaxAnalyzer.h", "SyntaxAnalyzer_8h.html", [
       [ "SyntaxAnalyzer", "classSyntaxAnalyzer.html", "classSyntaxAnalyzer" ]

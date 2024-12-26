@@ -6,6 +6,5 @@ var searchData=
   ['get_5ftext_70',['get_text',['../classLexem.html#a2b77d2a63f903f43ea6f0d7960bcf6d7',1,'Lexem']]],
   ['get_5ftype_71',['get_type',['../classLexem.html#ab8ff98afb44dcd8c16b2b5664e30215e',1,'Lexem']]],
   ['getcurrentposition_72',['GetCurrentPosition',['../classLexemAnalyzer.html#abf47482494fcf938689e5fa41ec41250',1,'LexemAnalyzer']]],
-  ['getlexems_73',['GetLexems',['../classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b',1,'LexemAnalyzer']]],
-  ['getline_74',['GetLine',['../classSemantic.html#a420811a3c7900990220b470ff6f54d98',1,'Semantic']]]
+  ['getlexems_73',['GetLexems',['../classLexemAnalyzer.html#a4ae9c730cc2325674eaae4e37434805b',1,'LexemAnalyzer']]]
 ];

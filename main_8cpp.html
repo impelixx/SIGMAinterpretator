@@ -89,29 +89,31 @@ $(document).ready(function(){initNavTree('main_8cpp.html',''); initResizable(); 
 <div class="title">main.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="Semantic_8h_source.html">Semantic.h</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="SyntaxAnalyzer_8h_source.html">SyntaxAnalyzer.h</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="SyntaxAnalyzer_8h_source.html">SyntaxAnalyzer.h</a>&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;sstream&gt;</code><br />
 <code>#include &quot;<a class="el" href="LexemAnalyzer_8h_source.html">LexemAnalyzer.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Semantic_8h_source.html">Semantic.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for main.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="main_8cpp__incl.png" border="0" usemap="#abackend_2src_2main_8cpp" alt=""/></div>
 <map name="abackend_2src_2main_8cpp" id="abackend_2src_2main_8cpp">
-<area shape="rect" title=" " alt="" coords="230,5,393,32"/>
-<area shape="rect" href="Semantic_8h.html" title=" " alt="" coords="195,80,289,107"/>
-<area shape="rect" title=" " alt="" coords="79,304,159,331"/>
-<area shape="rect" href="SyntaxAnalyzer_8h.html" title=" " alt="" coords="36,80,171,107"/>
-<area shape="rect" title=" " alt="" coords="472,80,545,107"/>
-<area shape="rect" title=" " alt="" coords="570,80,645,107"/>
-<area shape="rect" href="LexemAnalyzer_8h.html" title="Header file containing the LexemAnalyzer class for lexical analysis of code." alt="" coords="314,80,447,107"/>
-<area shape="rect" title=" " alt="" coords="141,155,204,181"/>
-<area shape="rect" href="Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="203,229,281,256"/>
-<area shape="rect" title=" " alt="" coords="394,229,453,256"/>
-<area shape="rect" href="Bor_8h.html" title="Implementation of a trie (prefix tree) data structure for string matching." alt="" coords="331,155,385,181"/>
-<area shape="rect" title=" " alt="" coords="309,229,369,256"/>
+<area shape="rect" title=" " alt="" coords="261,5,424,32"/>
+<area shape="rect" href="SyntaxAnalyzer_8h.html" title=" " alt="" coords="47,80,182,107"/>
+<area shape="rect" title=" " alt="" coords="5,304,85,331"/>
+<area shape="rect" title=" " alt="" coords="483,80,557,107"/>
+<area shape="rect" title=" " alt="" coords="581,80,656,107"/>
+<area shape="rect" href="LexemAnalyzer_8h.html" title="Header file containing the LexemAnalyzer class for lexical analysis of code." alt="" coords="207,80,340,107"/>
+<area shape="rect" href="Semantic_8h.html" title=" " alt="" coords="365,80,459,107"/>
+<area shape="rect" title=" " alt="" coords="134,155,197,181"/>
+<area shape="rect" href="Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="57,229,135,256"/>
+<area shape="rect" title=" " alt="" coords="345,229,404,256"/>
+<area shape="rect" href="Bor_8h.html" title="Implementation of a trie (prefix tree) data structure for string matching." alt="" coords="273,155,327,181"/>
+<area shape="rect" title=" " alt="" coords="261,229,321,256"/>
+<area shape="rect" title=" " alt="" coords="403,155,453,181"/>
+<area shape="rect" title=" " alt="" coords="529,155,615,181"/>
 </map>
 </div>
 </div>
@@ -167,12 +169,12 @@ Functions</h2></td></tr>
 <li>Validates command line arguments</li>
 <li>Opens and reads the code file</li>
 <li>Performs lexical analysis using <a class="el" href="classLexemAnalyzer.html" title="A lexical analyzer that breaks source code into lexical tokens (lexemes)">LexemAnalyzer</a></li>
-<li>Performs semantic analysis using <a class="el" href="classSemantic.html" title="Class responsible for performing semantic analysis on lexems.">Semantic</a> analyzer</li>
+<li>Performs semantic analysis using Semantic analyzer</li>
 </ol>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::runtime_error</td><td>if code file cannot be opened </td></tr>
-    <tr><td class="paramname">Any</td><td>exceptions from <a class="el" href="classLexemAnalyzer.html" title="A lexical analyzer that breaks source code into lexical tokens (lexemes)">LexemAnalyzer</a> or <a class="el" href="classSemantic.html" title="Class responsible for performing semantic analysis on lexems.">Semantic</a> analysis </td></tr>
+    <tr><td class="paramname">Any</td><td>exceptions from <a class="el" href="classLexemAnalyzer.html" title="A lexical analyzer that breaks source code into lexical tokens (lexemes)">LexemAnalyzer</a> or Semantic analysis </td></tr>
   </table>
   </dd>
 </dl>
@@ -203,18 +205,18 @@ Functions</h2></td></tr>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;Lexem&gt; lexems = lexer.GetLexems();</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classSyntaxAnalyzer.html">SyntaxAnalyzer</a> syntaxer(lexems);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    syntaxer.Analyze();</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classSemantic.html">Semantic</a> semantic(lexems);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classSemanticAnalyzer.html">SemanticAnalyzer</a> semantic(lexems);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    semantic.Analyze();</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    semantic.PrintFunction();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    std::cout &lt;&lt; <span class="stringliteral">&quot;Code analysis completed successfully!&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  }</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
 <div class="ttc" id="aclassLexemAnalyzer_html"><div class="ttname"><a href="classLexemAnalyzer.html">LexemAnalyzer</a></div><div class="ttdoc">A lexical analyzer that breaks source code into lexical tokens (lexemes)</div><div class="ttdef"><b>Definition:</b> <a href="LexemAnalyzer_8h_source.html#l00046">LexemAnalyzer.h:46</a></div></div>
-<div class="ttc" id="aclassSemantic_html"><div class="ttname"><a href="classSemantic.html">Semantic</a></div><div class="ttdoc">Class responsible for performing semantic analysis on lexems.</div><div class="ttdef"><b>Definition:</b> <a href="Semantic_8h_source.html#l00012">Semantic.h:12</a></div></div>
+<div class="ttc" id="aclassSemanticAnalyzer_html"><div class="ttname"><a href="classSemanticAnalyzer.html">SemanticAnalyzer</a></div><div class="ttdoc">Analyzes the semantics of a given set of lexems.</div><div class="ttdef"><b>Definition:</b> <a href="Semantic_8h_source.html#l00088">Semantic.h:88</a></div></div>
 <div class="ttc" id="aclassSyntaxAnalyzer_html"><div class="ttname"><a href="classSyntaxAnalyzer.html">SyntaxAnalyzer</a></div><div class="ttdoc">A syntax analyzer for parsing and validating program syntax.</div><div class="ttdef"><b>Definition:</b> <a href="SyntaxAnalyzer_8h_source.html#l00037">SyntaxAnalyzer.h:37</a></div></div>
 </div><!-- fragment -->
 </div>
