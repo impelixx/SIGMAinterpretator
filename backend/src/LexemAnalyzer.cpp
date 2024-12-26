@@ -605,7 +605,7 @@ void LexemAnalyzer::AnalyzeIfStatement() {
  * @note The method internally uses GetNextChar() and SkipWhitespace() for character processing
  */
 void LexemAnalyzer::AnalyzeElseStatement() {
-  GetNextChar();
+  //GetNextChar();
   SkipWhitespace();
   if (ch_ == ':') {
     lexems_.emplace_back(Lexem(LexemType::OPERATOR, ":", currentPosition_,

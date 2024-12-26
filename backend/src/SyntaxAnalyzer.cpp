@@ -1,822 +1,572 @@
 #include "SyntaxAnalyzer.h"
+#include <stdexcept>
 #include <string>
 
 /**
- * @brief Calculates the current line number in the source code based on newline lexemes
+ * @brief Advances to the next lexeme in the token stream
  * 
- * Iterates through lexemes from the beginning up to the current lexeme index,
- * counting the number of newline characters to determine the current line number.
- * 
- * @return std::string The current line number converted to string
- * 
- * @note Line counting starts from 1
+ * Retrieves the next lexeme from the lexical analysis results if available.
+ * Updates the current lexeme (curLex_) by incrementing the index counter.
+ * Does nothing if all lexemes have been processed (index >= lex.size()).
  */
-std::string SyntaxAnalyzer::NumLine() {
-  int index = LexemIndex;
-  int s = 1;
-  for (int i = 0; i < index; ++i) {
-    if (lex[i].get_type() == "NEWLINE") {
-      ++s;
-    }
+void SyntaxAnalyzer::GetLexem() {
+  if (index < lex.size()) {
+    curLex_ = lex[index++];
   }
-
-  return std::to_string(s);
 }
 
 /**
- * @brief Performs syntax analysis of the program
+ * @brief Initiates the syntax analysis process for the program.
  * 
- * This method initiates the syntax analysis process by calling AnalyzeProgram().
- * Currently always returns true regardless of analysis result.
- * 
- * @return Boolean value indicating whether analysis was completed (always true)
+ * This function starts the syntax analysis by fetching the first lexeme
+ * and then analyzing the program structure according to the grammar rules.
+ * It serves as the entry point for the entire syntax analysis process.
  */
-bool SyntaxAnalyzer::Analyze() {
+void SyntaxAnalyzer::Analyze() {
+  GetLexem();
   AnalyzeProgram();
-  return true;
 }
 
-bool SyntaxAnalyzer::AnalyzeProgram() {
-  AnalyzeStatementList();
-  return true;
-}
-
-bool SyntaxAnalyzer::AnalyzeStatementList() {
-  bool b = false;
-  bool c = AnalyzeStatement();
-  while (c) {
-    b = b || c;
-    c = AnalyzeStatement();
+/**
+ * @brief Analyzes the program by processing statements until the end of code is reached.
+ * 
+ * This method iteratively processes statements in the program by calling AnalyzeStatement()
+ * for each statement until it encounters the end of code (EOC) token. It serves as the
+ * main entry point for syntax analysis of the entire program.
+ * 
+ * @throws May throw syntax analysis related exceptions if invalid syntax is encountered
+ */
+void SyntaxAnalyzer::AnalyzeProgram() {
+  while (curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
   }
-  b = b || c;
-  return b;
 }
 
-bool SyntaxAnalyzer::AnalyzeStatement() {
-  return AnalyzeFunctionDeclaration() || AnalyzeVariableDeclaration() ||
-         AnalyzeAssignment() || AnalyzeIfStatement() ||
-         AnalyzeWhileStatement() || AnalyzeDoWhileStatement() ||
-         AnalyzeForStatement() || AnalyzePrintStatement() ||
-         AnalyzeReturnStatement() || AnalyzeEmptyStatement();
-}
-
-bool SyntaxAnalyzer::AnalyzeEmptyStatement() {
-  if (lex[LexemIndex].get_text() == ";" ||
-      lex[LexemIndex].get_type() == "NEWLINE") {
-    ++LexemIndex;
-    return true;
+/**
+ * @brief Analyzes a single statement in the source code and directs to appropriate analysis functions
+ * 
+ * This method handles different types of statements including:
+ * - Empty lines and indentation changes
+ * - Variable assignments
+ * - Function declarations
+ * - Control flow statements (if, while, for)
+ * - Print statements
+ * - Return statements
+ * - Variable declarations
+ * - Break and continue statements
+ * 
+ * @throws std::runtime_error If an unexpected keyword is encountered
+ */
+void SyntaxAnalyzer::AnalyzeStatement() {
+  if (curLex_.get_type() == "NEWLINE" || curLex_.get_type() == "INDENT" ||
+      curLex_.get_type() == "DEDENT") {
+    GetLexem();
+    return;
   }
-  return false;
+
+  if (curLex_.get_type() != "KEYWORD") {
+    AnalyzeAssignment();
+    return;
+  }
+
+  std::string keyword = curLex_.get_text();
+  if (keyword == "def") {
+    AnalyzeFunctionDeclaration();
+  } else if (keyword == "if") {
+    AnalyzeIfStatement();
+  } else if (keyword == "while") {
+    AnalyzeWhileStatement();
+  } else if (keyword == "for") {
+    AnalyzeForStatement();
+  } else if (keyword == "print") {
+    AnalyzePrintStatement();
+  } else if (keyword == "return") {
+    AnalyzeReturnStatement();
+  } else if (keyword == "else") {
+    AnalyzeElseStatement();
+  } else if (IsType(keyword)) {
+    AnalyzeVariableDeclaration();
+  } else if (keyword == "break" || keyword == "continue") {
+    GetLexem();
+  } else {
+    throw std::runtime_error("Unexpected keyword: " + keyword + " at line " +
+                             std::to_string(curLex_.get_line()));
+  }
 }
 
-bool SyntaxAnalyzer::AnalyzeFunctionDeclaration() {
-  int LastLexemIndex = LexemIndex;
+/**
+ * @brief Analyzes the syntax of an 'else' statement block in the code
+ * @throws std::runtime_error If ':' is missing after 'else'
+ * @throws std::runtime_error If the else block is not properly indented
+ * 
+ * This method handles the parsing of else statement blocks by:
+ * 1. Verifying the presence of ':' after 'else'
+ * 2. Checking for proper indentation of the else block
+ * 3. Processing all statements within the else block until a DEDENT or EOC is encountered
+ * 
+ * The method expects the current lexeme to be positioned at 'else' when called.
+ */
+void SyntaxAnalyzer::AnalyzeElseStatement() {
+  GetLexem();
+  if (curLex_.get_text() != ":") {
+    throw std::runtime_error("Expected ':' after 'else' at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
 
-  if (lex[LexemIndex].get_text() == "def") {
-    ++LexemIndex;
-    if (AnalyzeIdentifier()) {  // тут делаем ++LexemIndex
-      if (lex[LexemIndex].get_text() == "(") {
-        ++LexemIndex;
-        if (AnalyzeParameterList()) {  // тут делаем ++LexemIndex
-          if (lex[LexemIndex].get_text() == ")") {
-            ++LexemIndex;
-            if (lex[LexemIndex].get_text() == ":") {
-              ++LexemIndex;
-              if (lex[LexemIndex].get_type() == "NEWLINE") {
-                ++LexemIndex;
-                if (lex[LexemIndex].get_type() == "INDENT") {
-                  ++LexemIndex;
-                  if (AnalyzeStatementList()) {
-                    if (lex[LexemIndex].get_type() == "DEDENT") {
-                      ++LexemIndex;
-                      return true;
-                    } else {
-                      LexemIndex = LastLexemIndex;
-                      throw std::runtime_error(
-                          "Error in AnalyzeFunctionDeclaration() error in " +
-                          NumLine() + " line");
-                      return false;
-                    }
-                  } else {
-                    LexemIndex = LastLexemIndex;
-                    throw std::runtime_error(
-                        "Error in AnalyzeFunctionDeclaration() error in " +
-                        NumLine() + " line");
-                    return false;
-                  }
-                } else {
-                  LexemIndex = LastLexemIndex;
-                  throw std::runtime_error(
-                      "Error in AnalyzeFunctionDeclaration() error in " +
-                      NumLine() + " line");
-                  return false;
-                }
-              } else {
-                LexemIndex = LastLexemIndex;
-                throw std::runtime_error(
-                    "Error in AnalyzeFunctionDeclaration() error in " +
-                    NumLine() + " line");
-                return false;
-              }
-            } else {
-              LexemIndex = LastLexemIndex;
-              throw std::runtime_error(
-                  "Error in AnalyzeFunctionDeclaration() error in " +
-                  NumLine() + " line");
-              return false;
-            }
-          } else {
-            LexemIndex = LastLexemIndex;
-            throw std::runtime_error(
-                "Error in AnalyzeFunctionDeclaration() error in " + NumLine() +
-                " line");
-            return false;
-          }
-        } else {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error(
-              "Error in AnalyzeFunctionDeclaration() error in " + NumLine() +
-              " line");
-          return false;
+  if (curLex_.get_type() == "NEWLINE") {
+    GetLexem();
+  }
+
+  if (curLex_.get_type() != "INDENT") {
+    throw std::runtime_error(
+        "Expected indented block in else statement at line " +
+        std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
+  }
+
+  if (curLex_.get_type() == "DEDENT") {
+    GetLexem();
+  }
+}
+
+/**
+ * @brief Analyzes variable declarations in the source code, including arrays and initializations.
+ * 
+ * This method processes variable declarations following this pattern:
+ * - Type identifier;
+ * - Type identifier[size];
+ * - Type identifier = expression;
+ * - Type identifier[size] = {element1, element2, ...};
+ * 
+ * The method handles:
+ * - Basic variable declarations
+ * - Array declarations with computed size expressions
+ * - Direct variable initialization
+ * - Array initialization with multiple elements
+ * 
+ * @throws std::runtime_error If:
+ *         - An identifier is missing after the type
+ *         - A closing bracket ']' is missing in array declaration
+ *         - A closing brace '}' is missing in array initialization
+ */
+void SyntaxAnalyzer::AnalyzeVariableDeclaration() {
+  std::string type = curLex_.get_text();
+  GetLexem();
+  if (curLex_.get_type() != "IDENTIFIER") {
+    throw std::runtime_error("Expected identifier after type at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  if (curLex_.get_text() == "[") {
+    std::cout << "Array declaration" << std::endl;
+    GetLexem();
+
+    std::cout << "Array size expression starts with: " << curLex_.get_text()
+              << std::endl;
+    AnalyzeExpression();
+
+    if (curLex_.get_text() != "]") {
+      throw std::runtime_error("Expected ']' in array declaration at line " +
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+  }
+
+  if (curLex_.get_text() == "=") {
+    GetLexem();
+    if (curLex_.get_text() == "{") {
+      GetLexem();
+
+      while (curLex_.get_text() != "}" && curLex_.get_type() != "EOC") {
+        AnalyzeExpression();
+        if (curLex_.get_text() == ",") {
+          GetLexem();
         }
-      } else {
-        LexemIndex = LastLexemIndex;
+      }
+
+      if (curLex_.get_text() != "}") {
         throw std::runtime_error(
-            "Error in AnalyzeFunctionDeclaration() error in " + NumLine() +
-            " line");
-        return false;
+            "Expected '}' in array initialization at line " +
+            std::to_string(curLex_.get_line()));
       }
+      GetLexem();
     } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error(
-          "Error in AnalyzeFunctionDeclaration() error in " + NumLine() +
-          " line");
-      return false;
-    }
-  } else {
-    return false;
-  }
-}
-
-bool SyntaxAnalyzer::AnalyzeParameterList() {
-  int LastLexemIndex = LexemIndex;
-
-  if (lex[LexemIndex].get_text() == ")") {
-    return true;
-  }
-
-  if (lex[LexemIndex - 1].get_text() == "(") {
-    if (AnalyzeIdentifier()) {
-      while (lex[LexemIndex].get_text() == ",") {
-        ++LexemIndex;
-        if (!AnalyzeIdentifier()) {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error("Error in AnalyzeParameterList() error in " +
-                                   NumLine() + " line");
-          return false;
-        }
-      }
-
-      if (lex[LexemIndex].get_text() == ")") {
-        return true;
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeParameterList() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      return false;
+      AnalyzeExpression();
     }
   }
 
-  return false;
+  AnalyzeStatementTerminator();
 }
 
-bool SyntaxAnalyzer::AnalyzeVariableDeclaration() {
-  int LastLexemIndex = LexemIndex;
-  // Первый вариант: <Type> + <Identifier> + "=" + <Expression> + <StatementTerminator>
-  if (AnalyzeType()) {
-    if (AnalyzeIdentifier()) {
-      if (lex[LexemIndex].get_text() == "=") {
-        ++LexemIndex;
-        if (AnalyzeExpression()) {
-          if (AnalyzeStatementTerminator()) {
-            return true;
-          } else {
-            LexemIndex = LastLexemIndex;
-            throw std::runtime_error(
-                "Error in AnalyzeVariableDeclaration() (Terminator) error in " +
-                NumLine() + " line");
-            return false;
-          }
-        } else {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error(
-              "Error in AnalyzeVariableDeclaration() (Expression) error in " +
-              NumLine() + " line");
-          return false;
-        }
-      } else {
-        LexemIndex = LastLexemIndex;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      return false;
+/**
+ * @brief Analyzes a function declaration in the source code.
+ * 
+ * This method processes a function declaration by validating:
+ * - Function name (must be an identifier)
+ * - Opening parenthesis
+ * - Parameter list
+ * - Colon after parameters
+ * - Newline after colon
+ * - Proper indentation of function body
+ * - Function body statements
+ * 
+ * The method advances through tokens using GetLexem() and throws runtime_error 
+ * if the syntax does not match expected function declaration format.
+ * 
+ * The function processes statements within the function body until it encounters
+ * either a DEDENT token (end of function block) or EOC (end of code).
+ * 
+ * @throws std::runtime_error If any part of the function declaration syntax is invalid,
+ *         with specific error messages indicating the line number where the error occurred.
+ */
+void SyntaxAnalyzer::AnalyzeFunctionDeclaration() {
+  GetLexem();
+
+  if (curLex_.get_type() != "IDENTIFIER") {
+    throw std::runtime_error("Expected function name at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  if (curLex_.get_text() != "(") {
+    throw std::runtime_error("Expected '(' after function name at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  AnalyzeParameterList();
+
+  if (curLex_.get_text() != ":") {
+    throw std::runtime_error("Expected ':' after function parameters at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  if (curLex_.get_type() != "NEWLINE") {
+    throw std::runtime_error("Expected newline after ':' at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  if (curLex_.get_type() != "INDENT") {
+    throw std::runtime_error(
+        "Expected indented block after function declaration at line " +
+        std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
+  }
+
+  if (curLex_.get_type() == "DEDENT") {
+    GetLexem();
+  }
+}
+
+/**
+ * @brief Analyzes function parameter list in the source code.
+ * 
+ * This method processes function parameters between parentheses, verifying that:
+ * - Each parameter starts with a valid type
+ * - Each type is followed by a valid identifier (parameter name)
+ * - Parameters are properly separated by commas
+ * The method advances through lexemes until reaching the closing parenthesis.
+ * 
+ * @throws std::runtime_error If parameter type is invalid or parameter name is missing
+ */
+void SyntaxAnalyzer::AnalyzeParameterList() {
+  while (curLex_.get_text() != ")") {
+    if (!IsType(curLex_.get_text())) {
+      throw std::runtime_error("Expected type in parameter list at line " +
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+
+    if (curLex_.get_type() != "IDENTIFIER") {
+      throw std::runtime_error("Expected parameter name at line " +
+                               std::to_string(curLex_.get_line()));
+    }
+    GetLexem();
+
+    if (curLex_.get_text() == ",") {
+      GetLexem();
     }
   }
-
-  // Второй вариант: <Type> + <Identifier> + "[" + <Number> + "]" + "=" + <InitializerList> + <StatementTerminator>
-  if (AnalyzeType()) {
-    if (AnalyzeIdentifier()) {
-      if (lex[LexemIndex].get_text() == "[") {
-        ++LexemIndex;
-        if (AnalyzeExpression()) {
-          if (lex[LexemIndex].get_text() == "]") {
-            ++LexemIndex;
-            if (lex[LexemIndex].get_text() == "=") {
-              ++LexemIndex;
-              if (AnalyzeInitianalizerList()) {
-                if (AnalyzeStatementTerminator()) {
-                  return true;
-                } else {
-                  LexemIndex = LastLexemIndex;
-                  throw std::runtime_error(
-                      "Error in AnalyzeVariableDeclaration() (Terminator in "
-                      "[]) error in " +
-                      NumLine() + " line");
-                  return false;
-                }
-              } else {
-                LexemIndex = LastLexemIndex;
-                throw std::runtime_error(
-                    "Error in AnalyzeVariableDeclaration() (InitList {}) error "
-                    "in " +
-                    NumLine() + " line");
-                return false;
-              }
-            } else {
-              LexemIndex = LastLexemIndex;
-              throw std::runtime_error(
-                  "Error in AnalyzeVariableDeclaration() (in =) error in " +
-                  NumLine() + " line");
-              return false;
-            }
-          } else {
-            LexemIndex = LastLexemIndex;
-            throw std::runtime_error(
-                "Error in AnalyzeVariableDeclaration() (]) error in " +
-                NumLine() + " line");
-            return false;
-          }
-        } else {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error(
-              "Error in AnalyzeVariableDeclaration() ({NUMBER}) error in " +
-              NumLine() + " line");
-          return false;
-        }
-      } else {
-        LexemIndex = LastLexemIndex;
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      return false;
-    }
-  }
-
-  return false;
+  GetLexem();
 }
 
-bool SyntaxAnalyzer::AnalyzeInitianalizerList() {
-  int LastLexemIndex = LexemIndex;
-
-  if (lex[LexemIndex].get_text() == "{") {
-    ++LexemIndex;
-    if (AnalyzeExpression()) {
-      while (lex[LexemIndex].get_text() == ",") {
-        ++LexemIndex;
-        if (!AnalyzeExpression()) {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error(
-              "Error in AnalyzeInitianalizerList()(Cycle Expression) error "
-              "in " +
-              NumLine() + " line");
-          return false;
-        }
-      }
-      if (lex[LexemIndex].get_text() == "}") {
-        ++LexemIndex;
-        return true;
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error(
-            "Error in AnalyzeInitianalizerList() (}) error in " + NumLine() +
-            " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      return false;
-    }
-  }
-
-  return false;
+/**
+ * @brief Checks if a given word is a valid SIGMA type identifier.
+ * 
+ * @param word String to check against valid type identifiers.
+ * @return true if the word matches any of the valid types (int, float, bool, string, void)
+ * @return false otherwise
+ */
+bool SyntaxAnalyzer::IsType(const std::string& word) {
+  return word == "int" || word == "float" || word == "bool" ||
+         word == "string" || word == "void";
 }
 
-bool SyntaxAnalyzer::AnalyzeAssignment() {
-  int LastLexemIndex = LexemIndex;
-
-  if (AnalyzeIdentifier()) {
-    if (lex[LexemIndex].get_text() == "[") {
-      ++LexemIndex;
-      if (AnalyzeNumber()) {
-        if (lex[LexemIndex].get_text() == "]") {
-          ++LexemIndex;
-        } else {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error("Error in AnalyzeAssignment() error in " +
-                                   NumLine() + " line");
-          return false;
-        }
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeAssignment() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    }
-  } else {
-    LexemIndex = LastLexemIndex;
-    return false;
+void SyntaxAnalyzer::AnalyzeAssignment() {
+  if (curLex_.get_type() != "IDENTIFIER") {
+    throw std::runtime_error("Expected identifier at line " +
+                             std::to_string(curLex_.get_line()));
   }
+  GetLexem();
 
-  if (lex[LexemIndex].get_text() == "=") {
-    ++LexemIndex;
-  } else {
-    LexemIndex = LastLexemIndex;
-    throw std::runtime_error("Error in AnalyzeAssignment() error in " +
-                             NumLine() + " line");
-    return false;
+  if (curLex_.get_text() != "=") {
+    throw std::runtime_error("Expected '=' in assignment at line " +
+                             std::to_string(curLex_.get_line()));
   }
+  GetLexem();
 
-  if (!AnalyzeExpression()) {
-    LexemIndex = LastLexemIndex;
-    throw std::runtime_error("Error in AnalyzeAssignment() error in " +
-                             NumLine() + " line");
-    return false;
-  }
+  AnalyzeExpression();
+  AnalyzeStatementTerminator();
+}
 
-  if (AnalyzeStatementTerminator()) {
-    return true;
-  } else {
-    LexemIndex = LastLexemIndex;
-    throw std::runtime_error("Error in AnalyzeAssignment() error in " +
-                             NumLine() + " line");
-    return false;
+void SyntaxAnalyzer::AnalyzeExpression() {
+  std::cout << "Expression token: " << curLex_.get_text()
+            << " type: " << curLex_.get_type() << std::endl;
+
+  while (curLex_.get_type() != "NEWLINE" && curLex_.get_text() != ";" &&
+         curLex_.get_text() != ")" && curLex_.get_text() != "," &&
+         curLex_.get_text() != "]" && curLex_.get_type() != "EOC" &&
+         curLex_.get_text() != "}") {
+    GetLexem();
+    std::cout << "Next token: " << curLex_.get_text()
+              << " type: " << curLex_.get_type() << std::endl;
   }
 }
 
-bool SyntaxAnalyzer::AnalyzeIfStatement() {
-  int LastLexemIndex = LexemIndex;  // Сохраняем текущий индекс лексем
-
-  if (lex[LexemIndex].get_text() == "if") {
-    ++LexemIndex;
-    if (AnalyzeCaseExpression()) {
-      if (AnalyzeFieldView()) {
-        return true;
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeIfStatement() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzeIfStatement() error in " +
-                               NumLine() + " line");
-      return false;
-    }
+void SyntaxAnalyzer::AnalyzeStatementTerminator() {
+  if (curLex_.get_text() == ";") {
+    GetLexem();
   }
-
-  return false;
+  if (curLex_.get_type() == "NEWLINE") {
+    GetLexem();
+  }
 }
 
-bool SyntaxAnalyzer::AnalyzeWhileStatement() {
-  int LastLexemIndex = LexemIndex;
+void SyntaxAnalyzer::AnalyzeIfStatement() {
+  GetLexem();
 
-  if (lex[LexemIndex].get_text() == "while") {
-    ++LexemIndex;
-    if (AnalyzeCaseExpression()) {
-      if (AnalyzeFieldView()) {
-        return true;
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeWhileStatement() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzeWhileStatement() error in " +
-                               NumLine() + " line");
-      return false;
-    }
+  if (curLex_.get_text() != "(") {
+    throw std::runtime_error("Expected '(' after 'if' at line " +
+                             std::to_string(curLex_.get_line()));
   }
-  return false;
+  GetLexem();
+
+  AnalyzeExpression();
+  GetLexem();
+  if (curLex_.get_text() != ":") {
+    throw std::runtime_error("Expected ':' after if condition at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  if (curLex_.get_type() == "NEWLINE") {
+    GetLexem();
+  }
+
+  if (curLex_.get_type() != "INDENT") {
+    throw std::runtime_error(
+        "Expected indented block in if statement at line " +
+        std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
+  }
+
+  if (curLex_.get_type() == "DEDENT") {
+    GetLexem();
+  }
 }
 
-bool SyntaxAnalyzer::AnalyzeDoWhileStatement() {
-  int LastLexemIndex = LexemIndex;
+/**
+ * @brief Analyzes the syntax of a while statement in the source code.
+ * 
+ * This method processes a while loop construct following this pattern:
+ * while (condition):
+ *     statement(s)
+ * 
+ * The method expects:
+ * 1. Opening parenthesis after 'while'
+ * 2. A valid expression as the loop condition
+ * 3. A colon following the condition
+ * 4. An indented block containing the loop body statements
+ * 
+ * @throws std::runtime_error If the syntax is invalid:
+ *         - Missing opening parenthesis
+ *         - Missing colon after condition
+ *         - Missing indentation for the loop body
+ */
+void SyntaxAnalyzer::AnalyzeWhileStatement() {
+  GetLexem();  // Skip 'while'
 
-  if (lex[LexemIndex].get_text() == "do") {
-    ++LexemIndex;
-    if (AnalyzeFieldView()) {
-      if (lex[LexemIndex].get_text() == "while") {
-        ++LexemIndex;
-        if (AnalyzeCaseExpression()) {
-          if (AnalyzeStatementTerminator()) {
-            return true;
-          } else {
-            LexemIndex = LastLexemIndex;
-            throw std::runtime_error(
-                "Error in AnalyzeDoWhileStatement() error in " + NumLine() +
-                " line");
-            return false;
-          }
-        } else {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error(
-              "Error in AnalyzeDoWhileStatement() error in " + NumLine() +
-              " line");
-          return false;
-        }
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error(
-            "Error in AnalyzeDoWhileStatement() error in " + NumLine() +
-            " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzeDoWhileStatement() error in " +
-                               NumLine() + " line");
-      return false;
-    }
+  if (curLex_.get_text() != "(") {
+    throw std::runtime_error("Expected '(' after 'while' at line " +
+                             std::to_string(curLex_.get_line()));
   }
-  return false;
+  GetLexem();
+
+  AnalyzeExpression();
+
+  if (curLex_.get_text() != ":") {
+    throw std::runtime_error("Expected ':' after while condition at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  if (curLex_.get_type() == "NEWLINE") {
+    GetLexem();
+  }
+
+  if (curLex_.get_type() != "INDENT") {
+    throw std::runtime_error(
+        "Expected indented block in while statement at line " +
+        std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
+  }
+
+  if (curLex_.get_type() == "DEDENT") {
+    GetLexem();
+  }
 }
 
-bool SyntaxAnalyzer::AnalyzeForStatement() {
-  int LastLexemIndex = LexemIndex;
+/**
+ * @brief Analyzes the syntax of a 'for' loop statement in the source code.
+ * 
+ * This method handles the parsing of Python-style for loops with the following structure:
+ * for identifier in expression:
+ *     indented_block
+ *
+ * The method verifies:
+ * - Presence of an identifier after 'for' keyword
+ * - Presence of 'in' keyword after identifier
+ * - Valid expression after 'in'
+ * - Proper colon after the expression
+ * - Proper indentation of the loop body
+ * - Valid statements within the loop body
+ * - Proper dedentation after the loop body
+ *
+ * @throws std::runtime_error if any syntax rules are violated, with detailed error message
+ *         including the line number where the error occurred
+ */
+void SyntaxAnalyzer::AnalyzeForStatement() {
+  GetLexem();
 
-  if (lex[LexemIndex].get_text() == "for") {
-    ++LexemIndex;
-    if (AnalyzeType()) {
-      if (AnalyzeIdentifier()) {
-        if (lex[LexemIndex].get_text() == "in") {
-          ++LexemIndex;
-          if (lex[LexemIndex].get_text() == "(") {
-            ++LexemIndex;
-            if (AnalyzeNumber()) {
-              if (lex[LexemIndex].get_text() == ",") {
-                ++LexemIndex;
-                if (AnalyzeNumber()) {
-                  if (lex[LexemIndex].get_text() == ")") {
-                    ++LexemIndex;
-                    if (AnalyzeFieldView()) {
-                      return true;
-                    } else {
-                      LexemIndex = LastLexemIndex;
-                      throw std::runtime_error(
-                          "Error in AnalyzeForStatement() error in " +
-                          NumLine() + " line");
-                      return false;
-                    }
-                  } else {
-                    LexemIndex = LastLexemIndex;
-                    throw std::runtime_error(
-                        "Error in AnalyzeForStatement() error in " + NumLine() +
-                        " line");
-                    return false;
-                  }
-                } else {
-                  LexemIndex = LastLexemIndex;
-                  throw std::runtime_error(
-                      "Error in AnalyzeForStatement() error in " + NumLine() +
-                      " line");
-                  return false;
-                }
-              } else {
-                LexemIndex = LastLexemIndex;
-                throw std::runtime_error(
-                    "Error in AnalyzeForStatement() error in " + NumLine() +
-                    " line");
-                return false;
-              }
-            } else {
-              LexemIndex = LastLexemIndex;
-              throw std::runtime_error(
-                  "Error in AnalyzeForStatement() error in " + NumLine() +
-                  " line");
-              return false;
-            }
-          } else {
-            LexemIndex = LastLexemIndex;
-            throw std::runtime_error(
-                "Error in AnalyzeForStatement() error in " + NumLine() +
-                " line");
-            return false;
-          }
-        } else {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error("Error in AnalyzeForStatement() error in " +
-                                   NumLine() + " line");
-          return false;
-        }
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeForStatement() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzeForStatement() error in " +
-                               NumLine() + " line");
-      return false;
-    }
+  if (curLex_.get_type() != "IDENTIFIER") {
+    throw std::runtime_error("Expected identifier after 'for' at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  if (curLex_.get_text() != "in") {
+    throw std::runtime_error(
+        "Expected 'in' after identifier in for loop at line " +
+        std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  AnalyzeExpression();
+
+  if (curLex_.get_text() != ":") {
+    throw std::runtime_error("Expected ':' after for expression at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  if (curLex_.get_type() == "NEWLINE") {
+    GetLexem();
   }
 
-  return false;
+  if (curLex_.get_type() != "INDENT") {
+    throw std::runtime_error(
+        "Expected indented block in for statement at line " +
+        std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+    AnalyzeStatement();
+  }
+
+  if (curLex_.get_type() == "DEDENT") {
+    GetLexem();
+  }
 }
 
-bool SyntaxAnalyzer::AnalyzeFieldView() {
-  int LastLexemIndex = LexemIndex;
-  if (lex[LexemIndex].get_text() == ":") {
-    ++LexemIndex;
-    if (lex[LexemIndex].get_type() == "NEWLINE") {
-      ++LexemIndex;
-      if (lex[LexemIndex].get_type() == "INDENT") {
-        ++LexemIndex;
-        if (AnalyzeStatementList()) {
-          if (lex[LexemIndex].get_type() == "DEDENT") {
-            ++LexemIndex;
-            return true;
-          } else {
-            LexemIndex = LastLexemIndex;
-            throw std::runtime_error("Error in AnalyzeFieldView() error in " +
-                                     NumLine() + " line");
-            return false;
-          }
-        } else {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error("Error in AnalyzeFieldView() error in " +
-                                   NumLine() + " line");
-          return false;
-        }
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeFieldView() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzeFieldView() error in " +
-                               NumLine() + " line");
-      return false;
-    }
-  }
+/**
+ * @brief Analyzes the syntax of a print statement in the source code.
+ * 
+ * @details The method expects the following syntax structure:
+ *          print(expression);
+ *          
+ * The method validates:
+ * - Opening parenthesis after 'print' keyword
+ * - Expression to be printed
+ * - Closing parenthesis
+ * - Statement terminator (semicolon)
+ * 
+ * @throws std::runtime_error if the syntax is invalid:
+ *         - Missing opening parenthesis after 'print'
+ *         - Missing closing parenthesis after the expression
+ *         - Missing or invalid statement terminator
+ */
+void SyntaxAnalyzer::AnalyzePrintStatement() {
+  GetLexem();
 
-  return false;
+  if (curLex_.get_text() != "(") {
+    throw std::runtime_error("Expected '(' after 'print' at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  AnalyzeExpression();
+
+  if (curLex_.get_text() != ")") {
+    throw std::runtime_error("Expected ')' after print expression at line " +
+                             std::to_string(curLex_.get_line()));
+  }
+  GetLexem();
+
+  AnalyzeStatementTerminator();
 }
 
-bool SyntaxAnalyzer::AnalyzePrintStatement() {
-  int LastLexemIndex = LexemIndex;
+/**
+ * @brief Analyzes a return statement in the source code.
+ * 
+ * This method processes return statements in the following format:
+ * return [expression] NEWLINE
+ * 
+ * The method first gets the next lexeme after 'return'.
+ * If the next lexeme is not a newline, it analyzes the expression following 'return'.
+ * Finally, it processes the statement terminator (typically a newline).
+ * 
+ * Usage example:
+ * - return       // empty return
+ * - return x     // return with expression
+ * - return 1 + 2 // return with complex expression
+ */
+void SyntaxAnalyzer::AnalyzeReturnStatement() {
+  GetLexem();
 
-  if (lex[LexemIndex].get_text() == "print") {
-    ++LexemIndex;
-    if (lex[LexemIndex].get_text() == "(") {
-      ++LexemIndex;
-      if (AnalyzeExpression()) {
-        if (lex[LexemIndex].get_text() == ")") {
-          ++LexemIndex;
-          if (AnalyzeStatementTerminator()) {
-            return true;
-          } else {
-            LexemIndex = LastLexemIndex;
-            throw std::runtime_error(
-                "Error in AnalyzePrintStatement() error in " + NumLine() +
-                " line");
-            return false;
-          }
-        } else {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error(
-              "Error in AnalyzePrintStatement() error in " + NumLine() +
-              " line");
-          return false;
-        }
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzePrintStatement() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzePrintStatement() error in " +
-                               NumLine() + " line");
-      return false;
-    }
+  if (curLex_.get_type() != "NEWLINE") {
+    AnalyzeExpression();
   }
 
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeReturnStatement() {
-  int LastLexemIndex = LexemIndex;
-
-  if (lex[LexemIndex].get_text() == "return") {
-    ++LexemIndex;
-    if (AnalyzeCaseExpression()) {
-      if (AnalyzeStatementTerminator()) {
-        return true;
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeReturnStatement() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzeReturnStatement() error in " +
-                               NumLine() + " line");
-      return false;
-    }
-  }
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeCaseExpression() {
-  int LastLexemIndex = LexemIndex;
-
-  if (lex[LexemIndex].get_text() == "(") {
-    ++LexemIndex;
-    if (AnalyzeExpression()) {
-      while (lex[LexemIndex].get_text() == "and" ||
-             lex[LexemIndex].get_text() == "or") {
-        ++LexemIndex;
-        if (!AnalyzeExpression()) {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error(
-              "Error in AnalyzeCaseExpression() error in " + NumLine() +
-              " line");
-          return false;
-        }
-      }
-
-      if (lex[LexemIndex].get_text() == ")") {
-        ++LexemIndex;
-        return true;
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeCaseExpression() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzeCaseExpression() error in " +
-                               NumLine() + " line");
-      return false;
-    }
-  } else {
-    if (AnalyzeExpression()) {
-      while (lex[LexemIndex].get_text() == "and" ||
-             lex[LexemIndex].get_text() == "or") {
-        ++LexemIndex;
-        if (!AnalyzeExpression()) {
-          LexemIndex = LastLexemIndex;
-          throw std::runtime_error(
-              "Error in AnalyzeCaseExpression() error in " + NumLine() +
-              " line");
-          return false;
-        }
-      }
-    }
-  }
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeExpression() {
-  int LastLexemIndex = LexemIndex;
-
-  if (AnalyzeTerm()) {
-    while (lex[LexemIndex].get_text() == "+" ||
-           lex[LexemIndex].get_text() == "-") {
-      ++LexemIndex;
-      if (!AnalyzeTerm()) {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeExpression() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    }
-    return true;
-  }
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeTerm() {
-  int LastLexemIndex = LexemIndex;
-  if (AnalyzeFactor()) {
-    while (lex[LexemIndex].get_text() == "*" ||
-           lex[LexemIndex].get_text() == "/") {
-      ++LexemIndex;
-
-      if (!AnalyzeFactor()) {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeTerm() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    }
-    return true;
-  }
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeFactor() {
-  int LastLexemIndex = LexemIndex;
-
-  if (AnalyzeNumber()) {
-    return true;
-  }
-
-  if (AnalyzeIdentifier()) {
-    return true;
-  }
-
-  if (lex[LexemIndex].get_text() == "(") {
-    ++LexemIndex;
-    if (AnalyzeExpression()) {
-      if (lex[LexemIndex].get_text() == ")") {
-        ++LexemIndex;
-        return true;
-      } else {
-        LexemIndex = LastLexemIndex;
-        throw std::runtime_error("Error in AnalyzeFactor() error in " +
-                                 NumLine() + " line");
-        return false;
-      }
-    } else {
-      LexemIndex = LastLexemIndex;
-      throw std::runtime_error("Error in AnalyzeFactor() error in " +
-                               NumLine() + " line");
-      return false;
-    }
-  }
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeType() {
-  if (lex[LexemIndex].get_text() == "bool" ||
-      lex[LexemIndex].get_text() == "int" ||
-      lex[LexemIndex].get_text() == "float" ||
-      lex[LexemIndex].get_text() == "char" ||
-      lex[LexemIndex].get_text() == "string") {
-    ++LexemIndex;
-    return true;
-  }
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeIdentifier() {
-  if (lex[LexemIndex].get_type() == "IDENTIFIER") {
-    ++LexemIndex;
-    return true;
-  }
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeNumber() {
-  if (lex[LexemIndex].get_type() == "NUMBER") {
-    ++LexemIndex;
-    return true;
-  }
-  return false;
-}
-
-bool SyntaxAnalyzer::AnalyzeStatementTerminator() {
-  if (lex[LexemIndex].get_text() == ";" ||
-      lex[LexemIndex].get_type() == "NEWLINE") {
-    ++LexemIndex;
-    return true;
-  }
-  return false;
+  AnalyzeStatementTerminator();
 }
