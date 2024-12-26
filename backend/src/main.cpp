@@ -46,7 +46,6 @@ int main(int argc, char* argv[]) {
 
     LexemAnalyzer lexer(code, workwordsPath);
     lexer.Analyze();
-    lexer.PrintLexems();
     std::vector<Lexem> lexems = lexer.GetLexems();
     SyntaxAnalyzer syntaxer(lexems);
     syntaxer.Analyze();
