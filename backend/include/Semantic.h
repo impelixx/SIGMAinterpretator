@@ -1,9 +1,9 @@
 #pragma once
 
-#include <vector>
-#include <string>
 #include <map>
 #include <stdexcept>
+#include <string>
+#include <vector>
 #include "Lexem.h"
 
 /**
@@ -86,36 +86,36 @@
  * @param type The type of the variable.
  */
 class SemanticAnalyzer {
-public:
-    SemanticAnalyzer(std::vector<Lexem>& lexems);
-    void Analyze();
-    void PrintFunction();
+ public:
+  SemanticAnalyzer(std::vector<Lexem>& lexems);
+  void Analyze();
+  void PrintFunction();
 
-private:
-    // vars
-    Lexem curLex_;
-    size_t index = 0;
-    std::vector<Lexem> lexems_;
-    std::vector<std::map<std::string, std::string>> scopeStack_; 
-    std::map<std::string, std::vector<std::string>> functionSignatures_;
+ private:
+  // vars
+  Lexem curLex_;
+  size_t index = 0;
+  std::vector<Lexem> lexems_;
+  std::vector<std::map<std::string, std::string>> scopeStack_;
+  std::map<std::string, std::vector<std::string>> functionSignatures_;
 
-    // main analysis functions
-    void GetLexem();
-    void CheckFunctionCall(const std::string& funcName);
-    void AnalyzeProgram();
-    void AnalyzeStatement();
-    void AnalyzeFunction();
-    void AnalyzeVariableDeclaration();
-    void AnalyzeExpression();
-    void AnalyzePrint();
-    void AnalyzeWhile();
-    void AnalyzeIf();
-    void AnalyzeFor();
+  // main analysis functions
+  void GetLexem();
+  void CheckFunctionCall(const std::string& funcName);
+  void AnalyzeProgram();
+  void AnalyzeStatement();
+  void AnalyzeFunction();
+  void AnalyzeVariableDeclaration();
+  void AnalyzeExpression();
+  void AnalyzePrint();
+  void AnalyzeWhile();
+  void AnalyzeIf();
+  void AnalyzeFor();
 
-    // utility functions
-    void EnterScope();
-    void ExitScope();
-    bool IsVarDefined(const std::string &var);
-    std::string GetVarType(const std::string &var);
-    void AddVariable(const std::string &var, const std::string &type);
+  // utility functions
+  void EnterScope();
+  void ExitScope();
+  bool IsVarDefined(const std::string& var);
+  std::string GetVarType(const std::string& var);
+  void AddVariable(const std::string& var, const std::string& type);
 };

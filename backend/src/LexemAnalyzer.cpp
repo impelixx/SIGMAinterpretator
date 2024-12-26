@@ -643,8 +643,8 @@ void LexemAnalyzer::AnalyzeForStatement() {
     GetNextChar();
   }
   if (word == "in") {
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", startPos,
-                               currentPosition_, curLine_));
+    lexems_.emplace_back(
+        Lexem(LexemType::KEYWORD, "in", startPos, currentPosition_, curLine_));
     SkipWhitespace();
   }
   word.clear();
