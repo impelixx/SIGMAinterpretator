@@ -142,6 +142,8 @@ void LexemAnalyzer::HandleIndentation(int currentIndent) {
       indentStack_.pop_back();
       lexems_.emplace_back(
           Lexem(LexemType::DEDENT, "DEDENT", index_, index_, curLine_));
+      lexems_.emplace_back(
+          Lexem(LexemType::NEWLINE, "\\n", index_, index_, curLine_));
       if (indentStack_.empty()) {
         throw std::runtime_error(
             "Indentation error: No matching indentation level.\n On line: " +
@@ -634,16 +636,32 @@ void LexemAnalyzer::AnalyzeForStatement() {
   SkipWhitespace();
   AnalyzeIdentifier();
   SkipWhitespace();
-  auto temp = "";
-  for (int i = 0; i < 2; i++) {
-    temp += ch_;
+  size_t startPos = currentPosition_;
+  std::string word;
+  while (isalnum(ch_) || ch_ == '_') {
+    word += ch_;
     GetNextChar();
   }
-  if (temp == "in") {
-    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", currentPosition_ - 2,
+  if (word == "in") {
+    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "in", startPos,
                                currentPosition_, curLine_));
+    SkipWhitespace();
+  }
+  word.clear();
+  while ((isalnum(ch_) || ch_ == '_') && ch_ != '(') {
+    word += ch_;
     GetNextChar();
-    AnalyzeArrayDeclaration();
+  }
+  if (word == "range") {
+    lexems_.emplace_back(Lexem(LexemType::KEYWORD, "range", startPos,
+                               currentPosition_, curLine_));
+    SkipWhitespace();
+    if (ch_ == '(') {
+      lexems_.emplace_back(Lexem(LexemType::BRACKET, "(", currentPosition_,
+                                 currentPosition_ + 1, curLine_));
+      GetNextChar();
+      AnalyzeExpression();
+    }
   }
 }
 

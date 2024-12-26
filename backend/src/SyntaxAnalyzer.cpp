@@ -317,6 +317,19 @@ void SyntaxAnalyzer::AnalyzeAssignment() {
   }
   GetLexem();
 
+  if (curLex_.get_text() == "(") {
+    GetLexem();
+    while (curLex_.get_text() != ")") {
+      AnalyzeExpression();
+      if (curLex_.get_text() == ",") {
+        GetLexem();
+      }
+    }
+    GetLexem();
+    AnalyzeStatementTerminator();
+    return;
+  }
+
   if (curLex_.get_text() != "=") {
     throw std::runtime_error("Expected '=' in assignment at line " +
                              std::to_string(curLex_.get_line()));
@@ -465,7 +478,6 @@ void SyntaxAnalyzer::AnalyzeForStatement() {
                              std::to_string(curLex_.get_line()));
   }
   GetLexem();
-
   if (curLex_.get_text() != "in") {
     throw std::runtime_error(
         "Expected 'in' after identifier in for loop at line " +
@@ -474,7 +486,7 @@ void SyntaxAnalyzer::AnalyzeForStatement() {
   GetLexem();
 
   AnalyzeExpression();
-
+  GetLexem();
   if (curLex_.get_text() != ":") {
     throw std::runtime_error("Expected ':' after for expression at line " +
                              std::to_string(curLex_.get_line()));

@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
 
     LexemAnalyzer lexer(code, workwordsPath);
     lexer.Analyze();
+    lexer.PrintLexems();
     std::vector<Lexem> lexems = lexer.GetLexems();
     SyntaxAnalyzer syntaxer(lexems);
     syntaxer.Analyze();
@@ -54,7 +55,6 @@ int main(int argc, char* argv[]) {
     semantic.PrintFunction();
     std::cout << "Code analysis completed successfully!" << std::endl;
     return 0;
-
   } catch (const std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;
     return 1;
