@@ -1,9 +1,9 @@
-#include <Semantic.h>
 #include <SyntaxAnalyzer.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include "LexemAnalyzer.h"
+#include "Semantic.h"
 
 /**
  * @brief Main entry point of the SIGMA interpreter program
@@ -49,11 +49,11 @@ int main(int argc, char* argv[]) {
     std::vector<Lexem> lexems = lexer.GetLexems();
     SyntaxAnalyzer syntaxer(lexems);
     syntaxer.Analyze();
-    Semantic semantic(lexems);
+    SemanticAnalyzer semantic(lexems);
     semantic.Analyze();
-
+    semantic.PrintFunction();
+    std::cout << "Code analysis completed successfully!" << std::endl;
     return 0;
-
   } catch (const std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;
     return 1;
