@@ -408,7 +408,9 @@ void SemanticAnalyzer::AnalyzeFunction() {
  */
 void SemanticAnalyzer::AnalyzeVariableDeclaration() {
   auto type = curLex_.get_text();
-  GetLexem();
+  while (curLex_.get_type() == "KEYWORD") {
+    GetLexem();
+  }
   if (curLex_.get_type() != "IDENTIFIER") {
     throw std::runtime_error(
         "Invalid variable name: " + curLex_.get_text() +
