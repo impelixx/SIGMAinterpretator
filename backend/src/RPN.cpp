@@ -195,7 +195,7 @@ void RPN::buildIfRPN() {
 
 void RPN::buildWhileRPN() {
     buildRPNCell(RPNCell(CellType::LabelCell, "while_start"));
-    labels["while_start"] = startIndex;
+    labels["while_start"] = rpn_.size();
     getLexem();
     buildMathOperationRPN();
     RPNCell jumpCell(CellType::ConditionalJumpCell, "while_false");
