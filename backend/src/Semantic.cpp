@@ -523,7 +523,7 @@ void SemanticAnalyzer::AnalyzeExpression() {
  */
 void SemanticAnalyzer::AnalyzePrint() {
   GetLexem();
-  while(curLex_.get_type() == "KEYWORD") {
+  while (curLex_.get_type() == "KEYWORD") {
     GetLexem();
   }
   if (curLex_.get_text() != "(") {
