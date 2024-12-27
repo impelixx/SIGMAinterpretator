@@ -16,6 +16,7 @@ public:
     RPN(const std::vector<Lexem>& lexems);
     void buildRPN();
     void printRPN() const;
+    std::vector<RPNCell> getRPN();
 
 private:
     std::vector<Lexem> lexems_;

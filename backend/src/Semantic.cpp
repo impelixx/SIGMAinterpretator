@@ -523,6 +523,9 @@ void SemanticAnalyzer::AnalyzeExpression() {
  */
 void SemanticAnalyzer::AnalyzePrint() {
   GetLexem();
+  while(curLex_.get_type() == "KEYWORD") {
+    GetLexem();
+  }
   if (curLex_.get_text() != "(") {
     throw std::runtime_error("Expected '(' after print \n On line: " +
                              std::to_string(curLex_.get_line()));

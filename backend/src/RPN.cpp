@@ -299,6 +299,10 @@ int RPN::getPrecedence(const std::string& op) const {
     return 0;
 }
 
+std::vector<RPNCell> RPN::getRPN() {
+    return rpn_;
+}
+
 bool RPN::isOperator(const std::string& token) const {
     return (token == "+" || token == "-" || token == "*" || token == "/");
 }

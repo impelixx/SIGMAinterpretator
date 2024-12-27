@@ -18,6 +18,7 @@ file(
     SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "src/CodeGen.cpp"
 )
 
 set(

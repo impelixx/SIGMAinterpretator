@@ -5,6 +5,7 @@
 #include "LexemAnalyzer.h"
 #include "Semantic.h"
 #include <RPN.h>
+#include <Codegen.h>
 
 /**
  * @brief Main entry point of the SIGMA interpreter program
@@ -56,6 +57,7 @@ int main(int argc, char* argv[]) {
     rpn.buildRPN();
     rpn.printRPN();
     std::cout << "Code analysis completed successfully!" << std::endl;
+    CodeGen runner(code, rpn.getRPN());
     return 0;
   } catch (const std::exception& e) {
     std::cout << "Error: " << e.what() << std::endl;

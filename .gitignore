@@ -31,3 +31,4 @@ CMakeFiles/clion-Default-log.txt
 tests/backend
 megalinter-reports/
 html/
+backend/error.log
