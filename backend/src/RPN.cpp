@@ -14,9 +14,11 @@ void RPN::buildRPN() {
 }
 
 void RPN::AnalyzeLexemsList() {
-    std::cout << "Lexem: " << curLex_.get_text() << std::endl;
     if (curLex_.get_type() == "DEDENT") {
         getLexem();
+    }
+    if (curLex_.get_type() == "EOC") {
+        return;
     }
     if (curLex_.get_type() == "INDENT") {
         getLexem();
@@ -36,7 +38,6 @@ void RPN::AnalyzeLexemsList() {
             buildReturnCellRPN();
         } else if (curLex_.get_text() == "int" || curLex_.get_text() == "float"
                    || curLex_.get_text() == "string") {
-            std::cout << "Variable declaration: " << curLex_.get_text() << std::endl;
             buildAssignmentRPN();
         } else if (isOperator(curLex_.get_text()) || isRelOp(curLex_.get_text())) {
             buildMathOperationRPN();
@@ -51,6 +52,11 @@ void RPN::AnalyzeLexemsList() {
             getLexem();
             buildMathOperationRPN();
             buildRPNCell(RPNCell(CellType::MathCell, "="));
+        } else if (curLex_.get_text() == "(") {
+            buildRPNCell(RPNCell(CellType::CallCeil, name));
+            buildRPNCell(RPNCell(CellType::GoToCell, std::to_string(labels[name])));
+            getLexem();
+            getLexem();
         }
     }
     if (curLex_.get_type() == "NEWLINE") {
@@ -59,24 +65,21 @@ void RPN::AnalyzeLexemsList() {
 }
 
 void RPN::printRPN() const {
-    std::cout << "============= RPN Output =============" << std::endl;
+    size_t index = 0;
     for (const auto &cell : rpn_) {
-        std::cout << "[Type: " << cell.GetTypeAsString()
+        std::cout << "[" << index++ << "] [Type: " << cell.GetTypeAsString()
                   << ", Value: " << cell.value << "]" << std::endl;
     }
-    std::cout << "=======================================" << std::endl;
 }
 
-void RPN::buildMathOperationRPN() {
-    std::cout << "Math operation: " << curLex_.get_text() << std::endl;
-    std::string expression = curLex_.get_text();
+void RPN::buildMathOperationRPN(std::string start) {
+    std::string expression = start + curLex_.get_text();
     while (curLex_.get_type() != "NEWLINE") {
       getLexem();
       if (curLex_.get_text() == ";" || curLex_.get_text() == ":") {
         break;
       }
       expression += curLex_.get_text();
-      std::cout << "lexem: " << curLex_.get_text() << std::endl;
     }
     if (expression.empty()) {
         throw std::runtime_error("Empty expression");
@@ -85,7 +88,6 @@ void RPN::buildMathOperationRPN() {
         expression.pop_back();
         expression.pop_back();
     }
-    std::cout << "Expression: " << expression << std::endl;
     std::stack<std::string> operators;
     std::string result;
     std::string current;
@@ -142,10 +144,16 @@ void RPN::buildFunctionRPN() {
         getLexem();
     }
     RPNCell funcCell(CellType::FunctionCell, curLex_.get_text());
+    labels[curLex_.get_text()] = rpn_.size();
     buildRPNCell(funcCell);
+    getLexem();
+    getLexem();
+    getLexem();
+    getLexem();
     while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
-        AnalyzeLexemsList();
+      AnalyzeLexemsList();
     }
+    buildRPNCell(RPNCell(CellType::LabelCell, "end_func"));
 }
 
 void RPN::buildAssignmentRPN() {
@@ -162,8 +170,9 @@ void RPN::buildAssignmentRPN() {
 }
 
 void RPN::buildPrintRPN() {
-    RPNCell printCell(CellType::MathCell, "print");
-    buildRPNCell(printCell);
+        getLexem();
+        buildMathOperationRPN();
+        buildRPNCell(RPNCell(CellType::FunctionCell, "print"));
 }
 
 void RPN::buildIfRPN() {
@@ -179,7 +188,6 @@ void RPN::buildIfRPN() {
     buildRPNCell(RPNCell(CellType::GoToCell, "if_end"));
     getLexem();
     getLexem();
-    std::cout << "Lex: " << curLex_.get_text() << std::endl;
     buildRPNCell(ifCell);
     labels["if_false"] = rpn_.size();
     if (curLex_.get_text() == "else") {
@@ -207,42 +215,54 @@ void RPN::buildWhileRPN() {
     buildRPNCell(RPNCell(CellType::GoToCell, "while_start"));
     labels["while_false"] = rpn_.size();
     buildRPNCell(RPNCell(CellType::LabelCell, "while_false"));
-    // ---
 }
 
 void RPN::buildForRPN() {
-    // Пример: for i in range(...)
-    // Логика похожа: инициализация, условие, тело, инкремент, переход
     getLexem();
-    buildRPNCell(RPNCell(CellType::VarCell, "for_iterator"));
-    // ...
-    // аналогичная логика как с while
+    auto identifier = curLex_.get_text();
+    buildRPNCell(RPNCell(CellType::LabelCell, "start_for"));
+    labels["start_for"] = rpn_.size();
+    getLexem();
+    getLexem();
+    getLexem();
+    getLexem();
+    buildMathOperationRPN(identifier + "<");
+    buildRPNCell(RPNCell(CellType::ConditionalJumpCell, "end_for"));
+    while (curLex_.get_type() != "DEDENT" && curLex_.get_type() != "EOC") {
+        AnalyzeLexemsList();
+    }
+    buildRPNCell(RPNCell(CellType::GoToCell, "start_for"));
+    buildRPNCell(RPNCell(CellType::LabelCell, "end_for"));
 }
 
 void RPN::buildFunctionCallRPN() {
-    RPNCell callCell(CellType::CallCeil, "function_call");
-    buildRPNCell(callCell);
-}
-
-
-void RPN::buildGoToCellRPN() {
-    RPNCell gotoCell(CellType::GoToCell, "goto_label");
-    buildRPNCell(gotoCell);
+    getLexem();
+    std::string funcName = curLex_.get_text();
+    buildRPNCell(RPNCell(CellType::FunctionCell, funcName));
+    getLexem();
+    getLexem();
+    while (curLex_.get_text() != ")" && curLex_.get_type() != "EOC") {
+        buildMathOperationRPN();
+        if (curLex_.get_text() == ",") {
+            getLexem();
+        }
+    }
+    buildRPNCell(RPNCell(CellType::GoToCell, funcName));
+    getLexem();
 }
 
 void RPN::buildReturnCellRPN() {
     RPNCell returnCell(CellType::ReturnCell, "return");
-    buildRPNCell(returnCell);
-    // Допустим, после return можем считать выражение
     getLexem();
     buildMathOperationRPN();
+    buildRPNCell(returnCell);
+    buildRPNCell(RPNCell(CellType::GoToCell, "end_func"));
 }
 
 void RPN::buildCallCeilRPN() {
-    // Пример вызова функции
     RPNCell callCell(CellType::CallCeil, "call_ceil");
     buildRPNCell(callCell);
-    // Считываем аргументы
+    FuncCalls.push(rpn_.size());
     while (curLex_.get_text() != ")" && curLex_.get_type() != "NEWLINE") {
         getLexem();
         buildMathOperationRPN();

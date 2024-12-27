@@ -235,7 +235,10 @@ void SemanticAnalyzer::AnalyzeStatement() {
                                std::to_string(curLex_.get_line()));
     }
   }
-  GetLexem();
+  if (curLex_.get_type() == "NEWLINE" || curLex_.get_text() == ";" ||
+      curLex_.get_text() == "}") {
+    GetLexem();
+  }
 }
 
 /**
@@ -540,10 +543,8 @@ void SemanticAnalyzer::AnalyzePrint() {
           "Expected ',' or ')' after argument \n On line: " +
           std::to_string(curLex_.get_line()));
     }
-    if (curLex_.get_text() == ",") {
-      GetLexem();
-    }
   }
+  GetLexem();
   GetLexem();
 }
 

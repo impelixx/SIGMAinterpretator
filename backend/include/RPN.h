@@ -20,6 +20,7 @@ public:
 private:
     std::vector<Lexem> lexems_;
     std::vector <RPNCell> rpn_;
+    std::stack<size_t> FuncCalls;
     std::map<std::string, int> labels;
     Lexem curLex_;
     size_t index_;
@@ -32,7 +33,7 @@ private:
     void buildWhileRPN();
     void buildForRPN();
     void buildFunctionCallRPN();
-    void buildMathOperationRPN();
+    void buildMathOperationRPN(std::string start = "");
     void buildGoToCellRPN();
     void buildReturnCellRPN();
     void buildCallCeilRPN();

@@ -47,20 +47,18 @@ int main(int argc, char* argv[]) {
 
     LexemAnalyzer lexer(code, workwordsPath);
     lexer.Analyze();
-    lexer.PrintLexems();
     std::vector<Lexem> lexems = lexer.GetLexems();
     SyntaxAnalyzer syntaxer(lexems);
     syntaxer.Analyze();
     SemanticAnalyzer semantic(lexems);
     semantic.Analyze();
-    semantic.PrintFunction();
     RPN rpn(lexems);
     rpn.buildRPN();
     rpn.printRPN();
     std::cout << "Code analysis completed successfully!" << std::endl;
     return 0;
   } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    std::cout << "Error: " << e.what() << std::endl;
     return 1;
   }
 }
