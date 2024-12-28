@@ -3,18 +3,18 @@
 
 #pragma once
 
+#include <cell.h>
 #include <string>
 #include <vector>
-#include <cell.h>
 
 class CodeGen {
-public:
+ public:
   CodeGen(std::string code, std::vector<RPNCell> rpn);
 
-private:
+ private:
   void run(std::string text);
   void repl(std::string& text, const std::string& was, const std::string& will);
   std::string runPythonScript(const std::string& scriptPath);
 };
 
-#endif // CODEGEN_H
+#endif  // CODEGEN_H

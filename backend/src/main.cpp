@@ -1,11 +1,11 @@
+#include <Codegen.h>
+#include <RPN.h>
 #include <SyntaxAnalyzer.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include "LexemAnalyzer.h"
 #include "Semantic.h"
-#include <RPN.h>
-#include <Codegen.h>
 
 /**
  * @brief Main entry point of the SIGMA interpreter program
