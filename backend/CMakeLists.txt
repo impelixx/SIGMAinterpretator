@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.18)
 project(backend)
 
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
 include_directories(
     "${PROJECT_SOURCE_DIR}/include"
@@ -16,10 +16,9 @@ include_directories(
 file(
     GLOB
     SOURCES
-    "src/**/*.cpp"
-    "src/*.cpp"
-    "src/Lexem.cpp"
-    "src/Semantic.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "src/CodeGen.cpp"
 )
 
 set(
