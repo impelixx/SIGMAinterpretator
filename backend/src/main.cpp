@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
     SyntaxAnalyzer syntaxer(lexems);
     syntaxer.Analyze();
     SemanticAnalyzer semantic(lexems);
-    semantic.Analyze();
+    //semantic.Analyze();
     RPN rpn(lexems);
     rpn.buildRPN();
     rpn.printRPN();

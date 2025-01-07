@@ -311,10 +311,6 @@ bool SyntaxAnalyzer::IsType(const std::string& word) {
 }
 
 void SyntaxAnalyzer::AnalyzeAssignment() {
-  if (curLex_.get_type() != "IDENTIFIER") {
-    throw std::runtime_error("Expected identifier at line " +
-                             std::to_string(curLex_.get_line()));
-  }
   GetLexem();
 
   if (curLex_.get_text() == "(") {
@@ -328,11 +324,6 @@ void SyntaxAnalyzer::AnalyzeAssignment() {
     GetLexem();
     AnalyzeStatementTerminator();
     return;
-  }
-
-  if (curLex_.get_text() != "=") {
-    throw std::runtime_error("Expected '=' in assignment at line " +
-                             std::to_string(curLex_.get_line()));
   }
   GetLexem();
 

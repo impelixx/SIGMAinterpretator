@@ -1,19 +1,5 @@
-int a = 15
-while(a > 15):
-    print(a)
+print("START")
 
-a = 17
+int b[5] = {12, 2, 45, 73, 44444}
 
-if (a < 12):
-    print(a)
-else:
-    print(a)
-
-for i in range(15):
-    int b = i
-    print(b)
-def kk():
-    int kkl = 12
-    print(a)
-
-kk()
+print(b)

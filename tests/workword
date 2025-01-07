@@ -17,3 +17,8 @@ else
 print
 true
 len
+and
+or
+not
+in
+range
