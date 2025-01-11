@@ -16,7 +16,7 @@ jobs:
   linter:
     name: Run MegaLinter
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
