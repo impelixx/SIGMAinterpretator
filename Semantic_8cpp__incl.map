@@ -1,10 +1,20 @@
 <map id="backend/src/Semantic.cpp" name="backend/src/Semantic.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="237,5,428,32"/>
-<area shape="rect" id="node2" href="$Semantic_8h.html" title=" " alt="" coords="196,80,291,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,155,92,181"/>
-<area shape="rect" id="node7" href="$Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="362,155,439,181"/>
-<area shape="rect" id="node8" title=" " alt="" coords="398,229,478,256"/>
-<area shape="rect" id="node3" title=" " alt="" coords="117,155,167,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="191,155,250,181"/>
-<area shape="rect" id="node6" title=" " alt="" coords="275,155,337,181"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="237,5,428,31"/>
+<area shape="rect" id="Node000002" href="$Semantic_8h.html" title=" " alt="" coords="196,79,291,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="320,33,270,72,267,68,317,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,152,92,177"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="300,33,245,54,185,81,126,114,77,146,74,142,124,110,182,76,243,49,298,28"/>
+<area shape="rect" id="Node000007" href="$Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="362,152,439,177"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="341,30,392,138,387,141,336,32"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="398,225,478,251"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="351,29,405,77,433,112,454,151,457,183,451,213,446,212,452,183,449,153,428,115,401,81,347,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="117,152,167,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="229,106,171,146,168,142,226,102"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="213,107,94,150,92,145,211,102"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="191,152,250,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="242,105,231,140,226,138,237,104"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="275,152,337,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="256,103,289,140,285,143,252,106"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="270,102,364,144,362,149,268,106"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="409,176,428,212,423,215,404,179"/>
 </map>

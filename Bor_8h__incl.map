@@ -1,7 +1,11 @@
 <map id="backend/include/Bor.h" name="backend/include/Bor.h">
-<area shape="rect" id="node1" title="Implementation of a trie (prefix tree) data structure for string matching." alt="" coords="37,5,201,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,64,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="89,80,149,107"/>
-<area shape="rect" id="node4" href="$Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="173,80,251,107"/>
-<area shape="rect" id="node5" title=" " alt="" coords="172,155,252,181"/>
+<area shape="rect" id="Node000001" title="Implementation of a trie (prefix tree) data structure for string matching." alt="" coords="37,5,201,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,64,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,33,61,72,57,67,103,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="89,79,149,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="121,31,121,65,116,65,116,31"/>
+<area shape="rect" id="Node000004" href="$Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="173,79,251,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="135,29,188,68,184,72,132,33"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="172,152,252,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="215,104,215,138,209,138,209,104"/>
 </map>

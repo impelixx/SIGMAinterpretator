@@ -1,3 +1,4 @@
 <map id="vertex" name="vertex">
-<area shape="rect" id="node1" title="Represents a vertex (node) in a trie data structure." alt="" coords="5,5,69,32"/>
+<area shape="rect" id="Node000001" title="Represents a vertex (node) in a trie data structure." alt="" coords="5,5,69,31"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="84,12,96,18,87,24,70,25,69,20,86,19,91,18,82,17"/>
 </map>

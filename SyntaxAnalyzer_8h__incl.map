@@ -1,6 +1,9 @@
 <map id="backend/include/SyntaxAnalyzer.h" name="backend/include/SyntaxAnalyzer.h">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,249,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="49,80,112,107"/>
-<area shape="rect" id="node3" href="$Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="137,80,214,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="135,155,215,181"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,249,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="49,79,112,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,32,98,69,94,66,117,30"/>
+<area shape="rect" id="Node000003" href="$Lexem_8h.html" title="Defines the Lexem class and LexemType enum for lexical analysis." alt="" coords="137,79,214,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,30,162,66,158,69,133,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="135,152,215,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="178,104,178,138,173,138,173,104"/>
 </map>

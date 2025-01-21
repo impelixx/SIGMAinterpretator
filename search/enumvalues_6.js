@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['newline_96',['NEWLINE',['../Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea59d02b47a666732cc6577f158272b099',1,'Lexem.h']]],
-  ['number_97',['NUMBER',['../Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea12a90dfe20486bbe3e075afcd19ef2d0',1,'Lexem.h']]]
+  ['identifier_0',['IDENTIFIER',['../Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42ea84f8ae2490f9e4bd2321fd21f4b0e807',1,'Lexem.h']]],
+  ['indent_1',['INDENT',['../Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42eaaae81a0b1ffa6ba389c5a8398774bb69',1,'Lexem.h']]]
 ];

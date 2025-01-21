@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['string_100',['STRING',['../Lexem_8h.html#a36d3ea63d0a0e8d6b72ac94cf088d42eaee847e634a4297b274316de8a8ca9921',1,'Lexem.h']]]
+  ['mathcell_0',['MathCell',['../cell_8h.html#a268ae74e98bc01a0e35f5e215580bcb4a59d445c36fe7df10ace2612fe8eb01ca',1,'cell.h']]]
 ];
