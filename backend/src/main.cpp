@@ -26,7 +26,8 @@
  */
 int main(int argc, char* argv[]) {
   if (argc > 1 && argc < 3) {
-    std::cerr << "Use: " << argv[0] << " <path to code file> <path to workwords file>" << std::endl;
+    std::cerr << "Use: " << argv[0]
+              << " <path to code file> <path to workwords file>" << std::endl;
     return 1;
   }
 
