@@ -1,3 +1,5 @@
+#include <Codegen.h>
+#include <RPN.h>
 #include <SyntaxAnalyzer.h>
 #include <fstream>
 #include <iostream>
@@ -50,12 +52,15 @@ int main(int argc, char* argv[]) {
     SyntaxAnalyzer syntaxer(lexems);
     syntaxer.Analyze();
     SemanticAnalyzer semantic(lexems);
-    semantic.Analyze();
-    semantic.PrintFunction();
+    //semantic.Analyze();
+    RPN rpn(lexems);
+    rpn.buildRPN();
+    rpn.printRPN();
     std::cout << "Code analysis completed successfully!" << std::endl;
+    CodeGen runner(code, rpn.getRPN());
     return 0;
   } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    std::cout << "Error: " << e.what() << std::endl;
     return 1;
   }
 }

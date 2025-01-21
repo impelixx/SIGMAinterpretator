@@ -1,0 +1,5 @@
+print("START")
+
+int b[5] = {12, 2, 45, 73, 44444}
+
+print(b)
